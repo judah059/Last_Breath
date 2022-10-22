@@ -6,11 +6,15 @@ import rightArrow from '../../assets/rightArrow.svg'
 import userLogo from '../../assets/userLogo.svg'
 import burger from '../../assets/burger.svg'
 
-const Header: React.FC = () => {
+interface HeaderProps {
+    onClickDrawer: ()=> void
+}
+
+const Header: React.FC<HeaderProps> = ({onClickDrawer}) => {
     return (
         <header className={s.header}>
             <div className={s.leftSide}>
-                <div className={s.burger}>
+                <div className={s.burger} onClick={onClickDrawer}>
                     <img src={burger} alt="burger"/>
                 </div>
                 <img src={logo} className={s.logo} alt="logo"/>
