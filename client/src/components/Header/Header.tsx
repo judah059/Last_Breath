@@ -5,6 +5,7 @@ import downArrow from '../../assets/downArrow.svg'
 import rightArrow from '../../assets/rightArrow.svg'
 import userLogo from '../../assets/userLogo.svg'
 import burger from '../../assets/burger.svg'
+import {NavLink} from "react-router-dom";
 
 interface HeaderProps {
     onClickDrawer: ()=> void
@@ -19,7 +20,9 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer}) => {
                 </div>
                 <img src={logo} className={s.logo} alt="logo"/>
                 <div className={s.breadcrumbs}>
-                    <span>Last Breath</span>
+                    <span>
+                        <NavLink to='/'>Last Breath</NavLink>
+                    </span>
                     <img src={rightArrow} alt=""/>
                     <span>Tickets</span>
                 </div>

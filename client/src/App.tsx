@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.scss';
-import Header from "./components/Header/Header";
-import Drawer from "./components/Drawer/Drawer";
+import {Route, Routes} from "react-router-dom";
+import StartPage from "./pages/StartPage/StartPage";
+import MainPage from "./pages/MainPage/MainPage";
 
 const App: React.FC = () => {
-
-    const [isCartOpened, setIsCartOpened] = useState(false);
-
     return (
         <div className="wrapper">
-            <Header onClickDrawer={()=>setIsCartOpened(true)}/>
-            <Drawer isCartOpened={isCartOpened} onClickCloseDrawer={()=>setIsCartOpened(false)}/>
+            <Routes>
+                <Route path='/' element={<StartPage/>}></Route>
+                <Route path='main' element={<MainPage/>}></Route>
+            </Routes>
         </div>
     );
 }
