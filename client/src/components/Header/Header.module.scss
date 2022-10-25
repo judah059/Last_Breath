@@ -3,6 +3,7 @@ header {
   display: flex;
   justify-content: space-between;
   padding: 20px 10px;
+  border-bottom: #ffffff solid 1px;
 
   .leftSide {
     display: flex;
@@ -21,6 +22,14 @@ header {
       display: flex;
       gap: 20px;
       align-items: center;
+    }
+
+    a{
+      color: white;
+    }
+
+    a:hover{
+      color: #a10855;
     }
   }
 
