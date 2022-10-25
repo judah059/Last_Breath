@@ -1,6 +1,6 @@
 .wrapper{
   .logo_name{
-    margin-top: 57px;
+    padding-top: 57px;
     text-align: center;
 
     .logo{
@@ -17,13 +17,11 @@
   }
 
   .buttons{
-    display: grid;
+    display: flex;
     font-family: "Montserrat", serif;
     font-size: 36px;
     margin-top: 104px;
-    margin-left: 77px;
-    grid-auto-flow: column;
-    grid-gap: 452px;
+    justify-content: space-around;
 
     .buy_ticket button{
       background-color: #86e7e1;
