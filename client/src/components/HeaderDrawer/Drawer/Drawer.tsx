@@ -1,10 +1,11 @@
 import React from 'react';
 import s from './Drawer.module.scss'
-import logo from '../../assets/logo.svg'
-import phone from '../../assets/phone.svg'
-import telegram from '../../assets/telegram.svg'
-import viber from '../../assets/viber.svg'
-import closeBtn from '../../assets/closeBtn.svg'
+import logo from '../../../assets/logo.svg'
+import phone from '../../../assets/phone.svg'
+import telegram from '../../../assets/telegram.svg'
+import viber from '../../../assets/viber.svg'
+import closeBtn from '../../../assets/closeBtn.svg'
+import {NavLink} from "react-router-dom";
 
 
 interface DrawerProps {
@@ -27,7 +28,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer}) => {
                         <li>Now in cinema</li>
                         <li>Promotions and discounts</li>
                         <li>Help</li>
-                        <li>About Company</li>
+                        <li><NavLink to='/about-company'>About Company</NavLink></li>
                     </ul>
                 </div>
 
