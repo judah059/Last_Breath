@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './ChooseCinemaDrawer.module.scss'
+import {API} from "../../utils/api";
+import {ICinema} from "../../utils/api/types";
 
 
 interface ChooseCinemaDrawerProps {
@@ -10,39 +12,69 @@ interface ChooseCinemaDrawerProps {
 
 const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = ({isShow, refOne}) => {
 
+    const [cities, setCities] = useState<string[]>([])
+    const [selectedCity, setSelectedCity] = useState<string>('Kharkiv')
+    const [cinemas, setCinemas] = useState<ICinema[]>([])
 
+
+    const fetchCities = async (city?: string) => {
+        try {
+            const cinemas = await API.getCinemas(city);
+            const cities = Array.from(new Set(cinemas.map(el => el.city)))
+            setCities(cities);
+        } catch (e) {
+            console.log(e)
+            alert(e)
+        }
+    }
+
+    const fetchCinemas = async (city?: string) => {
+        try {
+            const cinemas = await API.getCinemas(city);
+            setCinemas(cinemas);
+        } catch (e) {
+            console.log(e)
+            alert(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchCities()
+    }, [])
+
+    useEffect(() => {
+        fetchCinemas(selectedCity)
+    }, [selectedCity])
 
 
     return (
-        <div className={`${s.overlay} ${isShow ? s.overlayOut : ""}`}  >
+        <div className={`${s.overlay} ${isShow ? s.overlayOut : ""}`}>
             <div className={s.drawer} ref={refOne}>
                 <div className={s.city}>
                     <h2>City:</h2>
                     <ul>
-                        <li className={s.active}>Kharkiv</li>
-                        <li>Kyiv</li>
-                        <li>Dnipro</li>
+                        {
+                            cities?.map((c, i) => (
+                                <li key={i}
+                                    onClick={() => setSelectedCity(c)}
+                                    className={c === selectedCity ? s.active : ''}
+                                >
+                                    {c}
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
                 <div className={s.cinema}>
                     <h2>Cinema:</h2>
                     <ul>
-                        <li>
-                            <p className={s.name}>KinoLand</p>
-                            <p className={s.street}>Yuvileyny avenue</p>
-                        </li>
-                        <li>
-                            <p className={s.name}>Planet Cinema</p>
-                            <p className={s.street}>"French Boulevard" Shopping Center, 44 B., Akademika Pavlova St</p>
-                        </li>
-                        <li>
-                            <p className={s.name}>Dafa Multiplex</p>
-                            <p className={s.street}>Heroiv Pratsi street, 9</p>
-                        </li>
-                        <li>
-                            <p className={s.name}>Cinema Kyiv</p>
-                            <p className={s.street}>Yuryeva Boulevard, 1</p>
-                        </li>
+
+                        {
+                            cinemas?.map(c => <li>
+                                <p>{c.cinemaName}</p>
+                                <p>{c.cinemaStreet}</p>
+                            </li>)
+                        }
 
                     </ul>
                 </div>
