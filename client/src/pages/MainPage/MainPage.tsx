@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import Header from "../../components/Header/Header";
-import Drawer from "../../components/Drawer/Drawer";
 import NowInCinema from "../../components/NowInCinema/NowInCinema";
+import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 
 
 const MainPage: React.FC = (props) => {
@@ -10,8 +9,7 @@ const MainPage: React.FC = (props) => {
 
     return (
         <div>
-            <Header onClickDrawer={() => setIsCartOpened(true)}/>
-            <Drawer isCartOpened={isCartOpened} onClickCloseDrawer={() => setIsCartOpened(false)}/>
+            <HeaderDrawer toLinkText='Tickets'/>
 
             <NowInCinema/>
 

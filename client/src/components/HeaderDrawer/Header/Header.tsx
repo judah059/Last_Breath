@@ -9,7 +9,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 
 interface HeaderProps {
     onClickDrawer: ()=> void,
-    toLinkText: string
+    toLinkText?: string
 }
 
 const Header: React.FC<HeaderProps> = ({onClickDrawer, toLinkText}) => {
