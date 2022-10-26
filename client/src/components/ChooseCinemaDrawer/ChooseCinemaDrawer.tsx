@@ -3,14 +3,19 @@ import s from './ChooseCinemaDrawer.module.scss'
 
 
 interface ChooseCinemaDrawerProps {
-
+    refOne: React.Ref<HTMLDivElement>;
+    isShow: boolean
 }
 
 
-const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = () => {
+const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = ({isShow, refOne}) => {
+
+
+
+
     return (
-        <div className={`${s.overlay} ${s.overlayOut}`}>
-            <div className={s.drawer}>
+        <div className={`${s.overlay} ${isShow ? s.overlayOut : ""}`}  >
+            <div className={s.drawer} ref={refOne}>
                 <div className={s.city}>
                     <h2>City:</h2>
                     <ul>

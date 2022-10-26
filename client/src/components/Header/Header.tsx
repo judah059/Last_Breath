@@ -9,9 +9,10 @@ import {NavLink} from "react-router-dom";
 
 interface HeaderProps {
     onClickDrawer: ()=> void
+    onClickCinemaDrawer: ()=> void
 }
 
-const Header: React.FC<HeaderProps> = ({onClickDrawer}) => {
+const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer}) => {
     return (
         <header className={s.header}>
             <div className={s.leftSide}>
@@ -28,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer}) => {
                 </div>
             </div>
             <div className={s.rightSide}>
-                <div className={s.chooseBtn}>
+                <div className={s.chooseBtn} onClick={onClickCinemaDrawer}>
                     <span>Choose city, cinema</span>
                     <img src={downArrow} alt="downArrow"/>
                 </div>
