@@ -13,7 +13,7 @@ interface HeaderProps {
     toLinkText?: string
 }
 
-const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer}) => {
+const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText}) => {
     const navigate = useNavigate()
 
     const mainLoader = () => {
