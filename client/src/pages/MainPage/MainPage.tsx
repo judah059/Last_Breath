@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Header from "../../components/Header/Header";
 import Drawer from "../../components/Drawer/Drawer";
-import NowInCinema from "../../components/NowInCinema/NowInCinema";
+import ChooseCinemaDrawer from "../../components/ChooseCinemaDrawer/ChooseCinemaDrawer";
 
 
 const MainPage: React.FC = (props) => {
@@ -13,7 +13,9 @@ const MainPage: React.FC = (props) => {
             <Header onClickDrawer={() => setIsCartOpened(true)}/>
             <Drawer isCartOpened={isCartOpened} onClickCloseDrawer={() => setIsCartOpened(false)}/>
 
-            <NowInCinema/>
+            {/*<NowInCinema/>*/}
+
+            <ChooseCinemaDrawer/>
 
         </div>
     )
