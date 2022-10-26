@@ -8,19 +8,18 @@ import burger from '../../../assets/burger.svg'
 import {NavLink, useNavigate} from "react-router-dom";
 
 interface HeaderProps {
-    onClickDrawer: ()=> void,
+    onClickDrawer: ()=> void
+    onClickCinemaDrawer: ()=> void
     toLinkText?: string
 }
 
-const Header: React.FC<HeaderProps> = ({onClickDrawer, toLinkText}) => {
-
+const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer}) => {
     const navigate = useNavigate()
 
     const mainLoader = () => {
         navigate('/main')
     }
-
-    return (
+        return (
         <header className={s.header}>
             <div className={s.leftSide}>
                 <div className={s.burger} onClick={onClickDrawer}>
@@ -36,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, toLinkText}) => {
                 </div>
             </div>
             <div className={s.rightSide}>
-                <div className={s.chooseBtn}>
+                <div className={s.chooseBtn} onClick={onClickCinemaDrawer}>
                     <span>Choose city, cinema</span>
                     <img src={downArrow} alt="downArrow"/>
                 </div>

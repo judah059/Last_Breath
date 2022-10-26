@@ -28,7 +28,7 @@ const NowInCinema: React.FC = () => {
     return (
         <div className={s.container}>
             {
-                movies.map(m => <MovieItem name={m.name} imageUrl={m.imageUrl}/>)
+                movies.map(m => <MovieItem key={m.id} name={m.name} imageUrl={m.imageUrl}/>)
             }
         </div>
     );
