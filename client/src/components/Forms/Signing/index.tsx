@@ -13,7 +13,7 @@ interface SigningProps {
 
 const Signing: React.FC<SigningProps> = ({isSigningOpened, onClickSigningClose}) => {
 
-    const [formType, setFormType] = useState<"signIn" | "signUp">("signUp");
+    const [formType, setFormType] = useState<"signIn" | "signUp">("signIn");
 
     const onClosePopupHandler = () => {
         document.body.style.overflow = 'unset';
@@ -30,8 +30,8 @@ const Signing: React.FC<SigningProps> = ({isSigningOpened, onClickSigningClose})
             {...{ overlayStyle: {overflow: 'auto'} }}
         >
             <div className={s.container}>
-                {formType === "signIn" && <SignInForm onOpenSignIn={() => setFormType("signIn")}/>}
-                {formType === "signUp" && <SignUpForm onOpenSignUp={() => setFormType("signUp")}/>}
+                {formType === "signIn" && <SignInForm onOpenSignUp={() => setFormType("signUp")}/>}
+                {formType === "signUp" && <SignUpForm onOpenSignIn={() => setFormType("signIn")}/>}
             </div>
         </Popup>
     );

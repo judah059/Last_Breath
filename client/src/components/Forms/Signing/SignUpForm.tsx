@@ -4,11 +4,11 @@ import logo from "../../../assets/logo.svg";
 import range from "lodash.range";
 
 interface SignUpFormProps {
-    onOpenSignUp: () => void
+    onOpenSignIn: () => void
 }
 
 
-const SignUpForm: React.FC<SignUpFormProps> = () => {
+const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn}) => {
     return (
         <form className={s.signIn}>
             <div className={s.titleBlock}>
@@ -66,7 +66,7 @@ const SignUpForm: React.FC<SignUpFormProps> = () => {
             </div>
             <div className={s.btnBlock}>
                 <button>Sign Up</button>
-                <p>Already have an account? <span>Sign in!</span></p>
+                <p>Already have an account? <span onClick={onOpenSignIn}>Sign in!</span></p>
             </div>
             <p className={s.backLink}>Back to site</p>
         </form>

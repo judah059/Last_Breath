@@ -4,11 +4,11 @@ import logo from '../../../assets/logo.svg'
 
 
 interface SignInFormProps {
-    onOpenSignIn: () => void
+    onOpenSignUp: () => void
 }
 
 
-const SignInForm: React.FC<SignInFormProps> = () => {
+const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp}) => {
     return (
         <form className={s.signIn}>
             <div className={s.titleBlock}>
@@ -37,7 +37,7 @@ const SignInForm: React.FC<SignInFormProps> = () => {
             </div>
             <div className={s.btnBlock}>
                 <button>Sign In</button>
-                <p>Don’t have an account? <span>Sign up for free!</span></p>
+                <p>Don’t have an account? <span onClick={onOpenSignUp}>Sign up for free!</span></p>
             </div>
             <p className={s.backLink}>Back to site</p>
         </form>
