@@ -25,7 +25,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer}) => {
                 </div>
                 <div className={s.menu}>
                     <ul>
-                        <li>Now in cinema</li>
+                        <li><NavLink to='/main'>Now in cinema</NavLink></li>
                         <li>Promotions and discounts</li>
                         <li>Help</li>
                         <li><NavLink to='/about-company'>About Company</NavLink></li>

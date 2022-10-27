@@ -8,7 +8,7 @@ const MainPage: React.FC = () => {
 
     return (
         <>
-            <HeaderDrawer toLinkText='Tickets'/>
+            <HeaderDrawer toLinkText='Now In Cinema'/>
             <NowInCinema/>
         </>
     )

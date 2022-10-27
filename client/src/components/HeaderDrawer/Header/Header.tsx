@@ -10,7 +10,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 interface HeaderProps {
     onClickDrawer: ()=> void
     onClickCinemaDrawer: ()=> void
-    toLinkText?: string
+    toLinkText: string
 }
 
 const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText}) => {
@@ -19,6 +19,9 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
     const mainLoader = () => {
         navigate('/main')
     }
+
+    let href = window.location.pathname !== '/profile';
+
         return (
         <header className={s.header}>
             <div className={s.leftSide}>
@@ -43,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
 
                 </div>
                 <div className={s.user}>
-                    <span>Sing In</span>
+                    {!href ? <></> : <span>Sing In</span>}
                     <img src={userLogo} alt="userLogo"/>
                 </div>
             </div>
