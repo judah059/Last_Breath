@@ -10,8 +10,9 @@ class MyUser(AbstractUser):
         ('RG', 'Regular'),
         ('CA', 'Cinema admin')
     ]
-    age = models.IntegerField(
-        default=0,
+    birth_date = models.DateField(
+        null=True,
+        blank=True,
     )
     role = models.CharField(
         max_length=2,
