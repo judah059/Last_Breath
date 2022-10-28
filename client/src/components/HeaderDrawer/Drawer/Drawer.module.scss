@@ -39,6 +39,7 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: auto;
+
   .top {
     display: flex;
     flex-direction: column;
@@ -78,17 +79,18 @@
       flex-direction: column;
       gap: 50px;
       font-weight: 500;
+
       li {
         //margin-bottom: 60px;
 
       }
 
-      a{
+      a {
         color: white;
-      }
 
-      a:hover{
-        color: #a10855;
+        &:hover {
+          color: #a10855;
+        }
       }
     }
   }

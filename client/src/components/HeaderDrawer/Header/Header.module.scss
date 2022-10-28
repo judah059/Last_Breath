@@ -9,12 +9,12 @@ header {
     display: flex;
     align-items: center;
     gap: 30px;
-    
-    .burger{
+
+    .burger {
       cursor: pointer;
     }
-    
-    .logo{
+
+    .logo {
       margin-right: 40px;
     }
 
@@ -24,12 +24,12 @@ header {
       align-items: center;
     }
 
-    a{
+    a {
       color: white;
-    }
 
-    a:hover{
-      color: #a10855;
+      &:hover {
+        color: #a10855;
+      }
     }
   }
 

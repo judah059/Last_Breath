@@ -5,7 +5,6 @@ import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 
 
 const MainPage: React.FC = () => {
-
     return (
         <>
             <HeaderDrawer toLinkText='Now In Cinema'/>

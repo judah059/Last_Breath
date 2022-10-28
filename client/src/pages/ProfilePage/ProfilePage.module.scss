@@ -21,7 +21,7 @@
   .settings {
     display: flex;
 
-    .settingsBlock{
+    .settingsBlock {
       margin-left: 78px;
       display: flex;
       align-items: center;
@@ -41,17 +41,18 @@
         line-height: 23px;
         margin-left: 3px;
       }
+    }
+  }
 
-      .editButton {
-        width: 145px;
-        height: 36px;
-        background: #D83D3D;
-        font-weight: 500;
-        font-size: 19px;
-        line-height: 23px;
-        border-radius: 10px;
-        color: #FFFFFF;
-      }
+  .deleteText {
+    margin-left: 76px;
+    padding-bottom: 10px;
+    margin-top: 68px;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: #a10855;
     }
   }
 }
