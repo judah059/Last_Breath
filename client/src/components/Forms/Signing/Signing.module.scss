@@ -5,6 +5,18 @@
   //max-width: 500px;
   margin: 0 auto;
   padding: 20px 100px;
+
+  .backLink {
+    cursor: pointer;
+    margin-top: 70px;
+    text-align: center;
+    color: #873C3C;
+    font-size: 40px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .signIn {
@@ -200,15 +212,5 @@
     }
   }
 
-  .backLink {
-    cursor: pointer;
-    margin-top: 70px;
-    text-align: center;
-    color: #873C3C;
-    font-size: 40px;
 
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }

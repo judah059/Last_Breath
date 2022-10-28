@@ -39,7 +39,6 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp}) => {
                 <button>Sign In</button>
                 <p>Don’t have an account? <span onClick={onOpenSignUp}>Sign up for free!</span></p>
             </div>
-            <p className={s.backLink}>Back to site</p>
         </form>
     );
 };

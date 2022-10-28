@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import s from './Signing.module.scss'
@@ -8,12 +8,18 @@ import SignUpForm from "./SignUpForm";
 interface SigningProps {
     isSigningOpened: boolean
     onClickSigningClose: () => void
+    setFormType: (type:"signIn" | "signUp") => void
+    formType: "signIn" | "signUp"
 }
 
 
-const Signing: React.FC<SigningProps> = ({isSigningOpened, onClickSigningClose}) => {
+const Signing: React.FC<SigningProps> = ({
+                                             isSigningOpened,
+                                             onClickSigningClose,
+                                             formType,
+                                             setFormType
+                                         }) => {
 
-    const [formType, setFormType] = useState<"signIn" | "signUp">("signIn");
 
     const onClosePopupHandler = () => {
         document.body.style.overflow = 'unset';
@@ -28,11 +34,12 @@ const Signing: React.FC<SigningProps> = ({isSigningOpened, onClickSigningClose})
             modal
             nested
             contentStyle={{width: '45%'}}
-            {...{ overlayStyle: {overflow: 'auto'} }}
+            {...{overlayStyle: {overflow: 'auto'}}}
         >
             <div className={s.container}>
                 {formType === "signIn" && <SignInForm onOpenSignUp={() => setFormType("signUp")}/>}
                 {formType === "signUp" && <SignUpForm onOpenSignIn={() => setFormType("signIn")}/>}
+                <p className={s.backLink} onClick={onClosePopupHandler}>Back to site</p>
             </div>
         </Popup>
     );

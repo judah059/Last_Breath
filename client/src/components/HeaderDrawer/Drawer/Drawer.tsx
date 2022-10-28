@@ -10,18 +10,27 @@ import {NavLink} from "react-router-dom";
 
 interface DrawerProps {
     isCartOpened: boolean,
-    onClickCloseDrawer: ()=>void
+    onClickCloseDrawer: () => void
+    onClickAuth: () => void
+    onClickSigningOpen: () => void
 }
 
 
-const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer}) => {
+const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer, onClickAuth, onClickSigningOpen}) => {
+
+    const onClickSignUpOpenHandler = () => {
+        document.body.style.overflow = 'hidden';
+        onClickAuth()
+        onClickSigningOpen()
+    }
+
     return (
         <div className={`${s.overlay} ${isCartOpened ? s.overlayOut : ""}`}>
             <div className={s.drawer}>
                 <div className={s.top}>
                     <img src={logo} alt="logo"/>
                     <div className={s.title}>Cinema “Last Breath”</div>
-                    <button>Authorization</button>
+                    <button onClick={onClickSignUpOpenHandler}>Authorization</button>
                 </div>
                 <div className={s.menu}>
                     <ul>
