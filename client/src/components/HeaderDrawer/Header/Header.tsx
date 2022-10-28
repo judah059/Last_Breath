@@ -11,9 +11,10 @@ interface HeaderProps {
     onClickDrawer: ()=> void
     onClickCinemaDrawer: ()=> void
     toLinkText: string
+    onClickSigningOpen: ()=>void
 }
 
-const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText}) => {
+const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText, onClickSigningOpen}) => {
     const navigate = useNavigate()
 
     const mainLoader = () => {
@@ -21,6 +22,11 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
     }
 
     let href = window.location.pathname !== '/profile';
+
+    const onOpenPopupHandler = () => {
+        document.body.style.overflow = 'hidden';
+        onClickSigningOpen()
+    }
 
         return (
         <header className={s.header}>
@@ -46,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
 
                 </div>
                 <div className={s.user}>
-                    {!href ? <></> : <span>Sing In</span>}
+                    {!href ? <></> : <span onClick={onOpenPopupHandler}>Sing In</span>}
                     <img src={userLogo} alt="userLogo"/>
                 </div>
             </div>

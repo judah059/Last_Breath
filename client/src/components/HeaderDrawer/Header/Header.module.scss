@@ -58,6 +58,13 @@ header {
       gap: 10px;
       justify-content: center;
       align-items: center;
+      span{
+        cursor: pointer;
+        &:hover{
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
     }
   }
 }
