@@ -9,6 +9,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = (props) => {
     return (
         <button className={s.button} onClick={props.onClickAction}>{props.buttonContent}</button>
+
     )
 };
 
