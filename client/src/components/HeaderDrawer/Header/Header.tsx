@@ -8,10 +8,10 @@ import burger from '../../../assets/burger.svg'
 import {NavLink, useNavigate} from "react-router-dom";
 
 interface HeaderProps {
-    onClickDrawer: ()=> void
-    onClickCinemaDrawer: ()=> void
+    onClickDrawer: () => void
+    onClickCinemaDrawer: () => void
     toLinkText: string
-    onClickSigningOpen: ()=>void
+    onClickSigningOpen: () => void
 }
 
 const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText, onClickSigningOpen}) => {
@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
         onClickSigningOpen()
     }
 
-        return (
+    return (
         <header className={s.header}>
             <div className={s.leftSide}>
                 <div className={s.burger} onClick={onClickDrawer}>

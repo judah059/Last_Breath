@@ -15,12 +15,10 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = (props) => {
     const [isSigningOpened, setIsSigningOpened] = useState(false);
     const {ref, isShow, setIsShow} = useOutsideAlerter(false);
 
-
     return (
         <div>
             <Header toLinkText={props.toLinkText} onClickDrawer={() => setIsMenuOpened(true)}
                     onClickCinemaDrawer={() => setIsShow(!isShow)} onClickSigningOpen={()=>setIsSigningOpened(true)}/>
-
             <Drawer isCartOpened={isMenuOpened} onClickCloseDrawer={() => setIsMenuOpened(false)}/>
             <ChooseCinemaDrawer refOne={ref} isShow={isShow}/>
             <Signing isSigningOpened={isSigningOpened} onClickSigningClose={()=>setIsSigningOpened(false)}/>

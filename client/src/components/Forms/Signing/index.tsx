@@ -27,6 +27,7 @@ const Signing: React.FC<SigningProps> = ({isSigningOpened, onClickSigningClose})
             onClose={onClosePopupHandler}
             modal
             nested
+            contentStyle={{width: '45%'}}
             {...{ overlayStyle: {overflow: 'auto'} }}
         >
             <div className={s.container}>
