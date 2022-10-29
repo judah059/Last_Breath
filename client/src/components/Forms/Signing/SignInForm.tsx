@@ -6,6 +6,7 @@ import {login} from "../../../store/authentication/authentication.actions";
 import {useAppDispatch} from "../../../utils/hooks/redux";
 
 
+
 interface SignInFormProps {
     onOpenSignUp: () => void
     onClickSigningClose: ()=>void
@@ -20,23 +21,20 @@ interface signInInputs {
 const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClose}) => {
 
     const [responseError, setResponseError] = useState(false);
-
-
     const {register, handleSubmit, formState: {errors}} = useForm<signInInputs>();
-
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<signInInputs> = async formData => {
 
         try {
             dispatch(login(formData))
+
             onClickSigningClose()
-            console.log(login(formData))
+
 
         } catch (e) {
             setResponseError(true);
-            console.log(e);
-        }
+            console.log((e as Error).message)        }
     };
 
     return (

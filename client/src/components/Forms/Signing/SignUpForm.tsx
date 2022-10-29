@@ -4,7 +4,7 @@ import logo from "../../../assets/logo.svg";
 import range from "lodash.range";
 import {useForm} from "react-hook-form";
 import {useAppDispatch} from "../../../utils/hooks/redux";
-import {ICreateUser} from "../../../utils/api/types";
+import {IUser} from "../../../utils/api/types";
 
 interface SignUpFormProps {
     onOpenSignIn: () => void
@@ -16,7 +16,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn}) => {
     const [responseError, setResponseError] = useState(false);
 
 
-    const {register, handleSubmit, formState: {errors}} = useForm<ICreateUser>();
+    const {register, handleSubmit, formState: {errors}} = useForm<IUser>();
 
     const dispatch = useAppDispatch();
 

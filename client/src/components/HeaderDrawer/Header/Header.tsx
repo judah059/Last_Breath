@@ -37,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({
     }
 
     const authToken = useAppSelector((state: RootState) => state.auth.token);
+    const userEmail = useAppSelector((state: RootState) => state.user.email);
 
     return (
         <header className={s.header}>
@@ -63,7 +64,8 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
                 <div className={s.user}>
                     {
-                        authToken ? <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
+                        (authToken || userEmail) ?
+                            <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
                             <span onClick={onOpenPopupHandler}>Sing In</span>
                     }
                 </div>

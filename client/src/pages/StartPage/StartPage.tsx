@@ -3,7 +3,9 @@ import s from './StartPage.module.scss'
 import {useNavigate} from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
-const StartPage: React.FC = (props) => {
+
+
+const StartPage: React.FC = () => {
 
     const navigate = useNavigate()
 
@@ -11,7 +13,7 @@ const StartPage: React.FC = (props) => {
         navigate('/main')
     }
 
-    return(
+    return (
         <div>
             <div className={s.wrapper}>
                 <div className={s.logo_name}>

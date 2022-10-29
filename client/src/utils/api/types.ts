@@ -16,14 +16,6 @@ export interface IReqUser {
     password: string
 }
 
-export interface ICreateUser {
-    email: string
-    firstName: string,
-    lastName: string,
-    username: string,
-    dateOfBirth: string
-}
-
 
 
 export interface IResUser {
@@ -38,5 +30,6 @@ export interface IUser {
     birth_date: string
     role: string
     email: string
+    password ?: string
 }
 

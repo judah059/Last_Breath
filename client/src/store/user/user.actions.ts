@@ -3,7 +3,10 @@ import {userAPI} from "../../utils/api";
 
 export const getMe = createAsyncThunk(
     'user/profile',
-    async () => {
-        return await userAPI.getMe()
+    async (thunkAPI) => {
+
+        const res = await userAPI.getMe()
+
+        return res[0]
     }
 )

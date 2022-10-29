@@ -16,7 +16,14 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-
+        setEmptyUser(state) {
+            state.username = '';
+            state.first_name = '';
+            state.last_name = '';
+            state.birth_date = '';
+            state.role = '';
+            state.email = '';
+        }
     },
     extraReducers: builder => {
         builder.addCase(getMe.pending, (state) => {
@@ -33,3 +40,7 @@ export const userSlice = createSlice({
         })
     }
 })
+
+export const {setEmptyUser} = userSlice.actions;
+
+export default userSlice.reducer;
