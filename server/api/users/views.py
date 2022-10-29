@@ -4,7 +4,8 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from api.users.permissions import IsUserProfileOwner
-from api.users.serializers import MyUserPostSerializer, MyUserProfileSerializer
+from api.users.serializers import MyUserPostSerializer, MyUserProfileSerializer, MovieSerializer
+from users.models import Movie
 
 UserModel = get_user_model()
 
@@ -25,3 +26,13 @@ class ChangePasswordView(generics.UpdateAPIView):
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated, IsUserProfileOwner,)
     serializer_class = MyUserProfileSerializer
+
+
+class MovieViewList(generics.ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+
+
+class MovieViewSet(viewsets.ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
