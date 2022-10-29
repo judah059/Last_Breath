@@ -21,8 +21,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from api.auth.serializers import CustomJWTSerializer
 from api.users.views import *
 
-routerUser = routers.SimpleRouter()
-routerUser.register(r'profile', UserViewSet, basename='profile')
+# routerUser = routers.SimpleRouter()
+# routerUser.register(r'profile', UserViewSet, basename='profile')
 
 routerMovie = routers.SimpleRouter()
 routerMovie.register(r'film', MovieViewSet, basename='film')
@@ -31,7 +31,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
     path('api/registration/', ApiRegistration.as_view()),
-    path('api/', include(routerUser.urls)),
+    #path('api/', include(routerUser.urls)),
+    path('api/profile/', UserViewSet.as_view({'get': 'list',
+                                              'put': 'update',
+                                              'delete': 'destroy'})),
     path('api/filmlist/', MovieViewList.as_view()),
     path('api/', include(routerMovie.urls))
 ]

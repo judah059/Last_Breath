@@ -24,6 +24,12 @@ class UserViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         return qs.filter(id=self.request.user.id)
 
+    def get_object(self):
+        try:
+            return UserModel.objects.get(pk=self.request.user.id)
+        except UserModel.DoesNotExist:
+            raise UserModel()
+
 
 class MovieViewList(generics.ListAPIView):
     queryset = Movie.objects.all()
