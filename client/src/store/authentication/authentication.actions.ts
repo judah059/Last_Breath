@@ -5,7 +5,7 @@ import {IReqUser, IResUser} from "../../utils/api/types";
 
 export const login = createAsyncThunk<IResUser, IReqUser>(
     'user/login',
-    async (userData, thunkAPI) => {
-        return await userAPI.login(userData);
+    async (authData, thunkAPI) => {
+        return await userAPI.login(authData);
     }
 )

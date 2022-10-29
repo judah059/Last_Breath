@@ -26,7 +26,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer, onClic
         onClickSigningOpen()
     }
 
-    const userToken = useAppSelector((state: RootState) => state.user.token);
+    const authToken = useAppSelector((state: RootState) => state.auth.token);
 
 
     return (
@@ -35,7 +35,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer, onClic
                 <div className={s.top}>
                     <img src={logo} alt="logo"/>
                     <div className={s.title}>Cinema “Last Breath”</div>
-                    {!userToken && <button onClick={onClickSignUpOpenHandler}>Authorization</button>}
+                    {!authToken && <button onClick={onClickSignUpOpenHandler}>Authorization</button>}
                 </div>
                 <div className={s.menu}>
                     <ul>

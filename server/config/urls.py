@@ -33,6 +33,5 @@ urlpatterns = [
     path('api/registration/', ApiRegistration.as_view()),
     path('api/', include(routerUser.urls)),
     path('api/filmlist/', MovieViewList.as_view()),
-    path('api/reg/', ApiRegistration.as_view()),
     path('api/', include(routerMovie.urls))
 ]

@@ -1,18 +1,4 @@
-export interface IUser {
-    token: string;
-    info: {
-        id: number,
-        name: string,
-        email: string,
-        email_verified_at: null | string,
-        created_at: string,
-        updated_at: string
-    }
-}
-
-
-export interface UserState {
-    data: IUser | null
+export interface AuthState {
     token: string | null
     refresh: string | null
     isLoading: boolean

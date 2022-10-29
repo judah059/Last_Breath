@@ -22,3 +22,12 @@ export interface IResUser {
     access: string
 }
 
+export interface IUser {
+    username: string
+    first_name: string
+    last_name: string
+    birth_date: string
+    role: string
+    email: string
+}
+

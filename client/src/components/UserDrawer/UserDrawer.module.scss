@@ -76,6 +76,14 @@
 
           p {
             font-weight: 500;
+
+            a {
+              color: white;
+
+              &:hover{
+                color: #8f8181;
+              }
+            }
           }
 
           &:hover{

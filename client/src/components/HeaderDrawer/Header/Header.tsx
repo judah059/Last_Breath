@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
         onClickSigningOpen()
     }
 
-    const userToken = useAppSelector((state: RootState) => state.user.token);
+    const authToken = useAppSelector((state: RootState) => state.auth.token);
 
     return (
         <header className={s.header}>
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
                 <div className={s.user}>
                     {
-                        userToken ? <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
+                        authToken ? <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
                             <span onClick={onOpenPopupHandler}>Sing In</span>
                     }
                 </div>

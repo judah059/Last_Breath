@@ -7,6 +7,7 @@ import cart from "../../assets/cart.svg";
 import account from "../../assets/account.svg";
 import exit from "../../assets/exit.svg";
 import closeBtn from "../../assets/closeBtn.svg";
+import {NavLink} from "react-router-dom";
 
 
 interface UserDrawerProps {
@@ -36,7 +37,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                             </li>
                             <li>
                                 <img src={account} alt="account"/>
-                                <p>Account</p>
+                                <p><NavLink to='/profile'>Account</NavLink></p>
                             </li>
                             <li>
                                 <img src={help} alt="help" width="41px"/>
