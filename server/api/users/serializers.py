@@ -33,21 +33,14 @@ class MyUserPostSerializer(ModelSerializer):
 
 
 class MyUserProfileSerializer(serializers.ModelSerializer):
-    age = serializers.SerializerMethodField(method_name='calculate_age', read_only=True)
-
     class Meta:
         model = MyUser
         fields = ("username",
                   "first_name",
                   "last_name",
                   "birth_date",
-                  "age",
                   "role",
                   "email")
-
-    def calculate_age(self, instance):
-        years = ((datetime.date.today() - instance.birth_date)/31536000)
-        return years
 
 
 class MovieSerializer(serializers.ModelSerializer):

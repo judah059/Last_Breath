@@ -3,7 +3,6 @@ from rest_framework import permissions, viewsets, generics
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from api.users.permissions import IsUserProfileOwner
 from api.users.serializers import MyUserPostSerializer, MyUserProfileSerializer, MovieSerializer
 from users.models import Movie
 
@@ -18,14 +17,12 @@ class ApiRegistration(CreateAPIView):
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserModel.objects.all()
-    permission_classes = (IsAuthenticated, IsUserProfileOwner,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = MyUserProfileSerializer
 
-
-class ChangePasswordView(generics.UpdateAPIView):
-    queryset = UserModel.objects.all()
-    permission_classes = (IsAuthenticated, IsUserProfileOwner,)
-    serializer_class = MyUserProfileSerializer
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(id=self.request.user.id)
 
 
 class MovieViewList(generics.ListAPIView):
