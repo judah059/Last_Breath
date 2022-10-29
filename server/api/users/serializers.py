@@ -4,7 +4,7 @@ import math
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from users.models import MyUser
+from users.models import *
 
 
 class MyUserPostSerializer(ModelSerializer):
@@ -48,4 +48,10 @@ class MyUserProfileSerializer(serializers.ModelSerializer):
     def calculate_age(self, instance):
         years = ((datetime.date.today() - instance.birth_date)/31536000)
         return years
+
+
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = "__all__"
 

@@ -45,8 +45,9 @@ class SubscriptionTransactions(models.Model):
 class Movie(models.Model):
     name = models.CharField(max_length=255, null=False)
     video = models.TextField(null=False)  # url
-    premier = models.TextField()
+    poster = models.TextField(default='', null=False)  # url
     trailer = models.TextField(null=False)  # url
+    premier = models.TextField()
     release_date = models.DateField()
     length = models.IntegerField()
     cast = models.TextField()  # Я бы сделал отдельную таблицу под актёров
