@@ -27,7 +27,9 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = (props) => {
             <Header toLinkText={props.toLinkText}
                     onClickDrawer={() => setIsMenuOpened(true)}
                     onClickCinemaDrawer={() => setIsShow(!isShow)}
-                    onClickSigningOpen={() => setIsSigningOpened(true)}/>
+                    onClickSigningOpen={() => setIsSigningOpened(true)}
+                    onClickOpenUserDrawer={() => setIsUserDrawerOpened(true)}
+            />
             <Drawer isCartOpened={isMenuOpened}
                     onClickCloseDrawer={() => setIsMenuOpened(false)}
                     onClickAuth={() => setFormType("signIn")}

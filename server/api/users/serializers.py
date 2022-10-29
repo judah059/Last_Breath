@@ -28,7 +28,7 @@ class MyUserPostSerializer(ModelSerializer):
                   'last_name',
                   'password',
                   'username',
-                  'age',
+                  'birth_date',
                   )
 
 

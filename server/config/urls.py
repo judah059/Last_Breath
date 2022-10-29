@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/', include(routerUser.urls)),
     path('api/change_password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
     path('api/filmlist/', MovieViewList.as_view()),
+    path('api/reg/', ApiRegistration.as_view()),
     path('api/', include(routerMovie.urls))
 ]

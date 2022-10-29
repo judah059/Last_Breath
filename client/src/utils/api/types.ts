@@ -10,3 +10,15 @@ export interface ICinema {
     cinemaName: string
     cinemaStreet: string
 }
+
+export interface IReqUser {
+    email: string
+    password: string
+}
+
+
+export interface IResUser {
+    refresh: string
+    access: string
+}
+
