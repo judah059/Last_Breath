@@ -18,14 +18,12 @@ class ApiRegistration(CreateAPIView):
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserModel.objects.all()
-    permission_classes = (IsAuthenticated, IsUserProfileOwner,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = MyUserProfileSerializer
 
-
-class ChangePasswordView(generics.UpdateAPIView):
-    queryset = UserModel.objects.all()
-    permission_classes = (IsAuthenticated, IsUserProfileOwner,)
-    serializer_class = MyUserProfileSerializer
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.get(id=self.request.user.id)
 
 
 class MovieViewList(generics.ListAPIView):

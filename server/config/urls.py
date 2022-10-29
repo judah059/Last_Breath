@@ -31,7 +31,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
     path('api/', include(routerUser.urls)),
-    path('api/change_password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
     path('api/filmlist/', MovieViewList.as_view()),
     path('api/', include(routerMovie.urls))
 ]
