@@ -40,7 +40,9 @@ class MyUserProfileSerializer(serializers.ModelSerializer):
                   "last_name",
                   "birth_date",
                   "role",
-                  "email")
+                  "email",
+                  "password"
+                  )
 
 
 class MovieSerializer(serializers.ModelSerializer):
