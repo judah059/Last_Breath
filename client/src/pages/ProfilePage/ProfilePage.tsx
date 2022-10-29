@@ -38,8 +38,8 @@ const ProfilePage: React.FC = (props) => {
                                        setSelectedSettingName={() => setSelectedSettingName('Phone')}/>
                     </div>
                     <div>
-                        <SettingObject settingName='Payment method:' settingContent='**** 4444'/>
-                        <SettingObject settingName='Subscription:' settingContent='Premium'/>
+                        <SettingObject settingName='Payment method' settingContent='**** 4444'/>
+                        <SettingObject settingName='Subscription' settingContent='Premium'/>
                     </div>
                 </div>
                 <div className={s.deleteText} onClick={() => setDeleteFormOpened(true)}>
