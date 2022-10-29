@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ICinema, IReqUser, IResUser, IUser} from "./types";
+import {ICinema, ICreateUser, IReqUser, IResUser, IUser} from "./types";
 
 let baseApi = axios.create({
     baseURL: 'https://6358280cc26aac906f3d1b80.mockapi.io/'
@@ -26,6 +26,9 @@ export let API = {
 export let userAPI = {
     login(data: IReqUser) {
         return baseApi2.post<IResUser>(`token/`, data).then(res => res.data);
+    },
+    register(data: ICreateUser){
+        return axios.post<ICreateUser>(`http://127.0.0.1:8000/api/registration/`, data).then(res => res.data);
     },
 
     getMe(){

@@ -16,6 +16,15 @@ export interface IReqUser {
     password: string
 }
 
+export interface ICreateUser {
+    email: string
+    firstName: string,
+    lastName: string,
+    username: string,
+    dateOfBirth: string
+}
+
+
 
 export interface IResUser {
     refresh: string
