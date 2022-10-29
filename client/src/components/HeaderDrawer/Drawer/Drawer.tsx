@@ -6,8 +6,7 @@ import telegram from '../../../assets/telegram.svg'
 import viber from '../../../assets/viber.svg'
 import closeBtn from '../../../assets/closeBtn.svg'
 import {NavLink} from "react-router-dom";
-import {useAppSelector} from "../../../utils/hooks/redux";
-import {RootState} from "../../../store";
+import {useAuth} from "../../../utils/hooks/useAuth";
 
 
 interface DrawerProps {
@@ -26,8 +25,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer, onClic
         onClickSigningOpen()
     }
 
-    const authToken = useAppSelector((state: RootState) => state.auth.token);
-
+    const isAuth = useAuth()
 
     return (
         <div className={`${s.overlay} ${isCartOpened ? s.overlayOut : ""}`}>
@@ -35,7 +33,7 @@ const Drawer: React.FC<DrawerProps> = ({isCartOpened, onClickCloseDrawer, onClic
                 <div className={s.top}>
                     <img src={logo} alt="logo"/>
                     <div className={s.title}>Cinema “Last Breath”</div>
-                    {!authToken && <button onClick={onClickSignUpOpenHandler}>Authorization</button>}
+                    {!isAuth && <button onClick={onClickSignUpOpenHandler}>Authorization</button>}
                 </div>
                 <div className={s.menu}>
                     <ul>

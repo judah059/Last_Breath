@@ -1,10 +1,7 @@
 import axios from "axios";
 import {ICinema, IReqUser, IResUser, IUser} from "./types";
-import Cookie from "cookie-universal";
+import {getWithExpiry} from "../localStorage";
 
-
-const cookies = Cookie();
-const cookieToken = cookies.get('access_token');
 
 let baseApi = axios.create({
     baseURL: 'https://6358280cc26aac906f3d1b80.mockapi.io/'
@@ -25,16 +22,18 @@ export let API = {
 }
 
 
+const cookieToken = getWithExpiry('access_token')
+
 export let userAPI = {
     login(data: IReqUser) {
         return baseApi2.post<IResUser>(`token/`, data).then(res => res.data);
     },
-    register(data: IUser){
+    register(data: IUser) {
         return baseApi2.post<IUser>(`registration/`, data).then(res => res.data);
     },
 
-    getMe(){
-        return baseApi2.get<IUser[]>(`profile/`,{
+    getMe() {
+        return baseApi2.get<IUser[]>(`profile/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

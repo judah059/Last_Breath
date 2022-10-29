@@ -12,7 +12,6 @@ const NowInCinema: React.FC = () => {
     const fetchMovies = async () => {
         try {
             const movies = await API.getCinemaMovies();
-            console.log(movies)
             setMovies(movies);
         } catch (e) {
             console.log(e)

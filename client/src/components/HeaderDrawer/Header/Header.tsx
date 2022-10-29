@@ -6,8 +6,7 @@ import rightArrow from '../../../assets/rightArrow.svg'
 import userLogo from '../../../assets/userLogo.svg'
 import burger from '../../../assets/burger.svg'
 import {NavLink, useNavigate} from "react-router-dom";
-import {RootState} from "../../../store";
-import {useAppSelector} from "../../../utils/hooks/redux";
+import {useAuth} from "../../../utils/hooks/useAuth";
 
 interface HeaderProps {
     onClickDrawer: () => void
@@ -36,8 +35,7 @@ const Header: React.FC<HeaderProps> = ({
         onClickSigningOpen()
     }
 
-    const authToken = useAppSelector((state: RootState) => state.auth.token);
-    const userEmail = useAppSelector((state: RootState) => state.user.email);
+    const isAuth = useAuth()
 
     return (
         <header className={s.header}>
@@ -64,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
                 <div className={s.user}>
                     {
-                        (authToken || userEmail) ?
+                        isAuth ?
                             <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
                             <span onClick={onOpenPopupHandler}>Sing In</span>
                     }

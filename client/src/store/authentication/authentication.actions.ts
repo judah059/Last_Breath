@@ -1,11 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {userAPI} from "../../utils/api";
 import {IReqUser, IResUser, IUser} from "../../utils/api/types";
-import Cookie from "cookie-universal";
 import {AppDispatch} from "../index";
 import {setEmptyUser} from "../user/user.slice";
+import {setWithExpiry} from "../../utils/localStorage";
 
-const cookies = Cookie();
 
 
 export const register = createAsyncThunk<IUser, IUser>(
@@ -19,20 +18,22 @@ export const login = createAsyncThunk<IResUser, IReqUser>(
     'user/login',
     async (authData, thunkAPI) => {
 
-        const response = await userAPI.login(authData)
+        const {rememberMe, email, password} = authData
 
-        cookies.set('access_token', response.access, {
-            path: "/",
-            maxAge: 30 * 24 * 60 * 60
-        })
+        const response = await userAPI.login({email, password})
+
+        const expiredTime = rememberMe ? (30 * 24 * 60 * 60) : 5000
+
+        setWithExpiry('access_token', response.access, expiredTime)
+
         return response
     }
 )
 
 
-export const logout = () => (dispatch:AppDispatch) => {
+export const logout = () => (dispatch: AppDispatch) => {
     dispatch(setEmptyUser())
-    cookies.remove('access_token');
+    localStorage.removeItem('access_token')
 }
 
 

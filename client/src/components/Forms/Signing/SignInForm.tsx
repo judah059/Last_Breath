@@ -4,6 +4,7 @@ import logo from '../../../assets/logo.svg'
 import {useForm, SubmitHandler} from "react-hook-form";
 import {login} from "../../../store/authentication/authentication.actions";
 import {useAppDispatch} from "../../../utils/hooks/redux";
+import {IReqUser} from "../../../utils/api/types";
 
 
 
@@ -13,18 +14,14 @@ interface SignInFormProps {
 
 }
 
-interface signInInputs {
-    email: string;
-    password: string;
-}
 
 const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClose}) => {
 
     const [responseError, setResponseError] = useState(false);
-    const {register, handleSubmit, formState: {errors}} = useForm<signInInputs>();
+    const {register, handleSubmit, formState: {errors}} = useForm<IReqUser>();
     const dispatch = useAppDispatch();
 
-    const onSubmit: SubmitHandler<signInInputs> = async formData => {
+    const onSubmit: SubmitHandler<IReqUser> = async formData => {
 
         try {
             dispatch(login(formData))
@@ -66,7 +63,11 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
                         <li>
 
                             <label htmlFor="rememberMe">Remember me
-                                <input type="checkbox" id={"rememberMe"} className={s.rememberMe}/>
+                                <input type="checkbox"
+                                       id="rememberMe"
+                                       className={s.rememberMe}
+                                       {...register("rememberMe")}
+                                />
                                 <span className={s.checkmark}></span>
                             </label>
                         </li>
