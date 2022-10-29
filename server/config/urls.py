@@ -22,7 +22,7 @@ from api.auth.serializers import CustomJWTSerializer
 from api.users.views import *
 
 routerUser = routers.SimpleRouter()
-routerUser.register(r'myuser', UserViewSet, basename='myuser')
+routerUser.register(r'profile', UserViewSet, basename='profile')
 
 routerMovie = routers.SimpleRouter()
 routerMovie.register(r'film', MovieViewSet, basename='film')
@@ -30,6 +30,7 @@ routerMovie.register(r'film', MovieViewSet, basename='film')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
+    path('api/registration/', ApiRegistration.as_view()),
     path('api/', include(routerUser.urls)),
     path('api/filmlist/', MovieViewList.as_view()),
     path('api/', include(routerMovie.urls))
