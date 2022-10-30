@@ -8,10 +8,20 @@ import {getMe} from "../user/user.actions";
 
 
 
-export const register = createAsyncThunk<IUser, IUser>(
+export const registration = createAsyncThunk<IUser, IUser>(
     'user/register',
     async (userData, thunkAPI) => {
-        return await userAPI.register(userData);
+        const response = await userAPI.register(userData);
+
+        const {email, password} = userData
+
+        const resLogin = await userAPI.login({email, password})
+
+        const expiredTime = 30 * 24 * 60 * 60
+
+        setWithExpiry('access_token', resLogin.access, expiredTime)
+
+        return response
     }
 )
 
