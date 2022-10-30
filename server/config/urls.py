@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/profile/', UserViewSet.as_view({'get': 'list',
                                               'put': 'update',
                                               'delete': 'destroy'})),
+    path('api/change_password/', ChangePasswordView.as_view(), name='auth_change_password'),
     path('api/filmlist/', MovieViewList.as_view()),
     path('api/', include(routerMovie.urls))
 ]
