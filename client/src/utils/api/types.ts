@@ -12,8 +12,8 @@ export interface ICinema {
 }
 
 export interface IReqUser {
-    email: string
-    password: string
+    email?: string
+    password?: string
     rememberMe?: boolean
 }
 
@@ -28,7 +28,7 @@ export interface IUser {
     first_name: string
     last_name: string
     birth_date: string
-    role: string
+    role?: string
     email: string
     password?: string
 }

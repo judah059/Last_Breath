@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {UserState} from "./user.types";
 import {getMe} from "./user.actions";
+import {registration} from "../authentication/authentication.actions";
 
 const initialState: UserState = {
     username: '',
@@ -34,10 +35,18 @@ export const userSlice = createSlice({
             state.first_name = action.payload.first_name;
             state.last_name = action.payload.last_name;
             state.birth_date = action.payload.birth_date;
-            state.role = action.payload.role;
+            state.role = action.payload.role || '';
             state.email = action.payload.email;
             state.isLoading = false;
         })
+        builder.addCase(registration.fulfilled, (state, action) => {
+            state.username = action.payload.username;
+            state.first_name = action.payload.first_name;
+            state.last_name = action.payload.last_name;
+            state.birth_date = action.payload.birth_date;
+            state.role = action.payload.role || '';
+            state.email = action.payload.email;
+        });
     }
 })
 

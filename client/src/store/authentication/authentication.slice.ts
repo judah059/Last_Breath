@@ -1,12 +1,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AuthState} from "./authentication.types";
-import {login} from "./authentication.actions";
+import {login, registration} from "./authentication.actions";
 import {IResUser} from "../../utils/api/types";
 
 const initialState: AuthState = {
     token: null,
     refresh: null,
-    isLoading: false
+    isLoading: false,
+    error: false
 }
 
 export const authSlice = createSlice({
@@ -23,6 +24,12 @@ export const authSlice = createSlice({
             state.token = action.payload.access;
             state.refresh = action.payload.refresh;
             state.isLoading = false;
+        });
+        builder.addCase(registration.pending, (state, action) => {
+            state.error = false
+        });
+        builder.addCase(registration.rejected, (state, action) => {
+            state.error = true
         });
     }
 })
