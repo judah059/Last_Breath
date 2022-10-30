@@ -8,7 +8,7 @@ import {IReqUser} from "../../../utils/api/types";
 
 interface SignInFormProps {
     onOpenSignUp: () => void
-    onClickSigningClose: ()=>void
+    onClickSigningClose: () => void
 
 }
 
@@ -20,13 +20,13 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<IReqUser> = async formData => {
-
         try {
             dispatch(login(formData))
             onClickSigningClose()
         } catch (e) {
             setResponseError(true);
-            console.log((e as Error).message)        }
+            console.log((e as Error).message)
+        }
     };
 
     return (

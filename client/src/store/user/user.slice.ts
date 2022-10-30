@@ -25,6 +25,9 @@ export const userSlice = createSlice({
             state.birth_date = '';
             state.role = '';
             state.email = '';
+        },
+        setError(state, action) {
+            state.error = action.payload
         }
     },
     extraReducers: builder => {
@@ -56,16 +59,16 @@ export const userSlice = createSlice({
             state.error = 'Error';
         })
         builder.addCase(registration.fulfilled, (state, action) => {
-            state.username = action.payload.username;
-            state.first_name = action.payload.first_name;
-            state.last_name = action.payload.last_name;
-            state.birth_date = action.payload.birth_date;
+            state.username = action.payload.username || '';
+            state.first_name = action.payload.first_name || '';
+            state.last_name = action.payload.last_name || '';
+            state.birth_date = action.payload.birth_date || '';
             state.role = action.payload.role || '';
-            state.email = action.payload.email;
+            state.email = action.payload.email || '';
         });
     }
 })
 
-export const {setEmptyUser} = userSlice.actions;
+export const {setEmptyUser, setError} = userSlice.actions;
 
 export default userSlice.reducer;

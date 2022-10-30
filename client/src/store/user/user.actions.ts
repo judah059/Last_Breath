@@ -20,3 +20,10 @@ export const updateMe = createAsyncThunk<IUser, IUser, {state: RootState}>(
         return await userAPI.updateMe(UserData, token)
     }
 )
+
+export const deleteMe = createAsyncThunk<IUser, string>(
+    'user/delete',
+    async (token, thunkAPI) => {
+        const res = await userAPI.deleteMe(token)
+    }
+)

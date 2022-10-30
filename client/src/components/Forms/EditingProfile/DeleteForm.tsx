@@ -3,6 +3,8 @@ import s from "./EditForm.module.scss";
 import close from "../../../assets/closeCross.svg";
 import Button from "../../common/Buttons/Button";
 import Popup from "reactjs-popup";
+import {useAppDispatch} from "../../../utils/hooks/redux";
+import {deleteMe} from "../../../store/user/user.actions";
 
 interface DeleteFormProps {
     isDeleteFormOpened: boolean
@@ -10,6 +12,13 @@ interface DeleteFormProps {
 }
 
 const DeleteForm: React.FC<DeleteFormProps> = (props) => {
+
+    const dispatch = useAppDispatch();
+
+    const onClickDeleteProfile = () => {
+        dispatch(deleteMe())
+    }
+
     return (
         <Popup
             open={props.isDeleteFormOpened}

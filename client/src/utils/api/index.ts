@@ -32,7 +32,7 @@ export let userAPI = {
     },
 
     register(data: IUser) {
-        return baseApi2.post<IUser>(`registration/`, data).then(res => res.data);
+        return axios.post<IUser>(`http://127.0.0.1:8000/api/registration/`, data).then(res => res.data);
     },
 
     getMe(token?: string) {
@@ -50,5 +50,13 @@ export let userAPI = {
                 }
             }
         ).then(res => res.data)
+    },
+
+    deleteMe(token?: string){
+        return baseApi2.delete('profile/', {
+            headers: {
+                Authorization: "Bearer " + token || cookieToken
+            }
+        }).then(res => res.data)
     }
 }

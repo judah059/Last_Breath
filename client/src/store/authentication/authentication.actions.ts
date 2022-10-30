@@ -5,6 +5,7 @@ import {AppDispatch} from "../index";
 import {setEmptyUser} from "../user/user.slice";
 import {setWithExpiry} from "../../utils/localStorage";
 import {getMe} from "../user/user.actions";
+import {setToken} from "./authentication.slice";
 
 
 
@@ -20,6 +21,8 @@ export const registration = createAsyncThunk<IUser, IUser>(
         const expiredTime = 30 * 24 * 60 * 60
 
         setWithExpiry('access_token', resLogin.access, expiredTime)
+
+        thunkAPI.dispatch(setToken(resLogin.access))
 
         return response
     }
