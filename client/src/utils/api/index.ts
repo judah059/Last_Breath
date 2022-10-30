@@ -11,14 +11,11 @@ const cookieToken = getWithExpiry('access_token')
 
 let baseApi2 = axios.create({
     baseURL: 'http://127.0.0.1:8000/api/',
-    headers: {
-        Authorization: "Bearer " + cookieToken
-    }
 })
 
 export let API = {
     getCinemaMovies() {
-        return baseApi.get('cinemaMovies').then(res => res.data)
+        return baseApi2.get('filmlist/').then(res => res.data)
     },
 
     getCinemas(city = '') {
