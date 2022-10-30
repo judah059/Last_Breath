@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {UserState} from "./user.types";
-import {getMe} from "./user.actions";
+import {getMe, updateMe} from "./user.actions";
 
 const initialState: UserState = {
     username: '',
@@ -9,7 +9,8 @@ const initialState: UserState = {
     birth_date: '',
     role: '',
     email: '',
-    isLoading: false
+    isLoading: false,
+    error: ''
 }
 
 export const userSlice = createSlice({
@@ -30,13 +31,28 @@ export const userSlice = createSlice({
             state.isLoading = true;
         })
         builder.addCase(getMe.fulfilled, (state, action) => {
-            state.username = action.payload.username;
-            state.first_name = action.payload.first_name;
-            state.last_name = action.payload.last_name;
-            state.birth_date = action.payload.birth_date;
-            state.role = action.payload.role;
-            state.email = action.payload.email;
+            state.username = action.payload.username || '';
+            state.first_name = action.payload.first_name || '';
+            state.last_name = action.payload.last_name || '';
+            state.birth_date = action.payload.birth_date || '';
+            state.role = action.payload.role || '';
+            state.email = action.payload.email || '';
             state.isLoading = false;
+        })
+        builder.addCase(updateMe.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(updateMe.fulfilled, (state, action) => {
+            state.username = action.payload.username || '';
+            state.first_name = action.payload.first_name || '';
+            state.last_name = action.payload.last_name || '';
+            state.birth_date = action.payload.birth_date || '';
+            state.role = action.payload.role || '';
+            state.email = action.payload.email || '';
+            state.isLoading = false;
+        })
+        builder.addCase(updateMe.rejected, (state, action) => {
+            state.error = 'Error';
         })
     }
 })

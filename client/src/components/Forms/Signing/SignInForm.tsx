@@ -6,8 +6,6 @@ import {login} from "../../../store/authentication/authentication.actions";
 import {useAppDispatch} from "../../../utils/hooks/redux";
 import {IReqUser} from "../../../utils/api/types";
 
-
-
 interface SignInFormProps {
     onOpenSignUp: () => void
     onClickSigningClose: ()=>void
@@ -25,10 +23,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
 
         try {
             dispatch(login(formData))
-
             onClickSigningClose()
-
-
         } catch (e) {
             setResponseError(true);
             console.log((e as Error).message)        }

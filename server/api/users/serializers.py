@@ -40,8 +40,8 @@ class MyUserProfileSerializer(serializers.ModelSerializer):
                   "last_name",
                   "birth_date",
                   "role",
-                  "email",
-                  "password"
+                  "email"
+#                   "password"
                   )
 
 

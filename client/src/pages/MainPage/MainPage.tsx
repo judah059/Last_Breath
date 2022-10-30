@@ -4,14 +4,17 @@ import NowInCinema from "../NowInCinema/NowInCinema";
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {useAppDispatch} from "../../utils/hooks/redux";
 import {getMe} from "../../store/user/user.actions";
+import {getWithExpiry} from "../../utils/localStorage";
 
 
 const MainPage: React.FC = () => {
 
     const dispatch = useAppDispatch()
 
+    const token = getWithExpiry('access_token')
+
     useEffect(() => {
-        dispatch(getMe())
+        dispatch(getMe(token))
     }, [])
 
     return (

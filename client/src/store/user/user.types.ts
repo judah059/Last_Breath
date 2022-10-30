@@ -6,4 +6,5 @@ export interface UserState {
     role: string
     email: string
     isLoading: boolean
+    error: string
 }

@@ -24,12 +24,17 @@ export interface IResUser {
 }
 
 export interface IUser {
-    username: string
-    first_name: string
-    last_name: string
-    birth_date: string
-    role: string
-    email: string
+    username?: string
+    first_name?: string
+    last_name?: string
+    birth_date?: string
+    role?: string
+    email?: string
     password?: string
 }
 
+export interface DateOfBirth {
+    month: string
+    day: string
+    year: string
+}
