@@ -4,13 +4,13 @@ import img from '../../assets/tempMovieImage.jpg'
 
 interface MovieItemProps {
     name: string
-    imageUrl: string
+    poster: string
 }
 
-const MovieItem: React.FC<MovieItemProps> = ({name, imageUrl}) => {
+const MovieItem: React.FC<MovieItemProps> = ({name, poster}) => {
     return (
         <div className={s.movie_item}>
-            <img src={imageUrl} alt="movieImage"/>
+            <img src={poster} alt="movieImage"/>
             <p>{name}</p>
         </div>
     );

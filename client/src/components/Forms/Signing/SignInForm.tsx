@@ -6,11 +6,9 @@ import {login} from "../../../store/authentication/authentication.actions";
 import {useAppDispatch} from "../../../utils/hooks/redux";
 import {IReqUser} from "../../../utils/api/types";
 
-
-
 interface SignInFormProps {
     onOpenSignUp: () => void
-    onClickSigningClose: ()=>void
+    onClickSigningClose: () => void
 
 }
 
