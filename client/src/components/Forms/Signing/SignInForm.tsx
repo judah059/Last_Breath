@@ -18,15 +18,25 @@ interface SignInFormProps {
 const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClose}) => {
 
     const [responseError, setResponseError] = useState(false);
+    const [responseErrorMsg, setResponseErrorMsg] = useState('');
     const {register, handleSubmit, formState: {errors}} = useForm<IReqUser>();
     const dispatch = useAppDispatch();
 
     const onSubmit: SubmitHandler<IReqUser> = async formData => {
 
         try {
-            dispatch(login(formData))
+            const res = await dispatch(login(formData))
 
-            onClickSigningClose()
+
+            if(res.payload === undefined){
+                setResponseErrorMsg('ERR_CONNECTION_REFUSED')
+            }else if(typeof res.payload === 'string'){
+                const resMsg = JSON.parse(res.payload as string)
+                setResponseErrorMsg(resMsg.detail)
+            }else {
+                onClickSigningClose()
+            }
+
 
 
         } catch (e) {
@@ -76,6 +86,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
                 </div>
             </div>
             <div className={s.btnBlock}>
+                {responseErrorMsg && <p>{responseErrorMsg}</p>}
                 <button type="submit">Sign In</button>
                 <p>Don’t have an account? <span onClick={onOpenSignUp}>Sign up for free!</span></p>
             </div>
