@@ -4,9 +4,9 @@ import s from "./EditForm.module.scss";
 import close from "../../../assets/closeCross.svg";
 import Button from "../../common/Buttons/Button";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {IChangePassword, IUser} from "../../../utils/api/types";
+import {IChangePassword} from "../../../utils/api/types";
 import {useAppDispatch} from "../../../utils/hooks/redux";
-import {updateMe, updatePassword} from "../../../store/user/user.actions";
+import {updatePassword} from "../../../store/user/user.actions";
 import {ErrorMessage} from "@hookform/error-message";
 import CustomErrorMessage from "../../common/CustomErrorMessage/CustomErrorMessage";
 
@@ -17,7 +17,9 @@ interface PasswordEditProps {
 
 interface IResError {
     password?: string[]
-    old_password?: string
+    old_password?: {
+        old_password: string
+    }
     custom?: string
 }
 
@@ -39,7 +41,8 @@ const PasswordEditForm: React.FC<PasswordEditProps> = (props) => {
                 setResponseError(true)
             } else if (typeof res.payload === 'string') {
                 const resMsg = JSON.parse(res.payload as string)
-                setResponseErrorMsg(resMsg.old_password)
+                console.log(resMsg)
+                setResponseErrorMsg(resMsg)
                 setResponseError(true)
             } else {
                 setResponseError(false)
@@ -80,7 +83,7 @@ const PasswordEditForm: React.FC<PasswordEditProps> = (props) => {
                     />
                 </div>
                 <ErrorMessage errors={errors} name="old_password" as="p" className={s.errorMsg}/>
-                {responseError && <CustomErrorMessage msgContent={responseErrorMsg.old_password}/>}
+                {responseError && <CustomErrorMessage msgContent={responseErrorMsg.old_password?.old_password}/>}
                 <label>{'New password'}:</label>
                 <div className={s.fieldBlock}>
                     <input type="password" placeholder={`Enter your new password`} className={s.field}
@@ -101,7 +104,7 @@ const PasswordEditForm: React.FC<PasswordEditProps> = (props) => {
                     />
                 </div>
                 <ErrorMessage errors={errors} name="password2" as="p" className={s.errorMsg}/>
-                {/*{responseError && <CustomErrorMessage msgContent={responseErrorMsg?.password?.toString()}/>}*/}
+                {responseError && <CustomErrorMessage msgContent={responseErrorMsg?.password?.toString()}/>}
                 <div className={s.buttonSave}>
                     <Button buttonContent='Save' onClickAction={clickOnSubmit}/>
                 </div>
