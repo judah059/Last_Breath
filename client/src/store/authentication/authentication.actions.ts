@@ -9,29 +9,46 @@ import {setToken} from "./authentication.slice";
 
 import {AxiosError} from "axios";
 
-
-export const registration = createAsyncThunk<IUser, IUser>(
-    'user/register',
-    async (userData, thunkAPI) => {
-        const response = await userAPI.register(userData);
-
-        const {email, password} = userData
-
-        const resLogin = await userAPI.login({email, password})
-
-        const expiredTime = 30 * 24 * 60 * 60
-
-        setWithExpiry('access_token', resLogin.access, expiredTime)
-
-        thunkAPI.dispatch(setToken(resLogin.access))
-
-        return response
-    }
-)
-
 interface ResErrors {
     json: string | ''
 }
+
+
+
+export const registration = createAsyncThunk<IUser, IUser, {
+    rejectValue: string
+}>(
+    'user/register',
+    async (userData, thunkAPI) => {
+        try{
+            const response = await userAPI.register(userData);
+
+            const {email, password} = userData
+
+            const resLogin = await userAPI.login({email, password})
+
+            const expiredTime = 30 * 24 * 60 * 60
+
+            setWithExpiry('access_token', resLogin.access, expiredTime)
+
+            thunkAPI.dispatch(setToken(resLogin.access))
+
+            return response
+        }catch (err: any) {
+            let error: AxiosError<ResErrors> = err // cast the error for access
+
+            if (!error.response) {
+                throw error
+            }
+
+            const errorMsg = error.response.data
+            const json = JSON.stringify(errorMsg)
+
+            return thunkAPI.rejectWithValue(json)
+        }
+    }
+)
+
 
 export const login = createAsyncThunk<IResUser, IReqUser, {
     rejectValue: string
@@ -49,6 +66,7 @@ export const login = createAsyncThunk<IResUser, IReqUser, {
             thunkAPI.dispatch(getMe(response.access))
 
             return response
+
         } catch (err: any) {
 
             let error: AxiosError<ResErrors> = err // cast the error for access
