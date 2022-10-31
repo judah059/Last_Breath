@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import s from './EditForm.module.scss'
@@ -20,6 +20,8 @@ interface EmailEditProps {
 const EmailEdit: React.FC<EmailEditProps> = (props) => {
 
     const {register, handleSubmit, formState: {errors}} = useForm<IUser>();
+    const [responseError, setResponseError] = useState(false);
+    const [responseErrorMsg, setResponseErrorMsg] = useState('');
     const dispatch = useAppDispatch();
     let {username, birth_date, error} = useAppSelector((state: RootState) => state.user);
 
@@ -29,6 +31,7 @@ const EmailEdit: React.FC<EmailEditProps> = (props) => {
                 email: formData.email, username, birth_date
             }
             dispatch(updateMe(userData))
+
             props.onClickEmailEditClose?.()
             // props.onClickEmailEditClose?.()
         } catch (e) {

@@ -30,7 +30,7 @@ export const registration = createAsyncThunk<IUser, IUser>(
 )
 
 interface ResErrors {
-       json: string | ''
+    json: string | ''
 }
 
 export const login = createAsyncThunk<IResUser, IReqUser, {
@@ -46,11 +46,9 @@ export const login = createAsyncThunk<IResUser, IReqUser, {
             const expiredTime = rememberMe ? (30 * 24 * 60 * 60) : 5000
             setWithExpiry('access_token', response.access, expiredTime)
 
-        thunkAPI.dispatch(getMe(response.access))
+            thunkAPI.dispatch(getMe(response.access))
 
-        return response
             return response
-
         } catch (err: any) {
 
             let error: AxiosError<ResErrors> = err // cast the error for access

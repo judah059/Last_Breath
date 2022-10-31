@@ -11,11 +11,13 @@ import {useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import EmailEdit from "../../components/Forms/EditingProfile/EmailEditForm";
 import UsernameEdit from "../../components/Forms/EditingProfile/UsernameEditForm";
+import PasswordEditForm from "../../components/Forms/EditingProfile/PasswordEditForm";
 
 const ProfilePage: React.FC = (props) => {
     const [isUsernameEditFormOpened, setUsernameEditFormOpened] = useState(false)
     const [isEmailEditFormOpened, setEmailEditFormOpened] = useState(false)
     const [isDateOfBirthEditOpened, setDateOfBirthEditOpened] = useState(false)
+    const [isPasswordEditFormOpened, setPasswordEditFormOpened] = useState(false)
     const [isDeleteFormOpened, setDeleteFormOpened] = useState(false)
     const [selectedSettingName, setSelectedSettingName] = useState('')
 
@@ -56,13 +58,16 @@ const ProfilePage: React.FC = (props) => {
                     <div>
                         <SettingObject settingName='Payment method' settingContent='**** 4444'/>
                         <SettingObject settingName='Subscription' settingContent='Premium'/>
+                        <SettingObject settingName='Password' settingContent='*********'
+                                       setFormOpened={() => setPasswordEditFormOpened(true)}
+                        />
                     </div>
                 </div>
-                <div className={s.deleteText} onClick={() => setDeleteFormOpened(true)}>
+                <span className={s.deleteText} onClick={() => setDeleteFormOpened(true)}>
                     Do you want to delete your account?
                     {<DeleteForm isDeleteFormOpened={isDeleteFormOpened}
                                  onClickDeleteFormClose={() => setDeleteFormOpened(false)}/>}
-                </div>
+                </span>
             </div>
             <UsernameEdit
                 settingName={selectedSettingName} isUsernameEditOpened={isUsernameEditFormOpened}
@@ -71,6 +76,8 @@ const ProfilePage: React.FC = (props) => {
                        onClickEmailEditClose={() => setEmailEditFormOpened(false)} settingName={selectedSettingName}/>
             <DateOfBirthEditForm isDateOfBirthEditOpened={isDateOfBirthEditOpened}
                                  onClickDateOfBirthClose={() => setDateOfBirthEditOpened(false)}/>
+            <PasswordEditForm isPasswordEditFormOpened={isPasswordEditFormOpened} onClickUsernameEditClose={
+                () => setPasswordEditFormOpened(false)}/>
         </div>
     )
 };

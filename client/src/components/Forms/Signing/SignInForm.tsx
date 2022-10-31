@@ -26,20 +26,20 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
             const res = await dispatch(login(formData))
 
 
-            if(res.payload === undefined){
+            if (res.payload === undefined) {
                 setResponseErrorMsg('ERR_CONNECTION_REFUSED')
-            }else if(typeof res.payload === 'string'){
+            } else if (typeof res.payload === 'string') {
                 const resMsg = JSON.parse(res.payload as string)
                 setResponseErrorMsg(resMsg.detail)
-            }else {
+            } else {
                 onClickSigningClose()
             }
 
 
-
         } catch (e) {
             setResponseError(true);
-            console.log((e as Error).message)        }
+            console.log((e as Error).message)
+        }
     };
 
     return (

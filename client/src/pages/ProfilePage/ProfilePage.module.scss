@@ -44,7 +44,8 @@
     }
   }
 
-  .deleteText {
+  span.deleteText {
+    display: inline-block;
     margin-left: 76px;
     padding-bottom: 10px;
     margin-top: 68px;
