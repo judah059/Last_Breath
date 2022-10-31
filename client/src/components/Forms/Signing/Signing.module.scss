@@ -48,6 +48,16 @@
     .fieldBlock {
       width: 100%;
 
+      .errorMsg {
+        margin-top: 8px;
+        color: #bf1650;
+
+        &::before {
+          display: inline;
+          content: "⚠ ";
+        }
+      }
+
       .selects {
         color: #979797;
 
@@ -192,7 +202,8 @@
       background: #55486C;
       border: 1.5px solid #55486C;
       border-radius: 15px;
-      &:hover{
+
+      &:hover {
         background: rgba(58, 36, 101, 0.74);
       }
     }

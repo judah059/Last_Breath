@@ -9,29 +9,46 @@ import {setToken} from "./authentication.slice";
 
 import {AxiosError} from "axios";
 
+interface ResErrors {
+    json: string | ''
+}
 
-export const registration = createAsyncThunk<IUser, IUser>(
+
+
+export const registration = createAsyncThunk<IUser, IUser, {
+    rejectValue: string
+}>(
     'user/register',
     async (userData, thunkAPI) => {
-        const response = await userAPI.register(userData);
+        try{
+            const response = await userAPI.register(userData);
 
-        const {email, password} = userData
+            const {email, password} = userData
 
-        const resLogin = await userAPI.login({email, password})
+            const resLogin = await userAPI.login({email, password})
 
-        const expiredTime = 30 * 24 * 60 * 60
+            const expiredTime = 30 * 24 * 60 * 60
 
-        setWithExpiry('access_token', resLogin.access, expiredTime)
+            setWithExpiry('access_token', resLogin.access, expiredTime)
 
-        thunkAPI.dispatch(setToken(resLogin.access))
+            thunkAPI.dispatch(setToken(resLogin.access))
 
-        return response
+            return response
+        }catch (err: any) {
+            let error: AxiosError<ResErrors> = err // cast the error for access
+
+            if (!error.response) {
+                throw error
+            }
+
+            const errorMsg = error.response.data
+            const json = JSON.stringify(errorMsg)
+
+            return thunkAPI.rejectWithValue(json)
+        }
     }
 )
 
-interface ResErrors {
-       json: string | ''
-}
 
 export const login = createAsyncThunk<IResUser, IReqUser, {
     rejectValue: string
@@ -46,9 +63,8 @@ export const login = createAsyncThunk<IResUser, IReqUser, {
             const expiredTime = rememberMe ? (30 * 24 * 60 * 60) : 5000
             setWithExpiry('access_token', response.access, expiredTime)
 
-        thunkAPI.dispatch(getMe(response.access))
+            thunkAPI.dispatch(getMe(response.access))
 
-        return response
             return response
 
         } catch (err: any) {

@@ -5,6 +5,8 @@ import {useForm, SubmitHandler} from "react-hook-form";
 import {login} from "../../../store/authentication/authentication.actions";
 import {useAppDispatch} from "../../../utils/hooks/redux";
 import {IReqUser} from "../../../utils/api/types";
+import {ErrorMessage} from "@hookform/error-message";
+import CustomErrorMessage from "../../common/CustomErrorMessage/CustomErrorMessage";
 
 interface SignInFormProps {
     onOpenSignUp: () => void
@@ -26,20 +28,20 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
             const res = await dispatch(login(formData))
 
 
-            if(res.payload === undefined){
+            if (res.payload === undefined) {
                 setResponseErrorMsg('ERR_CONNECTION_REFUSED')
-            }else if(typeof res.payload === 'string'){
+            } else if (typeof res.payload === 'string') {
                 const resMsg = JSON.parse(res.payload as string)
                 setResponseErrorMsg(resMsg.detail)
-            }else {
+            } else {
                 onClickSigningClose()
             }
 
 
-
         } catch (e) {
             setResponseError(true);
-            console.log((e as Error).message)        }
+            console.log((e as Error).message)
+        }
     };
 
     return (
@@ -54,19 +56,18 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
                     <input type="text"
                            placeholder={"Enter your email"}
                            className={s.field}
-                           {...register("email", {required: true})}
+                           {...register("email", {required: "This field is required"})}
                     />
-                    {errors.email && <span>This field is required</span>}
+                    <ErrorMessage errors={errors} name="email" as="p" className={s.errorMsg}/>
                 </div>
                 <div className={s.fieldBlock}>
                     <label>Password</label>
                     <input type="password"
                            className={s.field}
-                           {...register("password", {required: true})}
+                           {...register("password", {required: "This field is required"})}
                     />
-                    {errors.password && <span>This field is required</span>}
-                    <br/>
-                    {responseError && <span>Incorrect Email/Password</span>}
+
+                    <ErrorMessage errors={errors} name="password" as="p" className={s.errorMsg}/>
                     <ul>
                         <li>
 
@@ -84,7 +85,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onOpenSignUp, onClickSigningClos
                 </div>
             </div>
             <div className={s.btnBlock}>
-                {responseErrorMsg && <p>{responseErrorMsg}</p>}
+                {responseErrorMsg && <CustomErrorMessage msgContent={responseErrorMsg}/>}
                 <button type="submit">Sign In</button>
                 <p>Don’t have an account? <span onClick={onOpenSignUp}>Sign up for free!</span></p>
             </div>

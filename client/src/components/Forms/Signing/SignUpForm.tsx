@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import s from "./Signing.module.scss";
 import logo from "../../../assets/logo.svg";
 import range from "lodash.range";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
+import {useAppDispatch} from "../../../utils/hooks/redux";
 import {registration} from "../../../store/authentication/authentication.actions";
-import {RootState} from "../../../store";
+import {ErrorMessage} from "@hookform/error-message";
+import CustomErrorMessage from "../../common/CustomErrorMessage/CustomErrorMessage";
 
 interface SignUpFormProps {
     onOpenSignIn: () => void
@@ -24,9 +25,15 @@ interface registerInputs {
     repeatPassword: string
 }
 
-const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClose}) => {
+interface IResError {
+    username?: string[]
+    email?: string[]
+    custom?: string
+}
 
-    const isResError = useAppSelector((state: RootState) => state.auth.error)
+const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClose}) => {
+    const [responseErrorMsg, setResponseErrorMsg] = useState<IResError>({});
+    const [isResponseError, setIsResponseError] = useState(false);
 
     const {register, handleSubmit, formState: {errors}, watch} = useForm<registerInputs>();
 
@@ -49,9 +56,19 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                 password: formData.password
             }
 
-            if (!isResError) {
+
+            const res = await dispatch(registration(userData))
+
+            console.log(res)
+            if (res.payload === undefined) {
+                setResponseErrorMsg({custom: 'ERR_CONNECTION_REFUSED'})
+                setIsResponseError(true)
+            } else if (typeof res.payload === 'string') {
+                const resMsg: IResError = JSON.parse(res.payload as string)
+                setResponseErrorMsg(resMsg)
+                setIsResponseError(true)
+            } else {
                 onClickSigningClose()
-                dispatch(registration(userData))
             }
 
 
@@ -75,9 +92,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                         type="text"
                         placeholder={"Enter your username name"}
                         className={s.field}
-                        {...register("userName", {required: true})}
+                        {...register("userName", {required: "This field is required"})}
                     />
-                    {errors.userName && <span>This field is required</span>}
+                    <ErrorMessage errors={errors} name="userName" as="p" className={s.errorMsg}/>
                 </div>
 
                 <div className={s.fieldBlock}>
@@ -86,9 +103,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                         type="text"
                         placeholder={"Enter your first name"}
                         className={s.field}
-                        {...register("firstName", {required: true})}
+                        {...register("firstName", {required: "This field is required"})}
                     />
-                    {errors.firstName && <span>This field is required</span>}
+                    <ErrorMessage errors={errors} name="firstName" as="p" className={s.errorMsg}/>
                 </div>
                 <div className={s.fieldBlock}>
                     <label>Last name</label>
@@ -96,29 +113,29 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                         type="text"
                         placeholder={"Enter your last name"}
                         className={s.field}
-                        {...register("lastName", {required: true})}
+                        {...register("lastName", {required: "This field is required"})}
                     />
-                    {errors.lastName && <span>This field is required</span>}
+                    <ErrorMessage errors={errors} name="lastName" as="p" className={s.errorMsg}/>
                 </div>
 
                 <div className={s.fieldBlock}>
                     <label>Email</label>
                     <input type="text" placeholder={"Enter your email"} className={s.field}
                            {...register("email", {
-                               required: true, pattern: {
+                               required: "This field is required", pattern: {
                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                    message: "Invalid email address"
                                }
                            })}
 
                     />
-                    {errors.email && <span>{errors.email.message}</span>}
+                    <ErrorMessage errors={errors} name="email" as="p" className={s.errorMsg}/>
                 </div>
 
                 <div className={s.fieldBlock}>
                     <label>Date of birth</label>
                     <div className={s.selects}>
-                        <select {...register("month", {required: true})}>
+                        <select {...register("month", {required: "This field is required"})}>
                             <option value="" disabled selected>MM</option>
                             {
                                 range(1, 13).map(m => (
@@ -126,7 +143,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                                 ))
                             }
                         </select>
-                        <select {...register("day", {required: true})}>
+                        <select {...register("day", {required: "This field is required"})}>
                             <option value="" disabled selected>DD</option>
                             {
                                 range(1, 32).map(m => (
@@ -134,7 +151,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                                 ))
                             }
                         </select>
-                        <select {...register("year", {required: true})}>
+                        <select {...register("year", {required: "This field is required"})}>
                             <option value="" disabled selected>YYYY</option>
                             {
                                 range(1900, new Date().getFullYear() + 1).map(m => (
@@ -143,28 +160,34 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                             }
                         </select>
                     </div>
-                    {(errors.month || errors.day || errors.year) && <span>All fields are required</span>}
+                    {(errors.month || errors.day || errors.year) &&
+                        <CustomErrorMessage msgContent={"These fields are required"}/>}
+
                 </div>
 
                 <div className={s.fieldBlock}>
                     <label>Password</label>
-                    <input type="password" className={s.field} {...register("password", {required: true})}/>
-                    {errors.password && <span>This field is required</span>}
+                    <input type="password"
+                           className={s.field} {...register("password", {required: "This field is required"})}/>
+                    <ErrorMessage errors={errors} name="password" as="p" className={s.errorMsg}/>
                 </div>
                 <div className={s.fieldBlock}>
                     <label>Repeat Password</label>
                     <input type="password" className={s.field} {...register("repeatPassword", {
-                        required: true, validate: (val: string) => {
+                        required: "This field is required", validate: (val: string) => {
                             if (watch('password') != val) {
                                 return "Your passwords do no match";
                             }
                         }
                     })}/>
-                    {errors.repeatPassword && <span>{errors.repeatPassword.message}</span>}
+                    <ErrorMessage errors={errors} name="repeatPassword" as="p" className={s.errorMsg}/>
                 </div>
             </div>
             <div className={s.btnBlock}>
-                {isResError && <p>A user with that username or email already exists</p>}
+
+                {isResponseError && <CustomErrorMessage msgContent={responseErrorMsg?.username?.toString()}/>}
+                {isResponseError && <CustomErrorMessage msgContent={responseErrorMsg?.email?.toString()}/>}
+                {isResponseError && <CustomErrorMessage msgContent={responseErrorMsg?.custom}/>}
                 <button type="submit">Sign Up</button>
                 <p>Already have an account? <span onClick={onOpenSignIn}>Sign in!</span></p>
             </div>
