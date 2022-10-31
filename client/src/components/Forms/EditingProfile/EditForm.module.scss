@@ -33,6 +33,20 @@
     line-height: 24px;
     color: #9E9E9E;
     padding: 14px 18px;
+
+    input{
+      width: 100%;
+    }
+  }
+
+  .errorMsg {
+    margin-top: 8px;
+    color: #bf1650;
+
+    &::before {
+      display: inline;
+      content: "⚠ ";
+    }
   }
 
   .buttonSave {

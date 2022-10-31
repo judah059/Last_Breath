@@ -14,13 +14,12 @@ interface ResErrors {
 }
 
 
-
 export const registration = createAsyncThunk<IUser, IUser, {
     rejectValue: string
 }>(
     'user/register',
     async (userData, thunkAPI) => {
-        try{
+        try {
             const response = await userAPI.register(userData);
 
             const {email, password} = userData
@@ -34,7 +33,7 @@ export const registration = createAsyncThunk<IUser, IUser, {
             thunkAPI.dispatch(setToken(resLogin.access))
 
             return response
-        }catch (err: any) {
+        } catch (err: any) {
             let error: AxiosError<ResErrors> = err // cast the error for access
 
             if (!error.response) {

@@ -9,7 +9,8 @@ import {IUser} from "../../../utils/api/types";
 import {updateMe} from "../../../store/user/user.actions";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
 import {RootState} from "../../../store";
-import {setError} from "../../../store/user/user.slice";
+import {ErrorMessage} from "@hookform/error-message";
+import CustomErrorMessage from "../../common/CustomErrorMessage/CustomErrorMessage";
 
 interface EmailEditProps {
     isEmailEditOpened: boolean
@@ -30,11 +31,20 @@ const EmailEdit: React.FC<EmailEditProps> = (props) => {
             const userData = {
                 email: formData.email, username, birth_date
             }
-            dispatch(updateMe(userData))
+            const res = await dispatch(updateMe(userData))
 
-            props.onClickEmailEditClose?.()
-            // props.onClickEmailEditClose?.()
+            if (res.payload === undefined) {
+                setResponseErrorMsg('ERR_CONNECTION_REFUSED')
+                setResponseError(true)
+            } else if (typeof res.payload === 'string') {
+                const resMsg = JSON.parse(res.payload as string)
+                setResponseErrorMsg(resMsg.email)
+                setResponseError(true)
+            } else {
+                props.onClickEmailEditClose?.()
+            }
         } catch (e) {
+            setResponseError(true);
             console.log((e as Error).message)
         }
     };
@@ -64,8 +74,8 @@ const EmailEdit: React.FC<EmailEditProps> = (props) => {
                            })}
                     />
                 </div>
-                {errors.email && <span>{errors.email.message || "All fields required"}</span>}
-                {/*{error && <span>{"Email is already taken"}</span>}*/}
+                <ErrorMessage errors={errors} name="email" as="p" className={s.errorMsg}/>
+                {responseError && <CustomErrorMessage msgContent={responseErrorMsg}/>}
                 <div className={s.buttonSave}>
                     <Button buttonContent='Save' onClickAction={clickOnSubmit}/>
                 </div>
