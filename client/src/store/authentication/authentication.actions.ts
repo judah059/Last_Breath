@@ -59,7 +59,7 @@ export const login = createAsyncThunk<IResUser, IReqUser, {
 
             const {rememberMe, email, password} = authData
             const response = await userAPI.login({email, password})
-            const expiredTime = rememberMe ? (30 * 24 * 60 * 60) : 5000
+            const expiredTime = rememberMe ? (30 * 24 * 60 * 60) : (30 * 24 * 60 * 60)
             setWithExpiry('access_token', response.access, expiredTime)
 
             thunkAPI.dispatch(getMe(response.access))

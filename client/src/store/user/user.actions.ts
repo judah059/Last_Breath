@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {userAPI} from "../../utils/api";
-import {IUser} from "../../utils/api/types";
+import {IChangePassword, IUser} from "../../utils/api/types";
 import {RootState} from "../index";
 import {AxiosError} from "axios";
 
@@ -48,5 +48,26 @@ export const deleteMe = createAsyncThunk<IUser, IUser, {state: RootState}>(
         const res = await userAPI.deleteMe(token)
 
         return res[0]
+    }
+)
+
+export const updatePassword = createAsyncThunk<string, IChangePassword, {state: RootState}>(
+    'user/change_password',
+    async (passwordData, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.token || ''
+            return await  userAPI.updatePassword(passwordData, token)
+        } catch (err: any) {
+            let error: AxiosError<ResErrors> = err // cast the error for access
+
+            if (!error.response) {
+                throw error
+            }
+
+            const errorMsg = error.response.data
+            const json = JSON.stringify(errorMsg)
+
+            return thunkAPI.rejectWithValue(json)
+        }
     }
 )

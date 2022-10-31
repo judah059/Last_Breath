@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ICinema, IReqUser, IResUser, IUser} from "./types";
+import {IChangePassword, ICinema, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
 
 
@@ -51,6 +51,14 @@ export let userAPI = {
 
     deleteMe(token?: string){
         return baseApi2.delete('profile/', {
+            headers: {
+                Authorization: "Bearer " + token || cookieToken
+            }
+        }).then(res => res.data)
+    },
+
+    updatePassword(data: IChangePassword, token?: string){
+        return baseApi2.put<string>('change_password/', data, {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
             }

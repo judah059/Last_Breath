@@ -38,3 +38,9 @@ export interface DateOfBirth {
     day: string
     year: string
 }
+
+export interface IChangePassword {
+    old_password: string
+    password: string
+    password2: string
+}
