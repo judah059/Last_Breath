@@ -6,27 +6,36 @@ import rightArrow from '../../../assets/rightArrow.svg'
 import userLogo from '../../../assets/userLogo.svg'
 import burger from '../../../assets/burger.svg'
 import {NavLink, useNavigate} from "react-router-dom";
+import {useAuth} from "../../../utils/hooks/useAuth";
 
 interface HeaderProps {
     onClickDrawer: () => void
     onClickCinemaDrawer: () => void
     toLinkText: string
     onClickSigningOpen: () => void
+    onClickOpenUserDrawer: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLinkText, onClickSigningOpen}) => {
+const Header: React.FC<HeaderProps> = ({
+                                           onClickDrawer,
+                                           onClickCinemaDrawer,
+                                           toLinkText,
+                                           onClickSigningOpen,
+                                           onClickOpenUserDrawer
+                                       }) => {
     const navigate = useNavigate()
 
     const mainLoader = () => {
         navigate('/main')
     }
 
-    let href = window.location.pathname !== '/profile';
 
     const onOpenPopupHandler = () => {
         document.body.style.overflow = 'hidden';
         onClickSigningOpen()
     }
+
+    const isAuth = useAuth()
 
     return (
         <header className={s.header}>
@@ -52,8 +61,11 @@ const Header: React.FC<HeaderProps> = ({onClickDrawer, onClickCinemaDrawer, toLi
 
                 </div>
                 <div className={s.user}>
-                    {!href ? <></> : <span onClick={onOpenPopupHandler}>Sing In</span>}
-                    <img src={userLogo} alt="userLogo"/>
+                    {
+                        isAuth ?
+                            <img src={userLogo} alt="userLogo" onClick={onClickOpenUserDrawer}/> :
+                            <span onClick={onOpenPopupHandler}>Sing In</span>
+                    }
                 </div>
             </div>
         </header>

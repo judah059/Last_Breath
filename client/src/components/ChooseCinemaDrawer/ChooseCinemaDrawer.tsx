@@ -70,7 +70,7 @@ const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = ({isShow, refOne})
                     <ul>
 
                         {
-                            cinemas?.map(c => <li>
+                            cinemas?.map((c, i) => <li key={i}>
                                 <p>{c.cinemaName}</p>
                                 <p>{c.cinemaStreet}</p>
                             </li>)

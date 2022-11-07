@@ -22,7 +22,9 @@ const SettingObject: React.FC<ProfileProps> = (props) => {
                     {props.settingName}:
                 </div>
                 <div className={s.settingContent}>
-                    {props.settingContent}
+                    {
+                        !props.settingContent ? 'Empty' : props.settingContent
+                    }
                 </div>
             </div>
             <Button buttonContent='Edit' onClickAction={onClickAction}/>

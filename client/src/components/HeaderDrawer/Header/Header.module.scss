@@ -58,6 +58,11 @@ header {
       gap: 10px;
       justify-content: center;
       align-items: center;
+      
+      img{
+        cursor: pointer;
+      }
+      
       span{
         cursor: pointer;
         &:hover{

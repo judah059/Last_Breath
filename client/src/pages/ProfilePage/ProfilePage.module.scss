@@ -22,12 +22,12 @@
     display: flex;
 
     .settingsBlock {
+      width: 600px;
       margin-left: 78px;
       display: flex;
       align-items: center;
       margin-top: 38px;
       justify-content: space-between;
-      grid-gap: 266px;
 
       .settingName {
         font-weight: 500;
@@ -44,7 +44,8 @@
     }
   }
 
-  .deleteText {
+  span.deleteText {
+    display: inline-block;
     margin-left: 76px;
     padding-bottom: 10px;
     margin-top: 68px;

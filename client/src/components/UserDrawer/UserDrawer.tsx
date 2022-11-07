@@ -7,6 +7,10 @@ import cart from "../../assets/cart.svg";
 import account from "../../assets/account.svg";
 import exit from "../../assets/exit.svg";
 import closeBtn from "../../assets/closeBtn.svg";
+import {NavLink} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
+import {logout} from "../../store/authentication/authentication.actions";
 
 
 interface UserDrawerProps {
@@ -16,6 +20,16 @@ interface UserDrawerProps {
 
 
 const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickCloseUserDrawer}) => {
+
+    const {email, username} = useAppSelector((state: RootState) => state.user);
+
+    const dispatch = useAppDispatch()
+
+    const onClickLogoutHandler = () => {
+        onClickCloseUserDrawer()
+        dispatch(logout())
+    }
+
     return (
         <div className={`${s.overlay} ${isUserDrawerOpened ? s.overlayOut : ""}`}>
             <div className={s.drawer}>
@@ -24,8 +38,8 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                     <div className={s.blockUser}>
                         <img src={userDefaultLogo} alt="userDefaultLogo"/>
                         <div className={s.info}>
-                            <p className={s.name}>User</p>
-                            <p className={s.email}>useruser@mail.com</p>
+                            <p className={s.name}>{username}</p>
+                            <p className={s.email}>{email}</p>
                         </div>
                     </div>
                     <div className={s.menu}>
@@ -36,7 +50,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                             </li>
                             <li>
                                 <img src={account} alt="account"/>
-                                <p>Account</p>
+                                <p><NavLink to='/profile'>Account</NavLink></p>
                             </li>
                             <li>
                                 <img src={help} alt="help" width="41px"/>
@@ -47,7 +61,7 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                 </div>
                 <div className={s.bottom}>
                     <img src={exit} alt="help"/>
-                    <p>Exit</p>
+                    <p onClick={onClickLogoutHandler}>Exit</p>
                 </div>
                 <div className={s.closeBtn} onClick={onClickCloseUserDrawer}>
                     <img src={closeBtn} alt="closeBtn"/>

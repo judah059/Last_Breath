@@ -37,8 +37,8 @@ const Signing: React.FC<SigningProps> = ({
             {...{overlayStyle: {overflow: 'auto'}}}
         >
             <div className={s.container}>
-                {formType === "signIn" && <SignInForm onOpenSignUp={() => setFormType("signUp")}/>}
-                {formType === "signUp" && <SignUpForm onOpenSignIn={() => setFormType("signIn")}/>}
+                {formType === "signIn" && <SignInForm onOpenSignUp={() => setFormType("signUp")} onClickSigningClose={onClickSigningClose}/>}
+                {formType === "signUp" && <SignUpForm onOpenSignIn={() => setFormType("signIn")} onClickSigningClose={onClickSigningClose}/>}
                 <p className={s.backLink} onClick={onClosePopupHandler}>Back to site</p>
             </div>
         </Popup>
