@@ -1,9 +1,12 @@
-header {
-  background-color: #2D2639;
+// TODO: Понять, почему header и header из ДРУГИХ стилевых файлов конфликтуют
+
+.header {
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   padding: 20px 10px;
-  border-bottom: #ffffff solid 1px;
+  border-bottom: #000000 solid 1px;
+  color: black;
 
   .leftSide {
     display: flex;
@@ -25,10 +28,10 @@ header {
     }
 
     a {
-      color: white;
+      color: black;
 
       &:hover {
-        color: #a10855;
+        color: #1708a1;
       }
     }
   }
