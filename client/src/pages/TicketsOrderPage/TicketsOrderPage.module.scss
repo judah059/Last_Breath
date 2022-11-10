@@ -15,7 +15,7 @@ body {
       display: flex;
       gap: 10px;
       margin-left: 250px;
-      margin-top: 200px;
+      margin-top: 150px;
       margin-bottom: 20px;
 
       .seat {
@@ -133,14 +133,13 @@ body {
           line-height: 39px;
           display: flex;
           align-items: center;
+          padding: 2px 30px;
 
           .toPayText {
-            padding: 20px 30px;
           }
 
           .priceText {
             margin-left: auto;
-            padding: 20px;
           }
         }
 
