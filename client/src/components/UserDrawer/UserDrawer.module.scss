@@ -60,6 +60,7 @@
     .menu {
       margin-top: 20px;
 
+
       ul {
         display: flex;
         flex-direction: column;
@@ -72,7 +73,7 @@
           display: flex;
           align-items: center;
           gap: 30px;
-
+          color: white;
 
           p {
             font-weight: 500;
@@ -80,13 +81,13 @@
             a {
               color: white;
 
-              &:hover{
+              &:hover {
                 color: #8f8181;
               }
             }
           }
 
-          &:hover{
+          &:hover {
             color: #8f8181;
           }
         }
@@ -101,17 +102,18 @@
     gap: 30px;
     cursor: pointer;
     margin: 0 220px 0 0;
-    p{
+
+    p {
       font-weight: 500;
     }
 
-    &:hover{
+    &:hover {
       color: #8f8181;
     }
   }
 
 
-  .closeBtn{
+  .closeBtn {
     cursor: pointer;
     position: absolute;
     top: 25px;
