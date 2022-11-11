@@ -4,9 +4,8 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.users.serializers import MyUserPostSerializer, MyUserProfileSerializer, MovieSerializer, \
-    ChangePasswordSerializer
-from users.models import Movie
+from api.users.serializers import *
+from users.models import *
 
 UserModel = get_user_model()
 
@@ -68,3 +67,28 @@ class MovieViewList(generics.ListAPIView):
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+
+
+class SeatViewSet(viewsets.ModelViewSet):
+    queryset = Seat.objects.all()
+    serializer_class = SeatSerializer
+
+
+class CinemaViewSet(viewsets.ModelViewSet):
+    queryset = Cinema.objects.all()
+    serializer_class = CinemaSerializer
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+
+class CinemaHallViewSet(viewsets.ModelViewSet):
+    queryset = CinemaHall.objects.all()
+    serializer_class = CinemaHallSerializer
+
+
+class SessionViewSet(viewsets.ModelViewSet):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer

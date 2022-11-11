@@ -79,3 +79,40 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = "__all__"
 
+
+class SeatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seat
+        fields = "__all__"
+
+
+class CinemaHallSerializer(serializers.ModelSerializer):
+    seats = SeatSerializer(many=True, read_only=True, source="seat_set")
+
+    class Meta:
+        model = CinemaHall
+        fields = ["id", "number", "cinema", "seats"]
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
+
+
+class CinemaSerializer(serializers.ModelSerializer):
+    cinemahall = CinemaHallSerializer(many=True, read_only=True, source="cinemahall_set")
+    location_details = AddressSerializer(many=True, read_only=True, source="address_set")
+
+    class Meta:
+        model = Cinema
+        fields = ["id", "name", "location", "location_details", "cinemahall"]
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    cinemahall_detail = CinemaHallSerializer(read_only=True, source="cinemahall")
+    movie_name = serializers.CharField(read_only=True, source="movie.name")
+    movie_poster = serializers.CharField(read_only=True, source="movie.poster")
+    class Meta:
+        model = Session
+        fields = ["id", "date", "start_time", "end_time", "movie", "movie_name", "movie_poster", "cinemahall", "cinemahall_detail"]

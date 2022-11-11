@@ -71,6 +71,9 @@ class Address(models.Model):
     street = models.TextField(null=False)
     number = models.IntegerField(null=False)
 
+    def __str__(self):
+        return f'st. {self.street} {self.number} c. {self.city}'
+
 
 class Cinema(models.Model):
     name = models.TextField(null=False)
@@ -82,8 +85,10 @@ class Cinema(models.Model):
 
 class CinemaHall(models.Model):
     number = models.IntegerField()
-    seats = models.IntegerField(null=False)
     cinema = models.ForeignKey('Cinema', on_delete=models.CASCADE, null=False)
+
+    def __str__(self):
+        return f'{self.cinema.name} hall #{self.number}'
 
 
 class Ticket(models.Model):
@@ -110,3 +115,20 @@ class SubscriptionType(models.Model):
     days = models.IntegerField(null=False)
     quality = models.TextField()
     downloadSpeed = models.IntegerField()
+
+
+class Seat(models.Model):
+    number = models.IntegerField(null=False)
+    row = models.IntegerField(null=False)
+    cost = models.IntegerField(null=False)
+    is_free = models.BooleanField()
+
+    hall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False)
+
+
+class Session(models.Model):
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE, null=False)
+    cinemahall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
