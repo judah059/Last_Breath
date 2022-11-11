@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './TicketsOrderPage.module.scss'
+import s from './TicketsOrderInformationBlock.module.scss'
 
 interface TicketsOrderInformationBlockProps  {
     badgeUrl?: string

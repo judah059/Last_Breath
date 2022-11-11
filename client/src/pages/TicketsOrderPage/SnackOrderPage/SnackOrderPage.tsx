@@ -1,20 +1,15 @@
 import React from 'react';
-import TicketsHeader from "../../components/TicketsHeader/TicketsHeader";
-import s from './TicketsOrderPage.module.scss'
-import locationBadge from '../../assets/locationBadge.svg'
-import calendarBadge from '../../assets/calendar.svg'
-import clockBadge from '../../assets/clock.svg'
-import TicketsOrderInformationBlock from "./TicketsOrderInformationBlock";
-import {useNavigate} from "react-router-dom";
+import s from "./SnackOrderPage.module.scss";
+import TicketsHeader from "../../../components/TicketsHeader/TicketsHeader";
+import TicketsOrderInformationBlock from "../TicketsOrderInformationBlock";
+import locationBadge from "../../../assets/locationBadge.svg";
+import calendarBadge from "../../../assets/calendar.svg";
+import clockBadge from "../../../assets/clock.svg";
+import popcornBadge from "../../../assets/emojione_popcorn.svg"
+import drinkBadge from "../../../assets/mdi_drink.svg"
+import SnackOrderBlock from "./SnackOrderBlock/SnackOrderBlock";
 
-const TicketsOrderPage: React.FC = (props) => {
-
-    const navigate = useNavigate()
-
-    const snackPageLoader = () => {
-        navigate('/tickets-order/snack')
-    }
-
+const SnackOrderPage: React.FC = (props) => {
     return (
         <div className={s.wrapper}>
             <div>
@@ -38,18 +33,16 @@ const TicketsOrderPage: React.FC = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className={s.seats}>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
+                    <div className={s.underPosterText}>Buy online, pick up at a separate checkout. That's faster!</div>
+                    <div className={s.snacks}>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
                     </div>
                 </div>
             </div>
@@ -65,7 +58,6 @@ const TicketsOrderPage: React.FC = (props) => {
                                     0 tickets, 0 UAH
                                 </div>
                             </div>
-                            <div className={s.ticketList}></div>
                             <div className={s.label}>
                                 <div className={s.ticketText}>
                                     Bar goods
@@ -75,6 +67,7 @@ const TicketsOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.snackList}></div>
+                            <div className={s.ticketList}></div>
                         </div>
                         <div className={s.bottomWrapper}>
                             <div className={s.toPayTextAndPrice}>
@@ -86,14 +79,14 @@ const TicketsOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
-                                <button onClick={snackPageLoader} className={s.buttonProceed}>Proceed</button>
+                                <button className={s.buttonProceed}>Proceed</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
         </div>
     )
 };
 
-export default TicketsOrderPage;
+export default SnackOrderPage;

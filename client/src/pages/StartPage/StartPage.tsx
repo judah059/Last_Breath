@@ -26,7 +26,6 @@ const StartPage: React.FC = () => {
                     </div>
                     <div className={s.watch_online}>
                         <button>WATCH ONLINE</button>
-
                     </div>
                 </div>
             </div>
