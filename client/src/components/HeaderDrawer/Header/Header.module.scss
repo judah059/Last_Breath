@@ -4,6 +4,8 @@ header {
   justify-content: space-between;
   padding: 20px 10px;
   border-bottom: #ffffff solid 1px;
+  //border-bottom: #E03E1A solid 1px;
+
 
   .leftSide {
     display: flex;
@@ -29,6 +31,8 @@ header {
 
       &:hover {
         color: #a10855;
+        //color: #E03E1A;
+
       }
     }
   }
