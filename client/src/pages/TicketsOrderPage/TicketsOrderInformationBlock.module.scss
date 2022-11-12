@@ -1,0 +1,37 @@
+.locationBox {
+    display: flex;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 4px;
+
+    .logoBox {
+        display: flex;
+        background: #D9D9D9;
+        border: 1px solid #000000;
+        border-radius: 4px;
+        width: 69px;
+        height: 69px;
+
+        .logo {
+            margin: auto;
+        }
+    }
+
+    .locationBoxText {
+        margin-left: 30px;
+        margin-right: 50px;
+
+        .upperText {
+            font-size: 16px;
+            line-height: 20px;
+            color: #6F6464;
+        }
+
+        .lowerText {
+            margin-top: 5px;
+            font-size: 20px;
+            line-height: 24px;
+        }
+    }
+}
