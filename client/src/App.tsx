@@ -10,6 +10,7 @@ import SnackOrderPage from "./pages/TicketsOrderPage/SnackOrderPage/SnackOrderPa
 import Cart from "./pages/Cart/Cart";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import PaymentHistory from "./pages/PaymentHistory/PaymentHistory";
+import Cinema from "./pages/Cinema/Cinema";
 
 const App: React.FC = () => {
     return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
                 <Route path='tickets-order/snack' element={<SnackOrderPage/>}></Route>
                 <Route path='cart' element={<Cart/>}></Route>
                 <Route path='payment-history' element={<PaymentHistory/>}></Route>
+                <Route path='cinema/:id' element={<Cinema/>}></Route>
             </Routes>
         </div>
     );
