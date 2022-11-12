@@ -54,119 +54,125 @@ const MoviePage: React.FC = () => {
    return (
        <div>
           <HeaderDrawer toLinkText='Now In Cinema'/>
-          <div className={s.page__flex__Container}>
-             <div className={s.movie__poster}>
-                <div className={s.movie__poster__Container}>
-                   <div className={s.image__Container}>
-                      <img  src={movie?.poster}/>
-                   </div>
-                </div>
-                <div className={s.movie__poster__trailer__container}>
-                   <div >
-                      <img src={play} alt=""/>
-                      <div className={s.poster__trailer__text}>Watch trailer</div>
-                   </div>
-                </div>
-             </div>
 
-
-             <div className={s.main__info}>
-                  <div className={s.main__info__title}>{movie?.name}</div>
-                  <div className={s.main__info__flex}>
-                     <div >
-                        <div className={s.main__info__text}>Age rating:</div>
-                        <div className={s.main__info__text}>Release year:</div>
-                        <div className={s.main__info__text}>Producer:</div>
-                        <div className={s.main__info__text}>Genre:</div>
-                        <div className={s.main__info__text}>Duration:</div>
-                        <div className={s.main__info__text}>Studio:</div>
-                        <div className={s.main__info__text}>Starring:</div>
-                     </div>
-                     <div>
-                        <div className={s.main__info__text}>{movie?.ageLimit}</div>
-                        <div className={s.main__info__text}>{movie?.release_date}</div>
-                        <div className={s.main__info__text}>{movie?.producer}</div>
-                        <div className={s.main__info__text}>Нет такого</div>
-                        <div className={s.main__info__text}>{movie?.length}</div>
-                        <div className={s.main__info__text}>Нет такого</div>
-                        <div className={s.main__info__text}>{movie?.cast}</div>
-                     </div>
-                  </div>
-             </div>
-
-
-            <div className={s.session}>
-               <div className={s.session__header}>
-                  <div className={s.session__header__title}>Sessions</div>
-                  <div className={s.session__header__dropdown} onClick={popupToggle}>
-                        <div className={s.session__header__dropdown__label} >
-                           <div>
-                           {inputValue?.toLocaleString('en-us', {weekday:'short'})},  {inputValue?.toLocaleString('default', { month: 'long' })} {inputValue?.getDate()}
-                           </div>
-                           <img src={vector} className={s.vector} alt=""/>
-                        </div>
-                     {popup ?
-                     <div className={s.session__header__dropdown__menu}>
-                        <div className={s.session__header__dropdown__menu__items}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
-                        <div className={s.session__header__dropdown__menu__items}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
-                        <div className={s.session__header__dropdown__menu__items}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
-                        <div className={s.session__header__dropdown__menu__items}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
-                     </div>
-                         :
-                         <div className={`${s.session__header__dropdown__menu} ${s.active}`}>
-                            <div className={s.session__header__dropdown__menu__items} onClick={() => {
-                               setInputValue(inputValues[0])
-                               popupToggle()
-                            }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
-                            <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                               setInputValue(inputValues[1])
-                               popupToggle()
-                            }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
-                            <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                               setInputValue(inputValues[2])
-                               popupToggle()
-                            }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
-                            <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                               setInputValue(inputValues[3])
-                               popupToggle()
-                            }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
-                         </div>
-                     }
-                  </div>
-               </div>
-               <div className={s.session__bottom}>
-                  <div className={s.session__bottom__items}>
-                     <div>{labels[0]}</div>
-                     <div className={s.session__bottom__items__flex}>
-                        {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
-                     </div>
-                  </div>
-                  <div className={s.session__bottom__items}>
-                     <div>{labels[1]}</div>
-                     <div className={s.session__bottom__items__flex}>
-                        {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
-                     </div>
-                  </div>
-                  <div className={s.session__bottom__items}>
-                     <div>{labels[2]}</div>
-                     <div className={s.session__bottom__items__flex}>
-                        {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
-                     </div>
-                  </div>
-                  <div className={s.session__bottom__items}>
-                     <div>{labels[3]}</div>
-                     <div className={s.session__bottom__items__flex}>
-                        {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
-                     </div>
-                  </div>
-               </div>
-            </div>
-          </div>
-
-
-          <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!</div>
           {
-             movie == undefined ? <div>No movies were found</div> : <div></div>
+             movie == undefined ? <h1 style={{ margin: "auto"}}>No movies were found</h1>
+                 :
+                 <div>
+                    <div className={s.page__flex__Container}>
+                       <div className={s.movie__poster}>
+                          <div className={s.movie__poster__Container}>
+                             <div className={s.image__Container}>
+                                <img  src={movie?.poster}/>
+                             </div>
+                          </div>
+                          <div className={s.movie__poster__trailer__container}>
+                             <div >
+                                <img src={play} alt=""/>
+                                <div className={s.poster__trailer__text}>Watch trailer</div>
+                             </div>
+                          </div>
+                       </div>
+
+
+                       <div className={s.main__info}>
+                          <div className={s.main__info__title}>{movie?.name}</div>
+                          <div className={s.main__info__flex}>
+                             <div >
+                                <div className={s.main__info__text}>Age rating:</div>
+                                <div className={s.main__info__text}>Release year:</div>
+                                <div className={s.main__info__text}>Producer:</div>
+                                <div className={s.main__info__text}>Genre:</div>
+                                <div className={s.main__info__text}>Duration:</div>
+                                <div className={s.main__info__text}>Studio:</div>
+                                <div className={s.main__info__text}>Starring:</div>
+                             </div>
+                             <div>
+                                <div className={s.main__info__text}>{movie?.ageLimit}</div>
+                                <div className={s.main__info__text}>{movie?.release_date}</div>
+                                <div className={s.main__info__text}>{movie?.producer}</div>
+                                <div className={s.main__info__text}>Нет такого</div>
+                                <div className={s.main__info__text}>{movie?.length}</div>
+                                <div className={s.main__info__text}>Нет такого</div>
+                                <div className={s.main__info__text}>{movie?.cast}</div>
+                             </div>
+                          </div>
+                       </div>
+
+
+                       <div className={s.session}>
+                          <div className={s.session__header}>
+                             <div className={s.session__header__title}>Sessions</div>
+                             <div className={s.session__header__dropdown} onClick={popupToggle}>
+                                <div className={s.session__header__dropdown__label} >
+                                   <div>
+                                      {inputValue?.toLocaleString('en-us', {weekday:'short'})},  {inputValue?.toLocaleString('default', { month: 'long' })} {inputValue?.getDate()}
+                                   </div>
+                                   <img src={vector} className={s.vector} alt=""/>
+                                </div>
+                                {popup ?
+                                    <div className={s.session__header__dropdown__menu}>
+                                       <div className={s.session__header__dropdown__menu__items}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
+                                    </div>
+                                    :
+                                    <div className={`${s.session__header__dropdown__menu} ${s.active}`}>
+                                       <div className={s.session__header__dropdown__menu__items} onClick={() => {
+                                          setInputValue(inputValues[0])
+                                          popupToggle()
+                                       }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}  onClick={() => {
+                                          setInputValue(inputValues[1])
+                                          popupToggle()
+                                       }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}  onClick={() => {
+                                          setInputValue(inputValues[2])
+                                          popupToggle()
+                                       }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
+                                       <div className={s.session__header__dropdown__menu__items}  onClick={() => {
+                                          setInputValue(inputValues[3])
+                                          popupToggle()
+                                       }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
+                                    </div>
+                                }
+                             </div>
+                          </div>
+                          <div className={s.session__bottom}>
+                             <div className={s.session__bottom__items}>
+                                <div>{labels[0]}</div>
+                                <div className={s.session__bottom__items__flex}>
+                                   {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
+                                </div>
+                             </div>
+                             <div className={s.session__bottom__items}>
+                                <div>{labels[1]}</div>
+                                <div className={s.session__bottom__items__flex}>
+                                   {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
+                                </div>
+                             </div>
+                             <div className={s.session__bottom__items}>
+                                <div>{labels[2]}</div>
+                                <div className={s.session__bottom__items__flex}>
+                                   {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
+                                </div>
+                             </div>
+                             <div className={s.session__bottom__items}>
+                                <div>{labels[3]}</div>
+                                <div className={s.session__bottom__items__flex}>
+                                   {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!</div>
+
+                 </div>
+
+
           }
        </div>
    );
