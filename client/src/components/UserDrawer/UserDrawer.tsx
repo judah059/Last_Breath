@@ -44,10 +44,11 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                     </div>
                     <div className={s.menu}>
                         <ul>
-                            <li>
+                            <NavLink to='/cart'><li>
                                 <img src={cart} alt="cart"/>
                                 <p>Cart</p>
-                            </li>
+
+                            </li></NavLink>
                             <li>
                                 <img src={account} alt="account"/>
                                 <p><NavLink to='/profile'>Account</NavLink></p>

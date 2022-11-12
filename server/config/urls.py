@@ -27,6 +27,21 @@ from api.users.views import *
 routerMovie = routers.SimpleRouter()
 routerMovie.register(r'film', MovieViewSet, basename='film')
 
+routerSeat = routers.SimpleRouter()
+routerSeat.register(r'seat', SeatViewSet, basename='seat')
+
+routerCinema = routers.SimpleRouter()
+routerCinema.register(r'cinema', CinemaViewSet, basename='cinema')
+
+routerCinemaHall = routers.SimpleRouter()
+routerCinemaHall.register(r'cinemahall', CinemaHallViewSet, basename='cinemahall')
+
+routerAddress = routers.SimpleRouter()
+routerAddress.register(r'address', AddressViewSet, basename='address')
+
+routerSession = routers.SimpleRouter()
+routerSession.register(r'session', SessionViewSet, basename='session')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
@@ -37,5 +52,10 @@ urlpatterns = [
                                               'delete': 'destroy'})),
     path('api/change_password/', ChangePasswordView.as_view(), name='auth_change_password'),
     path('api/filmlist/', MovieViewList.as_view()),
-    path('api/', include(routerMovie.urls))
+    path('api/', include(routerMovie.urls)),
+    path('api/', include(routerSeat.urls)),
+    path('api/', include(routerCinema.urls)),
+    path('api/', include(routerAddress.urls)),
+    path('api/', include(routerCinemaHall.urls)),
+    path('api/', include(routerSession.urls)),
 ]
