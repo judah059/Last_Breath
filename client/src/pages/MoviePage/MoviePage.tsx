@@ -143,13 +143,13 @@ const MoviePage: React.FC = () => {
                              <div className={s.session__bottom__items}>
                                 <div>{labels[0]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
+                                   {datesForItems.map((d, index,x) => <div key={index} style={{cursor: "pointer"}}>{x[index]}</div>)}
                                 </div>
                              </div>
                              <div className={s.session__bottom__items}>
                                 <div>{labels[1]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index,x) => <div key={index}>{x[index]}</div>)}
+                                   {datesForItems.map((d, index,x) => <div key={index} style={{cursor: "pointer"}} >{x[index]}</div>)}
                                 </div>
                              </div>
                              <div className={s.session__bottom__items}>
