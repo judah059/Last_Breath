@@ -1,0 +1,9 @@
+.error {
+  margin: 8px 0;
+  color: #bf1650;
+
+  &::before {
+    display: inline;
+    content: "⚠ ";
+  }
+}

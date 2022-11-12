@@ -1,0 +1,79 @@
+// TODO: Понять, почему header и header из ДРУГИХ стилевых файлов конфликтуют
+
+.header {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10px;
+  border-bottom: #000000 solid 1px;
+  color: black;
+
+  .leftSide {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .burger {
+      cursor: pointer;
+    }
+
+    .logo {
+      margin-right: 40px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    a {
+      color: black;
+
+      &:hover {
+        color: #1708a1;
+      }
+    }
+  }
+
+
+  .rightSide {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .chooseBtn {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .divider {
+      border-left: 1px solid #989595;
+      opacity: 0.8;
+      height: 60%;
+    }
+
+    .user {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        cursor: pointer;
+      }
+
+      span{
+        cursor: pointer;
+        &:hover{
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+

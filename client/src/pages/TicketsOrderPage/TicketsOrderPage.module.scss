@@ -1,0 +1,145 @@
+body {
+  .wrapper {
+    color: black;
+    display: grid;
+    grid-template-columns: minmax(280px, auto) 28rem;
+    font-family: 'Montserrat', serif;
+    font-style: normal;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+
+    .seats {
+      display: flex;
+      gap: 10px;
+      margin-left: 250px;
+      margin-top: 150px;
+      margin-bottom: 20px;
+
+      .seat {
+        width: 30px;
+        height: 40px;
+        background: #FFFFFF;
+        border: 1px solid #3430E0;
+        border-radius: 1px;
+      }
+    }
+
+    .leftSide {
+      background-color: white;
+      height: 100vh;
+
+      .topBlock {
+        display: flex;
+
+        .poster {
+          padding-left: 50px;
+          padding-top: 20px;
+          width: 200px;
+          height: 300px;
+        }
+
+        .mediaBlock {
+          .movieName {
+            font-size: 36px;
+            line-height: 44px;
+            display: flex;
+            margin-left: 55px;
+            margin-top: 20px;
+          }
+
+          .textBoxWrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-left: 55px;
+            margin-top: 50px;
+          }
+        }
+      }
+      .underPosterText{
+        margin: 20px 50px;
+        font-size: 20px;
+        line-height: 24px;
+        color: #706565;
+      }
+      .snacks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 90px;
+        margin-left: 45px;
+      }
+    }
+
+    .wrapperAside {
+      position: fixed;
+      width: 28rem;
+
+      .rightSide {
+        background-color: #E5FDFD;
+        border: #827272 solid 1px;
+
+        .topWrapper {
+          height: calc(100vh - 145px);
+          .label {
+            display: flex;
+            .ticketText {
+              padding: 20px 30px;
+              font-size: 32px;
+              line-height: 39px;
+              display: flex;
+              align-items: center;
+            }
+
+            .ticketsCountPrice {
+              margin-left: auto;
+              padding: 40px 15px;
+              font-size: 20px;
+              line-height: 24px;
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
+
+        .bottomWrapper {
+          border-top: 1px solid #827272;
+
+          .toPayTextAndPrice {
+            font-size: 32px;
+            line-height: 39px;
+            display: flex;
+            align-items: center;
+            padding: 2px 30px;
+
+            .toPayText {
+            }
+
+            .priceText {
+              margin-left: auto;
+            }
+          }
+
+          .buttonWrapper {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+
+            .buttonProceed {
+              width: 500px;
+              height: 59.05px;
+              background: #D83D3D;
+              border-radius: 4px;
+              color: white;
+              font-size: 24px;
+              line-height: 29px;
+
+              &:hover {
+                background-color: #cb1a84;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
