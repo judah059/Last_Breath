@@ -4,6 +4,22 @@ export interface IMovieItem {
     poster: string
 }
 
+export interface ITestMovieItem {
+    "id": string,
+    "name": string,
+    "video": string,
+    "poster": string,
+    "trailer": string,
+    "premier": string,
+    "release_date": string,
+    "length": string,
+    "cast": string,
+    "ageLimit": string,
+    "producer": string,
+    "language": string,
+    "country": string
+}
+
 export interface ICinema {
     id: string
     city: string

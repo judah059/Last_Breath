@@ -17,7 +17,9 @@ export let API = {
     getCinemaMovies() {
         return baseApi2.get('filmlist/').then(res => res.data)
     },
-
+    getCinemaMovie(id: string | undefined) {
+        return baseApi2.get(`film/${id}`).then(res => res.data)
+    },
     getCinemas(city = '') {
         return baseApi.get<ICinema[]>(`cinemas?city=${city}`).then(res => res.data)
     },
