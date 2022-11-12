@@ -3,15 +3,16 @@ import s from "./Cart.module.scss";
 import mov from "../../assets/tempMovieImage.jpg";
 
 interface CartItemProps {
-
+    disableBtn?: boolean
 }
 
 
-const CartItem: React.FC<CartItemProps> = () => {
+const CartItem: React.FC<CartItemProps> = ({disableBtn=false}) => {
+
     return (
-        <div className={s.item}>
+        <div className={`${s.item} ${disableBtn && s.disabled}`}>
             <div className={s.left}>
-                <img src={mov} alt="" width={125}/>
+                <img src={mov} alt="movie" width={125}/>
                 <div className={s.info}>
                     <h3>Doctor Strange 2</h3>
                     <p className={s.location}>Kharkiv, KinoLand</p>
@@ -21,8 +22,14 @@ const CartItem: React.FC<CartItemProps> = () => {
             </div>
             <div className={s.right}>
                 <p>Sat, June 11<br/>11:00 - 13:10</p>
-                <button className={s.btn}>Сancel</button>
-                <button className={s.btn}>Pay</button>
+                {
+                    !disableBtn && (
+                        <>
+                            <button className={s.btn}>Cancel</button>
+                            <button className={s.btn}>Pay</button>
+                        </>
+                    )
+                }
             </div>
         </div>
     );
