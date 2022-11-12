@@ -7,6 +7,7 @@ import cart from "../../assets/cart.svg";
 import account from "../../assets/account.svg";
 import exit from "../../assets/exit.svg";
 import closeBtn from "../../assets/closeBtn.svg";
+import history from "../../assets/history.svg";
 import {NavLink} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
@@ -44,15 +45,23 @@ const UserDrawer: React.FC<UserDrawerProps> = ({isUserDrawerOpened, onClickClose
                     </div>
                     <div className={s.menu}>
                         <ul>
-                            <NavLink to='/cart'><li>
-                                <img src={cart} alt="cart"/>
-                                <p>Cart</p>
+                            <NavLink to='/cart'>
+                                <li>
+                                    <img src={cart} alt="cart"/>
+                                    <p>Cart</p>
 
-                            </li></NavLink>
+                                </li>
+                            </NavLink>
                             <li>
                                 <img src={account} alt="account"/>
                                 <p><NavLink to='/profile'>Account</NavLink></p>
                             </li>
+                            <NavLink to='/payment-history'>
+                                <li>
+                                    <img src={history} alt="payment-history" width="41px"/>
+                                    <p>Payment history</p>
+                                </li>
+                            </NavLink>
                             <li>
                                 <img src={help} alt="help" width="41px"/>
                                 <p>Help</p>
