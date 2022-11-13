@@ -142,9 +142,3 @@ class Ticket(models.Model):
     session_seat = models.ForeignKey('SessionSeat', on_delete=models.CASCADE, null=False)
     total_price = models.IntegerField()
 
-
-# class Snack(models.Model):
-#     name = models.CharField(null=False)
-#     price = models.IntegerField()
-
-
