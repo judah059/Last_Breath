@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
-import {IMovieItem, ISession, ITestMovieItem} from "../../utils/api/types";
+import {IMovieItem, ISession, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
@@ -11,10 +11,11 @@ import {useParams} from "react-router-dom";
 
 const MoviePage: React.FC = () => {
    const [movie, setMovie] = useState<ITestMovieItem>();
-   const [session, setSession] = useState<ISession | undefined>()
+   const [session, setSession] = useState<ISession[] | undefined>()
    const {id} = useParams()
    const [inputValue, setInputValue] = useState<Date>(new Date());
    const [inputValues, setInputValues] = useState<Date[]>([]);
+   const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
    const [popup, setPopup] = useState<Boolean>(true)
    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
@@ -29,12 +30,47 @@ const MoviePage: React.FC = () => {
          // alert(e)
       }
    }
+
+   const groupBy = (items : niceBackEnd[], key : string) =>
+       items.reduce(
+           (result, item) => ({
+              ...result,
+              // @ts-ignore
+              [item[key]]: [...(result[item[key]] || []), item.time]
+           }),
+           {}
+       );
+   const changeInputValuesForSpecDate =  (date : Date) => {
+      let da = [];
+      if(session) {
+         for (let i = 0; i < session.length; i++) {
+               if(session[i].date === date.toISOString().substring(0, 10)) da.push(session[i]);
+         }
+         // setInputValuesForSpecDate(da);
+         let res = da.map((s) => ({
+            cinema: s.cinemahall_detail.cinema_name,
+            time: s.start_time
+         }));
+         const iLoveBackEnd : ISessionItem | {} = groupBy(res, "cinema")
+         setInputValuesForSpecDate(iLoveBackEnd);
+
+      }
+
+
+
+   }
    const fetchSession = async () => {
       try {
-         const session : ISession = await API.getSession();
-         setSession(session)
+         const sessions : ISession[] = await API.getSession();
+         let sessionsMovie : ISession[]  = sessions.filter(x => x.movie.toString() === id?.toString())
+         // const sessionCinema1 = sessionsMovie.filter(x => x.cinema === 1)
+         //  sessions.map((session, index) => <div>{session.cinemahall_detail.cinema_name} <div>{session}</div></div>)
+         // const bla = sessionsMovie.map(s=>({cinema: s.cinemahall_detail.cinema_name, time:s.start_time}))
+         setSession(sessionsMovie)
+
          // setMovie(movie)
          console.log(session)
+         // console.log(bla)
       } catch (e) {
          console.log(e)
          setMovie(undefined)
@@ -134,18 +170,23 @@ const MoviePage: React.FC = () => {
                                     <div className={`${s.session__header__dropdown__menu} ${s.active}`}>
                                        <div className={s.session__header__dropdown__menu__items} onClick={() => {
                                           setInputValue(inputValues[0])
+                                          changeInputValuesForSpecDate(inputValues[0])
                                           popupToggle()
                                        }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[1])
+                                          changeInputValuesForSpecDate(inputValues[1])
+
                                           popupToggle()
                                        }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[2])
+                                          changeInputValuesForSpecDate(inputValues[2])
                                           popupToggle()
                                        }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[3])
+                                          changeInputValuesForSpecDate(inputValues[3])
                                           popupToggle()
                                        }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
                                     </div>
@@ -153,30 +194,38 @@ const MoviePage: React.FC = () => {
                              </div>
                           </div>
                           <div className={s.session__bottom}>
+                             {/*{inputValuesForSpecDate.la}*/}
+
                              <div className={s.session__bottom__items}>
                                 <div>{labels[0]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index,x) => <div key={index} style={{cursor: "pointer"}}>{x[index]}</div>)}
+                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d}</div>)}
                                 </div>
                              </div>
+
                              <div className={s.session__bottom__items}>
                                 <div>{labels[1]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index,x) => <div key={index} style={{cursor: "pointer"}} >{x[index]}</div>)}
+                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}
                                 </div>
                              </div>
+
+
                              <div className={s.session__bottom__items}>
                                 <div>{labels[2]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
+                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}  </div>)}
                                 </div>
                              </div>
+
                              <div className={s.session__bottom__items}>
                                 <div>{labels[3]}</div>
                                 <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index, x) => <div key={index}>{x[index]}</div>)}
+                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}
                                 </div>
                              </div>
+
+
                           </div>
                        </div>
                     </div>
