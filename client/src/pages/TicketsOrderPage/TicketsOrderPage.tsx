@@ -6,6 +6,7 @@ import calendarBadge from '../../assets/calendar.svg'
 import clockBadge from '../../assets/clock.svg'
 import TicketsOrderInformationBlock from "./TicketsOrderInformationBlock";
 import {useNavigate} from "react-router-dom";
+import SeatElement from "./SeatElement/SeatElement";
 
 const TicketsOrderPage: React.FC = (props) => {
 
@@ -39,17 +40,8 @@ const TicketsOrderPage: React.FC = (props) => {
                         </div>
                     </div>
                     <div className={s.seats}>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
-                        <div className={s.seat}></div>
+                        <SeatElement/>
+                        <SeatElement/>
                     </div>
                 </div>
             </div>

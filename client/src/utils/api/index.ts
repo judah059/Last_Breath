@@ -23,6 +23,9 @@ export let API = {
     getCinemas(city = '') {
         return baseApi.get<ICinema[]>(`cinemas?city=${city}`).then(res => res.data)
     },
+    getSeats() {
+
+    }
 }
 
 export let userAPI = {

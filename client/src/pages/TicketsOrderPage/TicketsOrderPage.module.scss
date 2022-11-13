@@ -10,18 +10,11 @@ body {
 
     .seats {
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       margin-left: 250px;
       margin-top: 150px;
       margin-bottom: 20px;
-
-      .seat {
-        width: 30px;
-        height: 40px;
-        background: #FFFFFF;
-        border: 1px solid #3430E0;
-        border-radius: 1px;
-      }
     }
 
     .leftSide {

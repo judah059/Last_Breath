@@ -60,3 +60,9 @@ export interface IChangePassword {
     password: string
     password2: string
 }
+
+export interface iChangePayment {
+    card_number: string
+    expiration_date: string
+    cvv: number
+}

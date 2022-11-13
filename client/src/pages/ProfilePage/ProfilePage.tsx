@@ -12,12 +12,14 @@ import {RootState} from "../../store";
 import EmailEdit from "../../components/Forms/EditingProfile/EmailEditForm";
 import UsernameEdit from "../../components/Forms/EditingProfile/UsernameEditForm";
 import PasswordEditForm from "../../components/Forms/EditingProfile/PasswordEditForm";
+import PaymentChangeForm from "../../components/Forms/EditingProfile/PaymentChangeForm/PaymentChangeForm";
 
 const ProfilePage: React.FC = (props) => {
     const [isUsernameEditFormOpened, setUsernameEditFormOpened] = useState(false)
     const [isEmailEditFormOpened, setEmailEditFormOpened] = useState(false)
     const [isDateOfBirthEditOpened, setDateOfBirthEditOpened] = useState(false)
     const [isPasswordEditFormOpened, setPasswordEditFormOpened] = useState(false)
+    const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
     const [isDeleteFormOpened, setDeleteFormOpened] = useState(false)
     const [selectedSettingName, setSelectedSettingName] = useState('')
 
@@ -56,7 +58,9 @@ const ProfilePage: React.FC = (props) => {
                                        setFormOpened={() => setDateOfBirthEditOpened(true)}/>
                     </div>
                     <div>
-                        <SettingObject settingName='Payment method' settingContent='**** 4444'/>
+                        <SettingObject settingName='Payment method' settingContent='**** 4444'
+                                       setFormOpened={() => setPaymentEditFormOpened(true)}
+                        />
                         <SettingObject settingName='Subscription' settingContent='Premium'/>
                         <SettingObject settingName='Password' settingContent='*********'
                                        setFormOpened={() => setPasswordEditFormOpened(true)}
@@ -78,6 +82,8 @@ const ProfilePage: React.FC = (props) => {
                                  onClickDateOfBirthClose={() => setDateOfBirthEditOpened(false)}/>
             <PasswordEditForm isPasswordEditFormOpened={isPasswordEditFormOpened} onClickUsernameEditClose={
                 () => setPasswordEditFormOpened(false)}/>
+            <PaymentChangeForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
+                               onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}/>
         </div>
     )
 };
