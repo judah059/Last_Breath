@@ -20,6 +20,20 @@ export interface ITestMovieItem {
     "country": string
 }
 
+export interface ISession {
+    "base_price": number,
+    "cinemahall": number,
+    "cinemahall_detail": object,
+    "date": string,
+    "end_time": string,
+    "id": number,
+    "movie": number,
+    "movie_name": number,
+    "movie_poster": number,
+    "seats": Array<object>,
+    "start_time":string
+}
+
 export interface ICinema {
     id: string
     city: string

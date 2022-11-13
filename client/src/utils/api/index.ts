@@ -20,6 +20,9 @@ export let API = {
     getCinemaMovie(id: string | undefined) {
         return baseApi2.get(`film/${id}`).then(res => res.data)
     },
+    getSession() {
+        return baseApi2.get(`session/`).then(res => res.data)
+    },
     getCinemas(city = '') {
         return baseApi.get<ICinema[]>(`cinemas?city=${city}`).then(res => res.data)
     },

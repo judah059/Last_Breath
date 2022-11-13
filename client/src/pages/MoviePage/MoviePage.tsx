@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
-import {IMovieItem, ITestMovieItem} from "../../utils/api/types";
+import {IMovieItem, ISession, ITestMovieItem} from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
@@ -11,6 +11,7 @@ import {useParams} from "react-router-dom";
 
 const MoviePage: React.FC = () => {
    const [movie, setMovie] = useState<ITestMovieItem>();
+   const [session, setSession] = useState<ISession | undefined>()
    const {id} = useParams()
    const [inputValue, setInputValue] = useState<Date>(new Date());
    const [inputValues, setInputValues] = useState<Date[]>([]);
@@ -22,6 +23,18 @@ const MoviePage: React.FC = () => {
          const movie : ITestMovieItem = await API.getCinemaMovie(id);
          setMovie(movie)
          // console.log(movie)
+      } catch (e) {
+         console.log(e)
+         setMovie(undefined)
+         // alert(e)
+      }
+   }
+   const fetchSession = async () => {
+      try {
+         const session : ISession = await API.getSession();
+         setSession(session)
+         // setMovie(movie)
+         console.log(session)
       } catch (e) {
          console.log(e)
          setMovie(undefined)
@@ -44,8 +57,8 @@ const MoviePage: React.FC = () => {
       await setInputValues(dates);
    }
    useEffect( () => {
-
       fetchMovie()
+      fetchSession()
       addInputValues()
       console.log(datesForItems)
    }, [])
