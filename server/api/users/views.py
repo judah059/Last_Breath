@@ -102,3 +102,24 @@ class SessionSeatViewSet(viewsets.ModelViewSet):
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user.id)
+
+    def get_object(self):
+        try:
+            return Ticket.objects.get(user=self.request.user.id)
+        except Ticket.DoesNotExist:
+            raise Ticket()
+
+
+class SessionFilteredView(generics.ListAPIView):
+    queryset = CinemaHall.objects.all()
+    serializer_class = CinemaSessionsSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        date = self.request.data['date']
+        movie = self.request.data['movie']
+        return qs.filter(date=date, movie=movie)

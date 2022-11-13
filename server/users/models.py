@@ -85,7 +85,7 @@ class Cinema(models.Model):
 
 class CinemaHall(models.Model):
     number = models.IntegerField()
-    cinema = models.ForeignKey('Cinema', on_delete=models.CASCADE, null=False)
+    cinema = models.ForeignKey('Cinema', on_delete=models.CASCADE, null=False, related_name="halls")
 
     def __str__(self):
         return f'{self.cinema.name} hall #{self.number}'
@@ -117,7 +117,7 @@ class Seat(models.Model):
 
 class Session(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE, null=False)
-    cinemahall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False)
+    cinemahall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False, related_name="sessions")
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -141,3 +141,10 @@ class Ticket(models.Model):
     session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
     session_seat = models.ForeignKey('SessionSeat', on_delete=models.CASCADE, null=False)
     total_price = models.IntegerField()
+
+
+# class Snack(models.Model):
+#     name = models.CharField(null=False)
+#     price = models.IntegerField()
+
+
