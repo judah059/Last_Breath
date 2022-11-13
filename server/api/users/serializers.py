@@ -87,11 +87,11 @@ class SeatSerializer(serializers.ModelSerializer):
 
 
 class CinemaHallSerializer(serializers.ModelSerializer):
-    seats = SeatSerializer(many=True, read_only=True, source="seat_set")
+    cinema_name = serializers.CharField(read_only=True, source="cinema.name")
 
     class Meta:
         model = CinemaHall
-        fields = ["id", "number", "cinema", "seats"]
+        fields = ["id", "number", "cinema", "cinema_name"]
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -102,17 +102,81 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class CinemaSerializer(serializers.ModelSerializer):
     cinemahall = CinemaHallSerializer(many=True, read_only=True, source="cinemahall_set")
-    location_details = AddressSerializer(many=True, read_only=True, source="address_set")
+    location_details = AddressSerializer(read_only=True, source="location")
 
     class Meta:
         model = Cinema
         fields = ["id", "name", "location", "location_details", "cinemahall"]
 
 
+class SessionSeatSerializer(serializers.ModelSerializer):
+    seat_number = serializers.IntegerField(read_only=True, source='seat.number')
+    seat_row = serializers.IntegerField(read_only=True, source='seat.row')
+    seat_additional_price = serializers.IntegerField(read_only=True, source='seat.additional_price')
+    class Meta:
+        model = SessionSeat
+        fields = ["seat_number", "seat_row", "seat_additional_price", "is_free"]
+
+
 class SessionSerializer(serializers.ModelSerializer):
     cinemahall_detail = CinemaHallSerializer(read_only=True, source="cinemahall")
     movie_name = serializers.CharField(read_only=True, source="movie.name")
     movie_poster = serializers.CharField(read_only=True, source="movie.poster")
+    seats = SessionSeatSerializer(many=True, read_only=True, source="sessionseat_set")
+
     class Meta:
         model = Session
-        fields = ["id", "date", "start_time", "end_time", "movie", "movie_name", "movie_poster", "cinemahall", "cinemahall_detail"]
+        fields = ["id", "date", "start_time", "end_time",  "base_price", "movie", "movie_name", "movie_poster", "cinemahall", "cinemahall_detail", "seats"]
+
+    def create(self, validated_data):
+        session_instance = Session(
+            date=validated_data['date'],
+            start_time=validated_data['start_time'],
+            end_time=validated_data['end_time'],
+            base_price=validated_data['base_price'],
+            movie=validated_data['movie'],
+            cinemahall=validated_data['cinemahall']
+        )
+        session_instance.save()
+
+        seats = Seat.objects.filter(hall=validated_data['cinemahall'])
+        for seat in seats:
+            session_seat_instance = SessionSeat(
+                seat=seat,
+                session=session_instance
+            )
+            session_seat_instance.save()
+
+        return session_instance
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        # fields = ["user", "session_seat", "session"]
+        fields = ["session_seat", "session"]
+
+    def create(self, validated_data):
+        if not validated_data['session_seat'].is_free:
+            raise serializers.ValidationError({"error": "This seat is already taken"})
+        if validated_data['session_seat'].session != validated_data['session']:
+            raise serializers.ValidationError({"error": "This seat is not belong to this session"})
+
+        ticket_instance = Ticket()
+        full_price = validated_data['session_seat'].seat.additional_price + validated_data['session'].base_price
+
+        #ticket_instance.user = validated_data['user']
+        ticket_instance.user = self.context['request'].user
+        ticket_instance.session_seat = validated_data['session_seat']
+        ticket_instance.session = validated_data['session']
+        ticket_instance.total_price = full_price
+
+        SessionSeat.objects.filter(id=validated_data['session_seat'].id).update(is_free=False)
+        ticket_instance.save()
+
+        return ticket_instance
+
+
+
+
+

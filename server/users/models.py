@@ -91,16 +91,6 @@ class CinemaHall(models.Model):
         return f'{self.cinema.name} hall #{self.number}'
 
 
-class Ticket(models.Model):
-    seat = models.TextField(null=False)
-    date = models.DateTimeField()
-    payment = models.DateTimeField(auto_now_add=True)
-    isUsed = models.BooleanField()
-    user = models.ForeignKey('MyUser', on_delete=models.CASCADE, null=False)
-    cinema = models.ForeignKey('Cinema', on_delete=models.PROTECT, null=False)
-    show = models.ForeignKey('Show', on_delete=models.PROTECT, null=False)
-
-
 class Show(models.Model):
     showTime = models.DateTimeField(null=False)
     length = models.IntegerField()
@@ -120,8 +110,7 @@ class SubscriptionType(models.Model):
 class Seat(models.Model):
     number = models.IntegerField(null=False)
     row = models.IntegerField(null=False)
-    cost = models.IntegerField(null=False)
-    is_free = models.BooleanField()
+    additional_price = models.IntegerField(null=False)
 
     hall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False)
 
@@ -132,3 +121,23 @@ class Session(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    base_price = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.movie.__str__()} in {self.cinemahall.__str__()}'
+
+
+class SessionSeat(models.Model):
+    seat = models.ForeignKey('Seat', on_delete=models.CASCADE, null=False)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
+    is_free = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'Row: {self.seat.row} Number: {self.seat.number}'
+
+
+class Ticket(models.Model):
+    user = models.ForeignKey('MyUser', on_delete=models.CASCADE, null=False)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
+    session_seat = models.ForeignKey('SessionSeat', on_delete=models.CASCADE, null=False)
+    total_price = models.IntegerField()
