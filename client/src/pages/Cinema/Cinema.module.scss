@@ -1,0 +1,147 @@
+.container {
+  max-width: 1150px;
+  margin: 40px auto;
+  padding: 10px;
+
+  .top {
+    position: relative;
+
+    .mainImage {
+      border-radius: 7px;
+      width: 100%;
+    }
+
+    .title {
+      position: absolute;
+      top: 35%;
+      left: 40%;
+
+      h2:first-child {
+        text-align: center;
+        font-size: 24px;
+      }
+
+      h2:last-child {
+        text-align: center;
+        font-weight: 500;
+        font-size: 48px;
+        line-height: 59px;
+        margin-top: 20px;
+      }
+    }
+
+    .location {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        p:first-child {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 24px;
+        }
+
+        p:last-child {
+          font-size: 16px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+
+  .dayList {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin: 40px auto;
+
+    .dayBlock {
+      border: 1px solid #837C8D;
+      border-radius: 4px;
+      text-align: center;
+      padding: 5px 20px;
+      font-weight: 500;
+      cursor: pointer;
+
+      h3 {
+        line-height: 24px;
+      }
+
+      p {
+        font-size: 12px;
+        line-height: 24px;
+        color: #B8B7B7;
+      }
+
+      &:hover {
+        background: #a86b6b;
+      }
+
+      &.active {
+        background: #CE3F3F;
+      }
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background-color: white;
+    width: 96%;
+    margin: 0 auto 30px;
+    padding: 0 25px;
+  }
+
+  .movieBlock {
+    margin-top: 50px;
+    padding: 0 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 80px;
+    grid-row-gap: 50px;
+
+
+    .item {
+      display: flex;
+
+      .title {
+        img{
+          border-radius: 6px;
+        }
+        p {
+          margin-top: 20px;
+          text-align: center;
+        }
+      }
+
+      .timetable {
+        padding-left: 30px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        align-content: flex-start;
+
+        li {
+          color: #EB6969;
+          cursor: pointer;
+
+          &.active{
+            color: #F20C0C;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+}
