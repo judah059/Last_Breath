@@ -64,7 +64,7 @@ const MoviePage: React.FC = () => {
          const sessions : ISession[] = await API.getSession();
          let sessionsMovie : ISession[]  = sessions.filter(x => x.movie.toString() === id?.toString())
          // const sessionCinema1 = sessionsMovie.filter(x => x.cinema === 1)
-         //  sessions.map((session, index) => <div>{session.cinemahall_detail.cinema_name} <div>{session}</div></div>)
+         //  sessions.map((cinema, index) => <div>{cinema.cinemahall_detail.cinema_name} <div>{cinema}</div></div>)
          // const bla = sessionsMovie.map(s=>({cinema: s.cinemahall_detail.cinema_name, time:s.start_time}))
          setSession(sessionsMovie)
 
