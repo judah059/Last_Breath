@@ -92,3 +92,13 @@ class CinemaHallViewSet(viewsets.ModelViewSet):
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+
+
+class SessionSeatViewSet(viewsets.ModelViewSet):
+    queryset = SessionSeat.objects.all()
+    serializer_class = SessionSeatSerializer
+
+
+class TicketViewSet(viewsets.ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer

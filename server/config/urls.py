@@ -42,6 +42,9 @@ routerAddress.register(r'address', AddressViewSet, basename='address')
 routerSession = routers.SimpleRouter()
 routerSession.register(r'session', SessionViewSet, basename='session')
 
+routerTicket = routers.SimpleRouter()
+routerTicket.register(r'ticket', TicketViewSet, basename='ticket')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
@@ -58,4 +61,6 @@ urlpatterns = [
     path('api/', include(routerAddress.urls)),
     path('api/', include(routerCinemaHall.urls)),
     path('api/', include(routerSession.urls)),
+    #path('api/session/seat', SessionSeatViewSet.as_view({"get": "list"})),
+    path('api/', include(routerTicket.urls)),
 ]
