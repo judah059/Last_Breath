@@ -20,6 +20,29 @@ export interface ITestMovieItem {
     "country": string
 }
 
+export interface ISession {
+    "base_price": number,
+    "cinemahall": number,
+    "cinemahall_detail": {
+        "cinema": number
+        "cinema_name": string
+        "id": number
+        "number": number
+
+    },
+    "date": string,
+    "end_time": string,
+    "id": number,
+    "movie": number,
+    "movie_name": number,
+    "movie_poster": number,
+    "seats": Array<object>,
+    "start_time":string
+}
+export interface niceBackEnd {
+    "cinema" : string,
+    "time" : string,
+}
 export interface ICinema {
     id: string
     city: string
@@ -37,6 +60,11 @@ export interface IReqUser {
 export interface IResUser {
     refresh: string
     access: string
+}
+
+export interface ISessionItem {
+    label: string,
+    dates: Array<string>
 }
 
 export interface IUser {
