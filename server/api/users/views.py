@@ -78,6 +78,13 @@ class CinemaViewSet(viewsets.ModelViewSet):
     queryset = Cinema.objects.all()
     serializer_class = CinemaSerializer
 
+    def get_queryset(self):
+        qs = super(CinemaViewSet, self).get_queryset()
+        city = self.request.GET.get()
+        if city:
+            return qs.filter(location__city=city)
+        return qs.all()
+
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()

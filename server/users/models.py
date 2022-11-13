@@ -137,14 +137,40 @@ class SessionSeat(models.Model):
 
 
 class Ticket(models.Model):
-    user = models.ForeignKey('MyUser', on_delete=models.CASCADE, null=False)
+    user = models.ForeignKey('MyUser', on_delete=models.CASCADE, null=False, related_name='tickets')
     session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
     session_seat = models.ForeignKey('SessionSeat', on_delete=models.CASCADE, null=False)
     total_price = models.IntegerField()
+    is_payed = models.BooleanField(default=False)
 
 
-# class Snack(models.Model):
-#     name = models.CharField(null=False)
-#     price = models.IntegerField()
+class Snack(models.Model):
+    cinema = models.ForeignKey('Cinema', on_delete=models.CASCADE)
+    name = models.TextField()
+    logo = models.TextField()  # url picture of Snack
+    price = models.IntegerField()
+
+
+class BoughtSnack(models.Model):
+    snack = models.ForeignKey('Snack', on_delete=models.CASCADE)
+    user = models.ForeignKey('MyUser', on_delete=models.CASCADE, related_name='snacks')
+    amount = models.IntegerField()
+    is_payed = models.BooleanField(default=False)
+    total_price = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        if not self.total_price:
+            self.total_price = self.snack.price * self.amount
+        super().save(*args, **kwargs)
+
+
+class Transaction(models.Model):
+    basket = models.ForeignKey('Basket', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Basket(models.Model):
+    user = models.OneToOneField('MyUser', on_delete=models.CASCADE, null=True, blank=True, related_name='basket')
+    total_price = models.IntegerField(default=0)
 
 
