@@ -63,5 +63,5 @@ urlpatterns = [
     path('api/', include(routerSession.urls)),
     #path('api/session/seat', SessionSeatViewSet.as_view({"get": "list"})),
     path('api/', include(routerTicket.urls)),
-    path('api/session/url/', SessionFilteredView.as_view())
+    path('api/filter/session/', SessionFilteredView.as_view())
 ]

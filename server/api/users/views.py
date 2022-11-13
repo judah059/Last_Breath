@@ -120,6 +120,13 @@ class SessionFilteredView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        date = self.request.data['date']
-        cinema = self.request.data['cinema']
-        return qs.filter(sessions__date=date, cinema=cinema)
+        date = self.request.data.get('date')
+        cinema = self.request.data.get('cinema')
+        if date and cinema:
+            return qs.filter(cinema=cinema, sessions__date=date)
+        if cinema:
+            return qs.filter(cinema=cinema)
+        if date:
+            return qs.filter(sessions__date=date)
+
+        return qs.all()
