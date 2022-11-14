@@ -177,10 +177,33 @@ class TicketSerializer(serializers.ModelSerializer):
         return ticket_instance
 
 
-class CinemaSessionsSerializer(serializers.ModelSerializer):
-    sessions = SessionSerializer(many=True, read_only=True)
-    cinema_name = serializers.CharField(read_only=True, source="cinema.name")
+class DevSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        date = self.context['request'].query_params.get('date')
+        if date:
+            if response["date"] == self.context['request'].query_params.get('date'):
+                return response
+            else:
+                return None
+        return response
+
+
+class DevCinemaHallSerializer(serializers.ModelSerializer):
+    sessions = DevSessionSerializer(many=True, read_only=True)
 
     class Meta:
         model = CinemaHall
-        fields = ["id", "number", "cinema", "cinema_name", "sessions"]
+        fields = ["id", "number", "sessions"]
+
+
+class DevCinemaSerializer(serializers.ModelSerializer):
+    halls = DevCinemaHallSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cinema
+        fields = ["id", "halls"]
