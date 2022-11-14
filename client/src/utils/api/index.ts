@@ -1,5 +1,5 @@
 import axios from "axios";
-import {IChangePassword, ICinema, IReqUser, IResUser, IUser} from "./types";
+import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
 
 
@@ -23,12 +23,15 @@ export let API = {
     getSession() {
         return baseApi2.get(`session/`).then(res => res.data)
     },
+    getSessionByDate(data : IReqSessionByDate) {
+        return baseApi2.get(`filter/session/`, {data: data}).then(res => res.data)
+    },
     getCinemas(city = '') {
         return baseApi.get<ICinema[]>(`cinemas?city=${city}`).then(res => res.data)
     },
-    getSeats() {
-
-    }
+    // getSeats() {
+    //
+    // }
 }
 
 export let userAPI = {

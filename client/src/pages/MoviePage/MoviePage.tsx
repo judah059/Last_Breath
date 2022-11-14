@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
-import {IMovieItem, ISession, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
+import {IMovieItem, ISession, ISessionByDate, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
@@ -96,9 +96,24 @@ const MoviePage: React.FC = () => {
       fetchMovie()
       fetchSession()
       addInputValues()
-      console.log(datesForItems)
+      fetchSessionByDate()
+      // console.log(datesForItems)
    }, [])
 
+   const fetchSessionByDate = async () => {
+      try {
+         const sessions : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinemaId: 1});
+         console.log(sessions)
+         // setMovie(movie)
+         // console.log(session)
+         // console.log(bla)
+      } catch (e) {
+         console.log(e)
+         setMovie(undefined)
+         // alert(e)
+      }
+
+   }
 
    return (
        <div>
