@@ -7,8 +7,9 @@ import location from "../../assets/location.svg";
 import {useParams} from "react-router-dom";
 import {ICinema} from "../../utils/api/types";
 import {API} from "../../utils/api";
-import {useAppDispatch} from "../../utils/hooks/redux";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {setCinema} from "../../store/cinema/cinema.slice";
+import {RootState} from "../../store";
 
 
 interface CinemaProps {
@@ -22,6 +23,8 @@ const Cinema: React.FC<CinemaProps> = () => {
 
     const [currCinema, setCurrCinema] = useState<ICinema>()
     const dispatch = useAppDispatch();
+    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.session);
+
 
     const fetchCinema = async () => {
         try {
@@ -42,7 +45,7 @@ const Cinema: React.FC<CinemaProps> = () => {
         return () => {
             dispatch(setCinema(null))
         }
-    }, [])
+    }, [id])
 
 
     return (

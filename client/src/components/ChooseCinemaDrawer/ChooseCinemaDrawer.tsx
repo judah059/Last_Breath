@@ -60,6 +60,7 @@ const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = ({isShow, refOne, 
     const onClickCinema = (chooseCinema: ICinema) => {
         if (isCinemaPage) {
             navigate(`/cinema/${chooseCinema?.id}`)
+            onClose()
             return
         }
         dispatch(setCinema(chooseCinema))
