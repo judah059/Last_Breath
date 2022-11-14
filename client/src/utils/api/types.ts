@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export interface IMovieItem {
     id: string
     name: string
@@ -19,6 +21,7 @@ export interface ITestMovieItem {
     "language": string,
     "country": string
 }
+
 
 export interface ISession {
     "base_price": number,
@@ -71,29 +74,67 @@ export interface ISessionItem {
 }
 export interface ISessionByDate {
     "id": number,
-    "number": number,
-    "cinema": number,
-    "cinema_name": string,
-    "sessions":  [
-        {
-            "id": number,
-            "date": string,
-            "start_time": string,
-            "end_time": string,
-            "base_price": number,
-            "movie": number,
-            "movie_name": string,
-            "movie_poster": string,
-            "cinemahall": number,
-            "cinemahall_detail": {
+    "halls": [
+    {
+        "id": number,
+        "number": number,
+        "sessions": [
+            {
                 "id": number,
-                "number": number,
-                "cinema": number
-                "cinema_name": string
-            },
-            "seats": []
-        }
-    ]
+                "date": string,
+                "start_time": string,
+                "end_time": string,
+                "base_price": number,
+                "movie": number,
+                "cinemahall": number,
+                "seats": []
+            }
+        ]
+    }]
+
+
+
+
+    // "id": number,
+    // "number": number,
+    // "cinema": number,
+    // "cinema_name": string,
+    // "sessions":  [
+    //     {
+    //         "id": number,
+    //         "date": string,
+    //         "start_time": string,
+    //         "end_time": string,
+    //         "base_price": number,
+    //         "movie": number,
+    //         "movie_name": string,
+    //         "movie_poster": string,
+    //         "cinemahall": number,
+    //         "cinemahall_detail": {
+    //             "id": number,
+    //             "number": number,
+    //             "cinema": number
+    //             "cinema_name": string
+    //         },
+    //         "seats": []
+    //     }
+    // ]
+}
+export interface IHall {
+            "id": number,
+            "number": number,
+            "sessions": [
+                {
+                    "id": number,
+                    "date": string,
+                    "start_time": string,
+                    "end_time": string,
+                    "base_price": number,
+                    "movie": number,
+                    "cinemahall": number,
+                    "seats": []
+                }
+            ]
 }
 export interface IUser {
     username?: string
@@ -104,6 +145,30 @@ export interface IUser {
     email?: string
     password?: string
 }
+
+// export interface ISessionDictionary {
+//     label: string,
+//     sessions: [
+//         {
+//             "id": number,
+//             "date": string,
+//             "start_time": string,
+//             "end_time": string,
+//             "base_price": number,
+//             "movie": number,
+//             "movie_name": string,
+//             "movie_poster": string,
+//             "cinemahall": number,
+//             "cinemahall_detail": {
+//                 "id": number,
+//                 "number": number,
+//                 "cinema": number
+//                 "cinema_name": string
+//             },
+//             "seats": []
+//         }
+//     ]
+// }
 
 export interface DateOfBirth {
     month: string

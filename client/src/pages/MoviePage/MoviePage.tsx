@@ -1,7 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
-import {IMovieItem, ISession, ISessionByDate, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
+import {
+   IHall,
+   IMovieItem,
+   ISession,
+   ISessionByDate,
+   ISessionItem,
+   ITestMovieItem,
+   niceBackEnd
+} from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
@@ -16,17 +24,35 @@ const MoviePage: React.FC = () => {
    const [inputValue, setInputValue] = useState<Date>(new Date());
    const [inputValues, setInputValues] = useState<Date[]>([]);
    const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
+   const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
    const [popup, setPopup] = useState<Boolean>(true)
    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
-   const fetchMovie = async () => {
+   const fetchMovieAndSessions = async () => {
       try {
          const movie : ITestMovieItem = await API.getCinemaMovie(id);
-         setMovie(movie)
+         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
+         let sessionByDate: ISessionByDate = sessionsByDate[0];
+         // console.log(sessionByDate)
+         for (let i = 0; i < sessionByDate.halls.length; i++) {
+            for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
+               if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+                  sessionByDate.halls[i].sessions.splice(j, 1)
+                  j--;
+               }
+            }
+         }
+
+
+
+        await setMovie(movie)
+         await  setSessionByDateAndCinema(sessionByDate)
+         console.log(sessionByDate)
+
          // console.log(movie)
       } catch (e) {
          console.log(e)
-         setMovie(undefined)
+         // setMovie(undefined)
          // alert(e)
       }
    }
@@ -69,11 +95,11 @@ const MoviePage: React.FC = () => {
          setSession(sessionsMovie)
 
          // setMovie(movie)
-         console.log(session)
+         // console.log(session)
          // console.log(bla)
       } catch (e) {
          console.log(e)
-         setMovie(undefined)
+         // setMovie(undefined)
          // alert(e)
       }
    }
@@ -93,7 +119,7 @@ const MoviePage: React.FC = () => {
       await setInputValues(dates);
    }
    useEffect( () => {
-      fetchMovie()
+      fetchMovieAndSessions()
       fetchSession()
       addInputValues()
       fetchSessionByDate()
@@ -102,30 +128,46 @@ const MoviePage: React.FC = () => {
 
    const fetchSessionByDate = async () => {
       try {
-         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
-         let newArray = [];
-         let idArray = []
-         for (let i = 0; i < sessionsByDate.length; i++) {
-            for (let j = 0; j < sessionsByDate[i].sessions.length; j++) {
-               if(sessionsByDate[i].sessions[j].date === "2022-11-13") {
-                  idArray.push(sessionsByDate[i].sessions[j].id)
-                  newArray.push(sessionsByDate[i])
-                  // sessionsByDate[i].sessions.
-               }
-            }
-         }
+         // const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
+         // let sessionByDate: ISessionByDate = sessionsByDate[0];
+         // // let newArray: IHall[] = [];
+         // console.log(sessionByDate)
+         // for (let i = 0; i < sessionByDate.halls.length; i++) {
+         //    for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
+         //       if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+         //          sessionByDate.halls[i].sessions.splice(j, 1)
+         //          j--;
+         //       }
+         //    }
+         // }
+         // console.log(sessionByDate)
 
-         console.log(sessionsByDate.map(x => x.sessions.filter(x => x.date === "2022-11-13")))
-         // sessionsByDate.filter((x, index) => x.sessions === "2022-11-13")
-         console.log(sessionsByDate)
-         // console.log(newArray)
-         // setMovie(movie)
-         // console.log(session)
-         // console.log(bla)
+
+
+         // console.log(sessionsByDate.filter(x => x.sessions[]))
+
+         // for (let i = 0; i < sessionsByDate.length; i++) {
+         //    for (let j = 0; j < sessionsByDate[i].sessions.length; j++) {
+         //       if(sessionsByDate[i].sessions[j].date === "2022-11-13") {
+         //          // arrayOfSessions.push(sessionsByDate[i].sessions[j])
+         //
+         //          // sessionDictionary.push({label: sessionsByDate[i].cinema_name, sessions: ...sessionDictionary})
+         //          newArray.push(sessionsByDate[i])
+         //          // sessionsByDate[i].sessions.
+         //       }
+         //          if(j  == sessionsByDate[i].sessions.length - 1) {
+         //             // sessionDictionary.push({label: sessionsByDate[i].cinema_name, sessions: arrayOfSessions})
+         //             // arrayOfSessions = [];
+         //          }
+         //       }
+         //    }
+
+
+         // console.log(sessionsByDate.map(x => x.sessions.filter(x => x.date === "2022-11-13")))
+         // console.log(sessionsByDate)
       } catch (e) {
          console.log(e)
          setMovie(undefined)
-         // alert(e)
       }
 
    }
