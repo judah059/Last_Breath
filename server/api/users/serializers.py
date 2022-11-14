@@ -101,7 +101,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class CinemaSerializer(serializers.ModelSerializer):
-    cinemahall = CinemaHallSerializer(many=True, read_only=True, source="cinemahall_set")
+    cinemahall = CinemaHallSerializer(many=True, read_only=True, source="halls")
     location_details = AddressSerializer(read_only=True, source="location")
 
     class Meta:
@@ -177,6 +177,10 @@ class TicketSerializer(serializers.ModelSerializer):
         return ticket_instance
 
 
+class CinemaSessionsSerializer(serializers.ModelSerializer):
+    sessions = SessionSerializer(many=True, read_only=True)
+    cinema_name = serializers.CharField(read_only=True, source="cinema.name")
 
-
-
+    class Meta:
+        model = CinemaHall
+        fields = ["id", "number", "cinema", "cinema_name", "sessions"]
