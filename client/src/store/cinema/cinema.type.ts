@@ -1,5 +1,6 @@
+import {ICinema} from "../../utils/api/types";
+
 export interface ICinemaStore {
-   id: number,
-   name: '',
-   location_name: ""
+   cinema: ICinema | null,
+   isCinemaPage: boolean
 }

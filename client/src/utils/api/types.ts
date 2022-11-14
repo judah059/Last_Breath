@@ -47,10 +47,23 @@ export interface niceBackEnd {
     "time" : string,
 }
 export interface ICinema {
-    id: string
-    city: string
-    cinemaName: string
-    cinemaStreet: string
+    "id": number,
+    "name": string,
+    "location": 1,
+    "location_details": {
+        "id": number,
+        "city": string,
+        "street": string,
+        "number": number
+    },
+    "cinemahall": [
+        {
+            "id": number,
+            "number": number,
+            "cinema": number,
+            "cinema_name": string
+        }
+    ]
 }
 
 export interface IReqUser {

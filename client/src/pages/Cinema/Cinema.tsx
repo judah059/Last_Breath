@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import s from './Cinema.module.scss'
 import mov from "../../assets/tempMovieImage.jpg";
 import cinemaTemp from "../../assets/cinemaTemp.jpg";
 import location from "../../assets/location.svg";
+import {useParams} from "react-router-dom";
+import {ICinema} from "../../utils/api/types";
+import {API} from "../../utils/api";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
+import {setCinema} from "../../store/cinema/cinema.slice";
+import {RootState} from "../../store";
+
 
 interface CinemaProps {
 
@@ -11,6 +18,36 @@ interface CinemaProps {
 
 
 const Cinema: React.FC<CinemaProps> = () => {
+
+    const {id} = useParams() as { id: string };
+
+    const [currCinema, setCurrCinema] = useState<ICinema>()
+    const dispatch = useAppDispatch();
+    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.session);
+
+
+    const fetchCinema = async () => {
+        try {
+            const cinema = await API.getCinema(id);
+            setCurrCinema(cinema)
+            dispatch(setCinema(cinema))
+
+            const sessions = await API.getSession(id)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchCinema()
+
+        return () => {
+            dispatch(setCinema(null))
+        }
+    }, [id])
+
+
     return (
         <>
             <HeaderDrawer toLinkText='Cinema Name'/>
@@ -19,13 +56,13 @@ const Cinema: React.FC<CinemaProps> = () => {
                     <img src={cinemaTemp} alt="cinema" className={s.mainImage}/>
                     <div className={s.title}>
                         <h2>Cinema</h2>
-                        <h2>“KinoLand”</h2>
+                        <h2>{currCinema?.name}</h2>
                     </div>
                     <div className={s.location}>
                         <img src={location} alt="location"/>
                         <div className={s.info}>
-                            <p>Yuvileyny avenue</p>
-                            <p>Kharkiv</p>
+                            <p>{currCinema?.location_details.street} {currCinema?.location_details.number}</p>
+                            <p>{currCinema?.location_details.city}</p>
                         </div>
                     </div>
                 </div>

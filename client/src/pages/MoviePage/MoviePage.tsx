@@ -14,21 +14,23 @@ import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
 import {useParams} from "react-router-dom";
-
+import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
+import {useAppDispatch} from "../../utils/hooks/redux";
 
 
 const MoviePage: React.FC = () => {
+   const dispatch = useAppDispatch();
    const [movie, setMovie] = useState<ITestMovieItem>();
    const [session, setSession] = useState<ISession[] | undefined>()
    const {id} = useParams()
    const [inputValue, setInputValue] = useState<Date>(new Date());
    const [inputValues, setInputValues] = useState<Date[]>([]);
-   const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
    const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
+   const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
    const [popup, setPopup] = useState<Boolean>(true)
    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
-   const fetchMovieAndSessions = async () => {
+   const fetchMovie = async () => {
       try {
          const movie : ITestMovieItem = await API.getCinemaMovie(id);
          const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
@@ -45,7 +47,7 @@ const MoviePage: React.FC = () => {
 
 
 
-        await setMovie(movie)
+         await setMovie(movie)
          await  setSessionByDateAndCinema(sessionByDate)
          console.log(sessionByDate)
 
@@ -95,11 +97,11 @@ const MoviePage: React.FC = () => {
          setSession(sessionsMovie)
 
          // setMovie(movie)
-         // console.log(session)
+         console.log(session)
          // console.log(bla)
       } catch (e) {
          console.log(e)
-         // setMovie(undefined)
+         setMovie(undefined)
          // alert(e)
       }
    }
@@ -119,11 +121,18 @@ const MoviePage: React.FC = () => {
       await setInputValues(dates);
    }
    useEffect( () => {
-      fetchMovieAndSessions()
+      fetchMovie()
       fetchSession()
       addInputValues()
       fetchSessionByDate()
       // console.log(datesForItems)
+
+      dispatch(setIsCinemaPage(false))
+
+      return () => {
+         dispatch(setIsCinemaPage(true))
+         dispatch(setCinema(null))
+      }
    }, [])
 
    const fetchSessionByDate = async () => {
@@ -167,7 +176,7 @@ const MoviePage: React.FC = () => {
          // console.log(sessionsByDate)
       } catch (e) {
          console.log(e)
-         setMovie(undefined)
+         // setMovie(undefined)
       }
 
    }

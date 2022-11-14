@@ -80,6 +80,7 @@ class CinemaViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super(CinemaViewSet, self).get_queryset()
+#         city = self.request.GET.get('city')
         print(self.request.query_params.get('city'))
         city = self.request.query_params.get('city')
         if city:
@@ -123,12 +124,24 @@ class TicketViewSet(viewsets.ModelViewSet):
 
 
 class SessionFilteredView(generics.ListAPIView):
-    queryset = Cinema.objects.all()
-    serializer_class = DevCinemaSerializer
+    queryset = CinemaHall.objects.all()
+    serializer_class = CinemaSessionsSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
+        date = self.request.query_params.get('date')
         cinema = self.request.query_params.get('cinema')
+        print(bool(date and cinema))
+        print(bool(cinema))
+        print(bool(date))
+        if date and cinema:
+            print("1")
+            return qs.filter(sessions__date=date, cinema=cinema)
         if cinema:
-            return qs.filter(id=cinema)
+            print("2")
+            return qs.filter(cinema=cinema)
+        if date:
+            print("3")
+            return qs.filter(sessions__date=date)
+
         return qs.all()
