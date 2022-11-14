@@ -169,14 +169,11 @@ class BoughtSnackView(viewsets.ModelViewSet):
 
 class SnackFilterView(viewsets.ModelViewSet):
     queryset = Snack.objects.all()
-    serializer_class = SnackFilterSerializer
-
+    serializer_class = SnackSerializer
     def get_queryset(self):
         qs = super().get_queryset()
-        cinema = self.request.query_params.get('cinema')
-        if cinema:
-            return qs.filter(id=cinema)
-        return qs.all()
+        return qs.filter(snack=Snack.objects.get(id=self.kwargs['pk']))
+
 
 class SnackView(viewsets.ModelViewSet):
     queryset = Snack.objects.all()
