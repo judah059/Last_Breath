@@ -1,29 +1,26 @@
-import {UserState} from "../user/user.types";
 import {createSlice} from "@reduxjs/toolkit";
-import {getMe, updateMe} from "../user/user.actions";
-import {registration} from "../authentication/authentication.actions";
 import {ICinemaStore} from "./cinema.type";
 
 const initialState: ICinemaStore = {
-   id: 0,
-   name: '',
-   location_name: ""
+    cinema: null,
+    isCinemaPage: true
 }
 
 
 export const cinemaSlice = createSlice({
-   name: 'session',
-   initialState,
-   reducers: {
-      setCinemaId(state, action) {
-         state.id = action.payload
-         state.name = action.payload
-         state.location_name = action.payload
-      }
-   }
+    name: 'session',
+    initialState,
+    reducers: {
+        setCinema(state, action) {
+            state.cinema = action.payload
+        },
+        setIsCinemaPage(state, action) {
+            state.isCinemaPage = action.payload
+        }
+    }
 
 })
 
-export const {setCinemaId} = cinemaSlice.actions;
+export const {setCinema, setIsCinemaPage} = cinemaSlice.actions;
 
 export default cinemaSlice.reducer;

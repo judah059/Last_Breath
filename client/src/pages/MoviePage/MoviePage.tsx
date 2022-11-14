@@ -1,35 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
-import {IMovieItem, ISession, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
+import {IMovieItem, ISession, ISessionByDate, ISessionItem, ITestMovieItem, niceBackEnd} from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
 import {useParams} from "react-router-dom";
-
+import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
+import {useAppDispatch} from "../../utils/hooks/redux";
 
 
 const MoviePage: React.FC = () => {
-   const [movie, setMovie] = useState<ITestMovieItem>();
-   const [session, setSession] = useState<ISession[] | undefined>()
-   const {id} = useParams()
-   const [inputValue, setInputValue] = useState<Date>(new Date());
-   const [inputValues, setInputValues] = useState<Date[]>([]);
-   const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
-   const [popup, setPopup] = useState<Boolean>(true)
-   const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
-   const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
-   const fetchMovie = async () => {
-      try {
-         const movie : ITestMovieItem = await API.getCinemaMovie(id);
-         setMovie(movie)
-         // console.log(movie)
-      } catch (e) {
-         console.log(e)
-         setMovie(undefined)
-         // alert(e)
-      }
-   }
+    const dispatch = useAppDispatch();
+    const [movie, setMovie] = useState<ITestMovieItem>();
+    const [session, setSession] = useState<ISession[] | undefined>()
+    const {id} = useParams()
+    const [inputValue, setInputValue] = useState<Date>(new Date());
+    const [inputValues, setInputValues] = useState<Date[]>([]);
+    const [inputValuesForSpecDate, setInputValuesForSpecDate] = useState<ISessionItem | {}>();
+    const [popup, setPopup] = useState<Boolean>(true)
+    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
+    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
+    const fetchMovie = async () => {
+        try {
+            const movie: ITestMovieItem = await API.getCinemaMovie(id);
+            setMovie(movie)
+            // console.log(movie)
+        } catch (e) {
+            console.log(e)
+            setMovie(undefined)
+            // alert(e)
+        }
+    }
 
    const groupBy = (items : niceBackEnd[], key : string) =>
        items.reduce(
@@ -96,7 +98,15 @@ const MoviePage: React.FC = () => {
       fetchMovie()
       fetchSession()
       addInputValues()
-      console.log(datesForItems)
+      // fetchSessionByDate()
+      // console.log(datesForItems)
+
+      dispatch(setIsCinemaPage(false))
+
+      return () => {
+         dispatch(setIsCinemaPage(true))
+         dispatch(setCinema(null))
+      }
    }, [])
 
 

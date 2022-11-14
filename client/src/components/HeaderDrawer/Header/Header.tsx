@@ -7,6 +7,8 @@ import userLogo from '../../../assets/userLogo.svg'
 import burger from '../../../assets/burger.svg'
 import {NavLink, useNavigate} from "react-router-dom";
 import {useAuth} from "../../../utils/hooks/useAuth";
+import {useAppSelector} from "../../../utils/hooks/redux";
+import {RootState} from "../../../store";
 
 interface HeaderProps {
     onClickDrawer: () => void
@@ -37,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({
 
     const isAuth = useAuth()
 
+    const {cinema} = useAppSelector((state: RootState) => state.session);
+
     return (
         <header className={s.header}>
             <div className={s.leftSide}>
@@ -54,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <div className={s.rightSide}>
                 <div className={s.chooseBtn} onClick={onClickCinemaDrawer}>
-                    <span>Choose city, cinema</span>
+                    <span>{cinema === null ? 'Choose city, cinema' : `${cinema.location_details.city}, ${cinema.name}`}</span>
                     <img src={downArrow} alt="downArrow"/>
                 </div>
                 <div className={s.divider}>

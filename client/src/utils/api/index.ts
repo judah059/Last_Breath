@@ -1,11 +1,7 @@
 import axios from "axios";
-import {IChangePassword, ICinema, IReqUser, IResUser, IUser} from "./types";
+import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
 
-
-let baseApi = axios.create({
-    baseURL: 'https://6358280cc26aac906f3d1b80.mockapi.io/'
-})
 
 const cookieToken = getWithExpiry('access_token')
 
@@ -20,15 +16,18 @@ export let API = {
     getCinemaMovie(id: string | undefined) {
         return baseApi2.get(`film/${id}`).then(res => res.data)
     },
-    getSession() {
-        return baseApi2.get(`session/`).then(res => res.data)
+    getSession(cinemaId?: string, date?: Date) {
+        return baseApi2.get(`session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
     },
-    getCinemas(city = '') {
-        return baseApi.get<ICinema[]>(`cinemas?city=${city}`).then(res => res.data)
+    getCinemas() {
+        return baseApi2.get<ICinema[]>(`cinema/`).then(res => res.data)
     },
-    getSeats() {
-
-    }
+    getSessionByDate(data : IReqSessionByDate) {
+        return baseApi2.get(`filter/session/`, {params: data}).then(res => res.data)
+    },
+    getCinema(id: string) {
+        return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
+    },
 }
 
 export let userAPI = {
