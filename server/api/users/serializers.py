@@ -251,3 +251,9 @@ class SnackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snack
         fields = "__all__"
+
+class SnackFilterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Snack
+        fields = ["id", "halls"]
