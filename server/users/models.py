@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from users.managers import UserManager
+import users.managers as manager
 
 
 class MyUser(AbstractUser):
@@ -33,7 +33,7 @@ class MyUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-    objects = UserManager()
+    objects = manager.UserManager()
 
     def __str__(self):
         return self.email
@@ -208,3 +208,6 @@ class Payments(models.Model):
         null=True,
         blank=True,
     )
+
+    objects = models.Manager()
+    payment_objects = manager.PaymentsManager()

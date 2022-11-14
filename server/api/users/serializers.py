@@ -36,13 +36,15 @@ class MyUserPostSerializer(ModelSerializer):
 class MyUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ("username",
-                  "first_name",
-                  "last_name",
-                  "birth_date",
-                  "role",
-                  "email",
-                  )
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "role",
+            "email",
+        )
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -113,6 +115,7 @@ class SessionSeatSerializer(serializers.ModelSerializer):
     seat_number = serializers.IntegerField(read_only=True, source='seat.number')
     seat_row = serializers.IntegerField(read_only=True, source='seat.row')
     seat_additional_price = serializers.IntegerField(read_only=True, source='seat.additional_price')
+
     class Meta:
         model = SessionSeat
         fields = ["seat_number", "seat_row", "seat_additional_price", "is_free"]
@@ -126,7 +129,8 @@ class SessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        fields = ["id", "date", "start_time", "end_time",  "base_price", "movie", "movie_name", "movie_poster", "cinemahall", "cinemahall_detail", "seats"]
+        fields = ["id", "date", "start_time", "end_time", "base_price", "movie", "movie_name", "movie_poster",
+                  "cinemahall", "cinemahall_detail", "seats"]
 
     def create(self, validated_data):
         session_instance = Session(
@@ -165,7 +169,7 @@ class TicketSerializer(serializers.ModelSerializer):
         ticket_instance = Ticket()
         full_price = validated_data['session_seat'].seat.additional_price + validated_data['session'].base_price
 
-        #ticket_instance.user = validated_data['user']
+        # ticket_instance.user = validated_data['user']
         ticket_instance.user = self.context['request'].user
         ticket_instance.session_seat = validated_data['session_seat']
         ticket_instance.session = validated_data['session']
@@ -189,7 +193,7 @@ class DevSessionSerializer(serializers.ModelSerializer):
             if response["date"] == self.context['request'].query_params.get('date'):
                 return response
             else:
-                return None
+                return '卐 1488'
         return response
 
 
@@ -207,3 +211,31 @@ class DevCinemaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cinema
         fields = ["id", "halls"]
+
+
+class PaymentGetSerializer(ModelSerializer):
+    user = MyUserProfileSerializer()
+
+    class Meta:
+        model = Payments
+        fields = (
+            'id',
+            'user',
+            'card_type',
+            'last_4',
+            'expire_date',
+            'stripe_id',
+        )
+
+
+class PaymentPostSerializer(ModelSerializer):
+    token = serializers.CharField(max_length=30, required=True)
+
+    class Meta:
+        model = Payments
+        fields = (
+            'token',
+        )
+
+    def create(self, validated_data):
+        return Payments.save(self, validated_data=validated_data)
