@@ -240,3 +240,14 @@ class PaymentPostSerializer(ModelSerializer):
 
     def create(self, validated_data):
         return Payments.save(self, validated_data=validated_data)
+
+
+class BoughtSnackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BoughtSnack
+        fields = "__all__"
+
+class SnackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Snack
+        fields = "__all__"
