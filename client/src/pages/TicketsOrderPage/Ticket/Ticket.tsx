@@ -6,6 +6,8 @@ interface TicketProps {
     row: number
     price: number
     place: number
+    id: number
+    onClickRemove: (id: number) => void
 }
 
 const Ticket: React.FC<TicketProps> = (props) => {
@@ -20,7 +22,7 @@ const Ticket: React.FC<TicketProps> = (props) => {
                         {props.price} UAH
                     </div>
                     <div className={s.close}>
-                        <img src={close} alt={'close'}/>
+                        <img src={close} alt={'close'} onClick={()=>props.onClickRemove(props.id)}/>
                     </div>
                 </div>
             </div>

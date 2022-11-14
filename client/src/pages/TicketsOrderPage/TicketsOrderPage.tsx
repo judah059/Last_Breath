@@ -51,7 +51,7 @@ const TicketsOrderPage: React.FC = (props) => {
         const findItem = tickets.find(e => +e.seat_id === +ticket.seat_id);
         if (findItem) {
             dispatch(setRemoveTicket(ticket.seat_id))
-        }else {
+        } else {
             dispatch(setTicket(ticket))
         }
 
@@ -63,6 +63,10 @@ const TicketsOrderPage: React.FC = (props) => {
 
     const isSeatFree = (id: number) => {
         return tickets.some(s => Number(s.seat_id) === Number(id))
+    }
+
+    const onClickRemove = (id:number) => {
+        dispatch(setRemoveTicket(id))
     }
 
     return (
@@ -115,7 +119,10 @@ const TicketsOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.ticketList}>
-                                {tickets.map(x => <Ticket row={x.seat_row} place={x.seat_number} price={x.price}/>)}
+                                {tickets.map(x => <Ticket row={x.seat_row}
+                                                          place={x.seat_number}
+                                                          price={x.price}
+                                                          id={x.seat_id} onClickRemove={onClickRemove}/>)}
                             </div>
                             <div className={s.label}>
                                 <div className={s.ticketText}>
