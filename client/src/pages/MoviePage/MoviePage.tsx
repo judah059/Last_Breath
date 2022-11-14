@@ -15,7 +15,8 @@ import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
 import {useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
-import {useAppDispatch} from "../../utils/hooks/redux";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
 
 
 const MoviePage: React.FC = () => {
@@ -23,6 +24,7 @@ const MoviePage: React.FC = () => {
    const [movie, setMovie] = useState<ITestMovieItem>();
    const [session, setSession] = useState<ISession[] | undefined>()
    const {id} = useParams()
+   const {cinema} = useAppSelector((state: RootState) => state.session);
    const [inputValue, setInputValue] = useState<Date>(new Date());
    const [inputValues, setInputValues] = useState<Date[]>([]);
    const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
