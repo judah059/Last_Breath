@@ -1,5 +1,7 @@
+import stripe
+from django.conf import settings
 from django.contrib.auth import get_user_model
-from rest_framework import permissions, viewsets, generics
+from rest_framework import permissions, viewsets, generics, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from api.users.serializers import *
 from users.models import *
 
 UserModel = get_user_model()
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ApiRegistration(CreateAPIView):
@@ -54,7 +57,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         result = {
-            "password": "Password has been changed successfully.",
+            "password": "卐",
         }
         return Response(result)
 
@@ -132,3 +135,25 @@ class SessionFilteredView(generics.ListAPIView):
         if cinema:
             return qs.filter(id=cinema)
         return qs.all()
+
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payments.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method != 'GET':
+            return PaymentPostSerializer
+        else:
+            return PaymentGetSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = MyUser.objects.get(pk=self.request.user.pk, email=self.request.user.email)
+        token = serializer.validated_data['token']
+        Payments.payment_objects.create_payment(user=user, token=token)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get_queryset(self):
+        user = MyUser.objects.get(pk=self.request.user.pk, email=self.request.user.email)
+        return Payments.payment_objects.get_queryset(user=user)
