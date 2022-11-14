@@ -1,4 +1,5 @@
 export interface ISeat {
+    seat_id: number
     seat_number: number,
     seat_row: number,
     seat_additional_price: number,
@@ -31,6 +32,7 @@ export interface ISessionState {
 }
 
 export interface ITicket {
+    seat_id: number
     seat_number: number,
     seat_row: number
     price: number

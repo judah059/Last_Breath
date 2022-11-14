@@ -55,6 +55,10 @@ const TicketsOrderPage: React.FC = (props) => {
     const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
     console.log(resultPrice)
 
+    const isSeatFree = (id: number) => {
+        return tickets.some(s => Number(s.seat_id) === Number(id))
+    }
+
     return (
         <div className={s.wrapper}>
             <div>
@@ -81,8 +85,14 @@ const TicketsOrderPage: React.FC = (props) => {
                     </div>
                     <div className={s.seats}>
                         {session?.seats.map((x, i) => <SeatElement
-                            isActive={x?.seat_number === tickets[i]?.seat_number && x?.seat_row === tickets[i]?.seat_row}
-                            onClickAddTicketOrder={() => onClickAddTicketOrder({seat_number: x.seat_number, seat_row: x.seat_row, price: x.seat_additional_price + session?.base_price})}/>)}
+                            isSeatFree={isSeatFree}
+                            id={x.seat_id}
+                            onClickAddTicketOrder={() => onClickAddTicketOrder({
+                                seat_number: x.seat_number,
+                                seat_row: x.seat_row,
+                                price: x.seat_additional_price + session?.base_price,
+                                seat_id: x.seat_id
+                            })}/>)}
                     </div>
                 </div>
             </div>

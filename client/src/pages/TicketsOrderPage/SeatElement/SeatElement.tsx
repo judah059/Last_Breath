@@ -3,12 +3,14 @@ import s from "./SeatElement.module.scss";
 
 interface SeatElementProps {
     onClickAddTicketOrder?: () => void
-    isActive: boolean
+    isSeatFree: (id: number) => boolean
+    id: number
 }
 
 const SeatElement: React.FC<SeatElementProps> = (props) => {
+
     return (
-        <div className={`${s.seat} ${props.isActive && s.active}`} onClick={props.onClickAddTicketOrder}></div>
+        <div className={`${s.seat} ${ props.isSeatFree(props.id) && s.active}`} onClick={props.onClickAddTicketOrder}></div>
     )
 };
 
