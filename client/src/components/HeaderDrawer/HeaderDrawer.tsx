@@ -38,7 +38,9 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = (props) => {
 
             <ChooseCinemaDrawer
                 refOne={ref}
-                isShow={isShow}/>
+                isShow={isShow}
+                onClose={()=>setIsShow(false)}
+            />
 
             <Signing formType={formType}
                      setFormType={setFormType}
