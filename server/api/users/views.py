@@ -169,5 +169,5 @@ class BoughtSnackView(viewsets.ModelViewSet):
 
 
 class SnackView(viewsets.ModelViewSet):
-    queryset = BoughtSnack.objects.all()
-    serializer_class = BoughtSnackSerializer
+    queryset = Snack.objects.all()
+    serializer_class = SnackSerializer
