@@ -1,6 +1,7 @@
 import axios from "axios";
 import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
+import {ISession} from "../../store/session/session.types";
 
 
 const cookieToken = getWithExpiry('access_token')
@@ -18,6 +19,9 @@ export let API = {
     },
     getSession(cinemaId?: string, date?: Date) {
         return baseApi2.get(`session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
+    },
+    getSessionById(id: number) {
+        return baseApi2.get<ISession>(`session/${id}`).then(res => res.data)
     },
     getCinemas() {
         return baseApi2.get<ICinema[]>(`cinema/`).then(res => res.data)

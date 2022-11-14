@@ -8,7 +8,7 @@ const initialState: ICinemaStore = {
 
 
 export const cinemaSlice = createSlice({
-    name: 'session',
+    name: 'cinema',
     initialState,
     reducers: {
         setCinema(state, action) {

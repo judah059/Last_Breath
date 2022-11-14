@@ -22,7 +22,7 @@ const ChooseCinemaDrawer: React.FC<ChooseCinemaDrawerProps> = ({isShow, refOne, 
     const [cinemas, setCinemas] = useState<ICinema[]>([])
     const [filteredCinemas, setFilteredCinemas] = useState<ICinema[]>([])
 
-    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.session);
+    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.cinema);
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate()

@@ -23,7 +23,7 @@ const Cinema: React.FC<CinemaProps> = () => {
 
     const [currCinema, setCurrCinema] = useState<ICinema>()
     const dispatch = useAppDispatch();
-    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.session);
+    const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.cinema);
 
 
     const fetchCinema = async () => {

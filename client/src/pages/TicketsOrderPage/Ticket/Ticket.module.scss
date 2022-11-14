@@ -1,0 +1,35 @@
+.ticketBody {
+  background: #FFFAFA;
+  border: 1px solid #00A9CE;
+  border-radius: 2px;
+  width: 87%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    .row {
+      color: #564747;
+      font-size: 20px;
+      padding: 20px;
+    }
+
+    .leftWrapper {
+      display: flex;
+
+      .price {
+        padding-top: 20px;
+      }
+
+      .close {
+        padding: 10px;
+      }
+    }
+  }
+
+  .place {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+}
