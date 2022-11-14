@@ -123,18 +123,12 @@ class TicketViewSet(viewsets.ModelViewSet):
 
 
 class SessionFilteredView(generics.ListAPIView):
-    queryset = CinemaHall.objects.all()
-    serializer_class = CinemaSessionsSerializer
+    queryset = Cinema.objects.all()
+    serializer_class = DevCinemaSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
-        date = self.request.query_params.get('date')
         cinema = self.request.query_params.get('cinema')
-        if date and cinema:
-            return qs.filter(cinema=cinema, sessions__date=date)
         if cinema:
-            return qs.filter(cinema=cinema)
-        if date:
-            return qs.filter(sessions__date=date)
-
+            return qs.filter(id=cinema)
         return qs.all()
