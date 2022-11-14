@@ -32,10 +32,21 @@ const MoviePage: React.FC = () => {
    const [popup, setPopup] = useState<Boolean>(true)
    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
-   const fetchMovie = async () => {
+   const fetchData = async () => {
       try {
+         // movie
          const movie : ITestMovieItem = await API.getCinemaMovie(id);
-         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
+
+         // dates
+         let dates = []
+         let multiplier = 0
+         for (let i = 0; i < 4; i++, multiplier++) {
+            dates.push(new Date(Date.now() + (( 3600 * 1000 * 24) * multiplier)))
+         }
+         await setInputValues(dates);
+
+         // session by date from today's date
+         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
          let sessionByDate: ISessionByDate = sessionsByDate[0];
          // console.log(sessionByDate)
          for (let i = 0; i < sessionByDate.halls.length; i++) {
@@ -52,8 +63,6 @@ const MoviePage: React.FC = () => {
          await setMovie(movie)
          await  setSessionByDateAndCinema(sessionByDate)
          console.log(sessionByDate)
-
-         // console.log(movie)
       } catch (e) {
          console.log(e)
          // setMovie(undefined)
@@ -61,34 +70,48 @@ const MoviePage: React.FC = () => {
       }
    }
 
-   const groupBy = (items : niceBackEnd[], key : string) =>
-       items.reduce(
-           (result, item) => ({
-              ...result,
-              // @ts-ignore
-              [item[key]]: [...(result[item[key]] || []), item.time]
-           }),
-           {}
-       );
-   const changeInputValuesForSpecDate =  (date : Date) => {
-      let da = [];
-      if(session) {
-         for (let i = 0; i < session.length; i++) {
-               if(session[i].date === date.toISOString().substring(0, 10)) da.push(session[i]);
+   const fetchSessionBy = async (date: string) => {
+      const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: date,  cinema: cinema?.id});
+      let sessionByDate: ISessionByDate = sessionsByDate[0];
+      // console.log(sessionByDate)
+      for (let i = 0; i < sessionByDate.halls.length; i++) {
+         for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
+            if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+               sessionByDate.halls[i].sessions.splice(j, 1)
+               j--;
+            }
          }
-         // setInputValuesForSpecDate(da);
-         let res = da.map((s) => ({
-            cinema: s.cinemahall_detail.cinema_name,
-            time: s.start_time
-         }));
-         const iLoveBackEnd : ISessionItem | {} = groupBy(res, "cinema")
-         setInputValuesForSpecDate(iLoveBackEnd);
-
       }
-
-
-
+      await  setSessionByDateAndCinema(sessionByDate)
+      console.log(sessionByDate)
    }
+
+   // const groupBy = (items : niceBackEnd[], key : string) =>
+   //     items.reduce(
+   //         (result, item) => ({
+   //            ...result,
+   //            // @ts-ignore
+   //            [item[key]]: [...(result[item[key]] || []), item.time]
+   //         }),
+   //         {}
+   //     );
+   // const changeInputValuesForSpecDate =  (date : Date) => {
+   //    let da = [];
+   //    if(session) {
+   //       for (let i = 0; i < session.length; i++) {
+   //             if(session[i].date === date.toISOString().substring(0, 10)) da.push(session[i]);
+   //       }
+   //       // setInputValuesForSpecDate(da);
+   //       let res = da.map((s) => ({
+   //          cinema: s.cinemahall_detail.cinema_name,
+   //          time: s.start_time
+   //       }));
+   //       const iLoveBackEnd : ISessionItem | {} = groupBy(res, "cinema")
+   //       setInputValuesForSpecDate(iLoveBackEnd);
+   //
+   //    }
+   //
+   // }
    const fetchSession = async () => {
       try {
          const sessions : ISession[] = await API.getSession();
@@ -114,19 +137,13 @@ const MoviePage: React.FC = () => {
       console.log(popup)
    }
    // const date = new Date();
-   const addInputValues = async () => {
-      let dates = []
-      let multiplier = 0
-      for (let i = 0; i < 4; i++, multiplier++) {
-         dates.push(new Date(Date.now() + (( 3600 * 1000 * 24) * multiplier)))
-      }
-      await setInputValues(dates);
-   }
+   // const addInputValues = async () => {
+   //
+   // }
    useEffect( () => {
-      fetchMovie()
+      fetchData()
       fetchSession()
-      addInputValues()
-      fetchSessionByDate()
+      // fetchSessionByDate()
       // console.log(datesForItems)
 
       dispatch(setIsCinemaPage(false))
@@ -137,51 +154,7 @@ const MoviePage: React.FC = () => {
       }
    }, [])
 
-   const fetchSessionByDate = async () => {
-      try {
-         // const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
-         // let sessionByDate: ISessionByDate = sessionsByDate[0];
-         // // let newArray: IHall[] = [];
-         // console.log(sessionByDate)
-         // for (let i = 0; i < sessionByDate.halls.length; i++) {
-         //    for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
-         //       if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
-         //          sessionByDate.halls[i].sessions.splice(j, 1)
-         //          j--;
-         //       }
-         //    }
-         // }
-         // console.log(sessionByDate)
 
-
-
-         // console.log(sessionsByDate.filter(x => x.sessions[]))
-
-         // for (let i = 0; i < sessionsByDate.length; i++) {
-         //    for (let j = 0; j < sessionsByDate[i].sessions.length; j++) {
-         //       if(sessionsByDate[i].sessions[j].date === "2022-11-13") {
-         //          // arrayOfSessions.push(sessionsByDate[i].sessions[j])
-         //
-         //          // sessionDictionary.push({label: sessionsByDate[i].cinema_name, sessions: ...sessionDictionary})
-         //          newArray.push(sessionsByDate[i])
-         //          // sessionsByDate[i].sessions.
-         //       }
-         //          if(j  == sessionsByDate[i].sessions.length - 1) {
-         //             // sessionDictionary.push({label: sessionsByDate[i].cinema_name, sessions: arrayOfSessions})
-         //             // arrayOfSessions = [];
-         //          }
-         //       }
-         //    }
-
-
-         // console.log(sessionsByDate.map(x => x.sessions.filter(x => x.date === "2022-11-13")))
-         // console.log(sessionsByDate)
-      } catch (e) {
-         console.log(e)
-         // setMovie(undefined)
-      }
-
-   }
 
    return (
        <div>
@@ -253,25 +226,28 @@ const MoviePage: React.FC = () => {
                                     <div className={`${s.session__header__dropdown__menu} ${s.active}`}>
                                        <div className={s.session__header__dropdown__menu__items} onClick={() => {
                                           setInputValue(inputValues[0])
-                                          changeInputValuesForSpecDate(inputValues[0])
+                                          fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
+
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[1])
-                                          changeInputValuesForSpecDate(inputValues[1])
-
+                                          fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
+
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[2])
-                                          changeInputValuesForSpecDate(inputValues[2])
+                                          fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
+
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[3])
-                                          changeInputValuesForSpecDate(inputValues[3])
+                                          fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
+
                                     </div>
                                 }
                              </div>
