@@ -80,7 +80,7 @@ class CinemaViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super(CinemaViewSet, self).get_queryset()
-        city = self.request.GET.get()
+        city = self.request.GET.get('city')
         if city:
             return qs.filter(location__city=city)
         return qs.all()
@@ -127,10 +127,10 @@ class SessionFilteredView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        date = self.request.data.get('date')
-        cinema = self.request.data.get('cinema')
+        date = self.request.query_params.get('date')
+        cinema = self.request.query_params.get('cinema')
         if date and cinema:
-            return qs.filter(cinema=cinema, sessions__date=date)
+            return qs.filter(sessions__date=date, cinema=cinema)
         if cinema:
             return qs.filter(cinema=cinema)
         if date:
