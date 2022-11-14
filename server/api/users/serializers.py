@@ -110,12 +110,13 @@ class CinemaSerializer(serializers.ModelSerializer):
 
 
 class SessionSeatSerializer(serializers.ModelSerializer):
+    seat_id = serializers.IntegerField(read_only=True, source='seat.id')
     seat_number = serializers.IntegerField(read_only=True, source='seat.number')
     seat_row = serializers.IntegerField(read_only=True, source='seat.row')
     seat_additional_price = serializers.IntegerField(read_only=True, source='seat.additional_price')
     class Meta:
         model = SessionSeat
-        fields = ["seat_number", "seat_row", "seat_additional_price", "is_free"]
+        fields = ["seat_id", "seat_number", "seat_row", "seat_additional_price", "is_free"]
 
 
 class SessionSerializer(serializers.ModelSerializer):
