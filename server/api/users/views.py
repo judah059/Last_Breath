@@ -157,3 +157,17 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = MyUser.objects.get(pk=self.request.user.pk, email=self.request.user.email)
         return Payments.payment_objects.get_queryset(user=user)
+
+
+class BoughtSnackView(viewsets.ModelViewSet):
+    queryset = BoughtSnack.objects.all()
+    serializer_class = BoughtSnackSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user__id=self.request.user.id)
+
+
+class SnackView(viewsets.ModelViewSet):
+    queryset = BoughtSnack.objects.all()
+    serializer_class = BoughtSnackSerializer
