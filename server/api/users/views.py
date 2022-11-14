@@ -54,7 +54,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         result = {
-            "password": "Password has been changed successfully.",
+            "password": "卐",
         }
         return Response(result)
 

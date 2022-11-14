@@ -26,6 +26,9 @@ class MyUser(AbstractUser):
         db_index=True,
         unique=True,
     )
+    stripe_id = models.CharField(
+        max_length=30
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -174,3 +177,34 @@ class Basket(models.Model):
     total_price = models.IntegerField(default=0)
 
 
+class Payments(models.Model):
+    user = models.ForeignKey(
+        'MyUser',
+        on_delete=models.SET_NULL,
+        related_name='payments',
+        null=True,
+    )
+    stripe_id = models.CharField(
+        max_length=30,
+        null=True,
+    )
+    date_created = models.DateField(
+        auto_now_add=True,
+    )
+    card_type = models.CharField(
+        max_length=31,
+        default='Visa',
+    )
+    last_4 = models.CharField(
+        max_length=10,
+        default='0000',
+    )
+    expire_date = models.DateField(
+        null=True,
+        blank=True,
+    )
+    fingerprint = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True,
+    )
