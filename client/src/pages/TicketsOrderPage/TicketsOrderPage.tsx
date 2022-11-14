@@ -10,7 +10,7 @@ import SeatElement from "./SeatElement/SeatElement";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import cinema from "../Cinema/Cinema";
-import {setTicket} from "../../store/session/session.slice";
+import {setRemoveTicket, setTicket} from "../../store/session/session.slice";
 import {ITicket} from "../../store/session/session.types";
 import Ticket from "./Ticket/Ticket";
 
@@ -48,8 +48,14 @@ const TicketsOrderPage: React.FC = (props) => {
 
     const onClickAddTicketOrder = (ticket: ITicket) => {
         console.log(ticket)
-        dispatch(setTicket(ticket))
-        console.log(ticket)
+        const findItem = tickets.find(e => +e.seat_id === +ticket.seat_id);
+        if (findItem) {
+            dispatch(setRemoveTicket(ticket.seat_id))
+        }else {
+            dispatch(setTicket(ticket))
+        }
+
+
     }
 
     const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
