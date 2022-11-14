@@ -58,7 +58,7 @@ export interface IReqUser {
 
 export interface IReqSessionByDate {
     date?: string
-    cinemaId?: number
+    cinema?: number
 }
 export interface IResUser {
     refresh: string

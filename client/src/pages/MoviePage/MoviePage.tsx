@@ -102,8 +102,23 @@ const MoviePage: React.FC = () => {
 
    const fetchSessionByDate = async () => {
       try {
-         const sessions : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinemaId: 1});
-         console.log(sessions)
+         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: "2022-11-13",  cinema: 1});
+         let newArray = [];
+         let idArray = []
+         for (let i = 0; i < sessionsByDate.length; i++) {
+            for (let j = 0; j < sessionsByDate[i].sessions.length; j++) {
+               if(sessionsByDate[i].sessions[j].date === "2022-11-13") {
+                  idArray.push(sessionsByDate[i].sessions[j].id)
+                  newArray.push(sessionsByDate[i])
+                  // sessionsByDate[i].sessions.
+               }
+            }
+         }
+
+         console.log(sessionsByDate.map(x => x.sessions.filter(x => x.date === "2022-11-13")))
+         // sessionsByDate.filter((x, index) => x.sessions === "2022-11-13")
+         console.log(sessionsByDate)
+         // console.log(newArray)
          // setMovie(movie)
          // console.log(session)
          // console.log(bla)
