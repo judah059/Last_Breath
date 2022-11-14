@@ -98,7 +98,7 @@ const MoviePage: React.FC = () => {
       fetchMovie()
       fetchSession()
       addInputValues()
-      fetchSessionByDate()
+      // fetchSessionByDate()
       // console.log(datesForItems)
 
       dispatch(setIsCinemaPage(false))

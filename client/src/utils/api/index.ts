@@ -16,7 +16,7 @@ export let API = {
     getCinemaMovie(id: string | undefined) {
         return baseApi2.get(`film/${id}`).then(res => res.data)
     },
-    getSession(cinemaId: string, date?: Date) {
+    getSession(cinemaId?: string, date?: Date) {
         return baseApi2.get(`session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
     },
     getCinemas() {
