@@ -80,7 +80,9 @@ class CinemaViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super(CinemaViewSet, self).get_queryset()
-        city = self.request.GET.get('city')
+#         city = self.request.GET.get('city')
+        print(self.request.query_params.get('city'))
+        city = self.request.query_params.get('city')
         if city:
             return qs.filter(location__city=city)
         return qs.all()

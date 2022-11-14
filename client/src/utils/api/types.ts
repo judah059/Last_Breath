@@ -69,7 +69,10 @@ export interface IReqUser {
     rememberMe?: boolean
 }
 
-
+export interface IReqSessionByDate {
+    date?: string
+    cinema?: number
+}
 export interface IResUser {
     refresh: string
     access: string
@@ -79,7 +82,32 @@ export interface ISessionItem {
     label: string,
     dates: Array<string>
 }
-
+export interface ISessionByDate {
+    "id": number,
+    "number": number,
+    "cinema": number,
+    "cinema_name": string,
+    "sessions":  [
+        {
+            "id": number,
+            "date": string,
+            "start_time": string,
+            "end_time": string,
+            "base_price": number,
+            "movie": number,
+            "movie_name": string,
+            "movie_poster": string,
+            "cinemahall": number,
+            "cinemahall_detail": {
+                "id": number,
+                "number": number,
+                "cinema": number
+                "cinema_name": string
+            },
+            "seats": []
+        }
+    ]
+}
 export interface IUser {
     username?: string
     first_name?: string

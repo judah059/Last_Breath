@@ -1,5 +1,5 @@
 import axios from "axios";
-import {IChangePassword, ICinema, IReqUser, IResUser, IUser} from "./types";
+import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
 
 
@@ -22,8 +22,8 @@ export let API = {
     getCinemas() {
         return baseApi2.get<ICinema[]>(`cinema/`).then(res => res.data)
     },
-    getSeats() {
-
+    getSessionByDate(data : IReqSessionByDate) {
+        return baseApi2.get(`filter/session/`, {params: data}).then(res => res.data)
     },
     getCinema(id: string) {
         return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
@@ -56,7 +56,7 @@ export let userAPI = {
         ).then(res => res.data)
     },
 
-    deleteMe(token?: string) {
+    deleteMe(token?: string){
         return baseApi2.delete('profile/', {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
@@ -64,7 +64,7 @@ export let userAPI = {
         }).then(res => res.data)
     },
 
-    updatePassword(data: IChangePassword, token?: string) {
+    updatePassword(data: IChangePassword, token?: string){
         return baseApi2.put<string>('change_password/', data, {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
