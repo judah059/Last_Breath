@@ -229,60 +229,63 @@ const MoviePage: React.FC = () => {
                                           fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
-
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[1])
                                           fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
-
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[2])
                                           fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
-
                                        <div className={s.session__header__dropdown__menu__items}  onClick={() => {
                                           setInputValue(inputValues[3])
                                           fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
                                           popupToggle()
                                        }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
-
                                     </div>
                                 }
                              </div>
                           </div>
                           <div className={s.session__bottom}>
                              {/*{inputValuesForSpecDate.la}*/}
+                             {sessionByDateAndCinema?.halls.map(x =>
+                                 <div className={s.session__bottom__items}>
+                                    <div>Hall №{x.id}</div>
+                                    <div className={s.session__bottom__items__flex}>
+                                       {x.sessions.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d.start_time.substring(d.start_time.length -3, 0)}</div>)}
+                                    </div>
+                                 </div>)
+                             }
+                             {/*<div className={s.session__bottom__items}>*/}
+                             {/*   <div>{labels[0]}</div>*/}
+                             {/*   <div className={s.session__bottom__items__flex}>*/}
+                             {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d}</div>)}*/}
+                             {/*   </div>*/}
+                             {/*</div>*/}
 
-                             <div className={s.session__bottom__items}>
-                                <div>{labels[0]}</div>
-                                <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d}</div>)}
-                                </div>
-                             </div>
-
-                             <div className={s.session__bottom__items}>
-                                <div>{labels[1]}</div>
-                                <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}
-                                </div>
-                             </div>
+                             {/*<div className={s.session__bottom__items}>*/}
+                             {/*   <div>{labels[1]}</div>*/}
+                             {/*   <div className={s.session__bottom__items__flex}>*/}
+                             {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
+                             {/*   </div>*/}
+                             {/*</div>*/}
 
 
-                             <div className={s.session__bottom__items}>
-                                <div>{labels[2]}</div>
-                                <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}  </div>)}
-                                </div>
-                             </div>
+                             {/*<div className={s.session__bottom__items}>*/}
+                             {/*   <div>{labels[2]}</div>*/}
+                             {/*   <div className={s.session__bottom__items__flex}>*/}
+                             {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}  </div>)}*/}
+                             {/*   </div>*/}
+                             {/*</div>*/}
 
-                             <div className={s.session__bottom__items}>
-                                <div>{labels[3]}</div>
-                                <div className={s.session__bottom__items__flex}>
-                                   {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}
-                                </div>
-                             </div>
+                             {/*<div className={s.session__bottom__items}>*/}
+                             {/*   <div>{labels[3]}</div>*/}
+                             {/*   <div className={s.session__bottom__items__flex}>*/}
+                             {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
+                             {/*   </div>*/}
+                             {/*</div>*/}
 
 
                           </div>
