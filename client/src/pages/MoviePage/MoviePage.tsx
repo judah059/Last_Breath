@@ -173,6 +173,7 @@ const MoviePage: React.FC = () => {
    const fetchSession = async () => {
       try {
          const sessions : ISession[] = await API.getSession();
+
          let sessionsMovie : ISession[]  = sessions.filter(x => x.movie.toString() === id?.toString())
          // const sessionCinema1 = sessionsMovie.filter(x => x.cinema === 1)
          //  sessions.map((cinema, index) => <div>{cinema.cinemahall_detail.cinema_name} <div>{cinema}</div></div>)
