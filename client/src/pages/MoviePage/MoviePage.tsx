@@ -21,11 +21,12 @@ import {RootState} from "../../store";
 
 const MoviePage: React.FC = () => {
    const dispatch = useAppDispatch();
-   const [movie, setMovie] = useState<ITestMovieItem>();
+   const [movie, setMovie] = useState<ITestMovieItem | undefined>(undefined);
    const [session, setSession] = useState<ISession[] | undefined>()
    const {id} = useParams()
    const {cinema} = useAppSelector((state: RootState) => state.session);
-   const [inputValue, setInputValue] = useState<Date>(new Date());
+   const nowDate = new Date()
+   const [inputValue, setInputValue] = useState<Date>(nowDate);
    const [inputValues, setInputValues] = useState<Date[]>([]);
    const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
    const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
@@ -37,6 +38,7 @@ const MoviePage: React.FC = () => {
       try {
          // movie
          const movie : ITestMovieItem = await API.getCinemaMovie(id);
+         setMovie(movie)
 
          // dates
          let dates = []
@@ -49,7 +51,7 @@ const MoviePage: React.FC = () => {
          // session by date from today's date
          let sessionsByDate : ISessionByDate[] = []
 
-         if(inputValue === new Date()) sessionsByDate = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
+         if(inputValue === nowDate) sessionsByDate = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
          else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10),  cinema: cinema?.id});
 
          let sessionByDate: ISessionByDate = sessionsByDate[0];
@@ -85,7 +87,6 @@ const MoviePage: React.FC = () => {
             }
          }
 
-         await setMovie(movie)
          await  setSessionByDateAndCinema(sessionByDate)
          console.log(sessionByDate)
       } catch (e) {
@@ -184,7 +185,7 @@ const MoviePage: React.FC = () => {
          // console.log(bla)
       } catch (e) {
          console.log(e)
-         setMovie(undefined)
+         // setMovie(undefined)
          // alert(e)
       }
    }
@@ -215,6 +216,7 @@ const MoviePage: React.FC = () => {
    return (
        <div>
           <HeaderDrawer toLinkText='Now In Cinema'/>
+
 
           {
              movie == undefined ? <h1 style={{ margin: "auto"}}>No movies were found</h1>
