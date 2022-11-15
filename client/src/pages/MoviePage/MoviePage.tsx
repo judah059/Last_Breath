@@ -5,7 +5,7 @@ import {
    IHall,
    IMovieItem,
    ISession,
-   ISessionByDate,
+   ISessionByDate, ISessionEmptyArray,
    ISessionItem,
    ITestMovieItem,
    niceBackEnd
@@ -30,6 +30,7 @@ const MoviePage: React.FC = () => {
    const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
    const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
    const [popup, setPopup] = useState<Boolean>(true)
+   const [noHalls, setNoHallse] = useState<Boolean>(false)
    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
    const fetchData = async () => {
@@ -50,6 +51,14 @@ const MoviePage: React.FC = () => {
          let sessionByDate: ISessionByDate = sessionsByDate[0];
          // console.log(sessionByDate)
          for (let i = 0; i < sessionByDate.halls.length; i++) {
+            if(sessionByDate.halls[i].sessions.every(element => element === null)) {
+               sessionByDate.halls[i].sessions.splice(i, 1)
+               if(sessionByDate.halls.every(element => element.sessions.length  as number === 0)){
+                  setNoHallse(true)
+                  break;
+               }
+               else   continue;
+            }
             for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
                if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
                   sessionByDate.halls[i].sessions.splice(j, 1)
@@ -58,7 +67,15 @@ const MoviePage: React.FC = () => {
             }
          }
 
-
+         for (let i = 0; i < sessionByDate.halls.length; i++) {
+            for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+               if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
+                  let temp = sessionByDate.halls[i].sessions[j];
+                  sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
+                  sessionByDate.halls[i].sessions[j+1] = temp;
+               }
+            }
+         }
 
          await setMovie(movie)
          await  setSessionByDateAndCinema(sessionByDate)
@@ -74,7 +91,21 @@ const MoviePage: React.FC = () => {
       const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: date,  cinema: cinema?.id});
       let sessionByDate: ISessionByDate = sessionsByDate[0];
       // console.log(sessionByDate)
+      // let emptyArray : ISessionEmptyArray[]= []
+      let hallsLength = sessionByDate.halls.length
+      let counter = 0
       for (let i = 0; i < sessionByDate.halls.length; i++) {
+         if(sessionByDate.halls[i].sessions.every(element => element === null)) {
+            counter++
+            if(hallsLength === counter){
+               setNoHallse(true)
+               console.log("No halls true")
+               break;
+            }
+            else continue;
+
+         }
+
          for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
             if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
                sessionByDate.halls[i].sessions.splice(j, 1)
@@ -82,6 +113,24 @@ const MoviePage: React.FC = () => {
             }
          }
       }
+      if(hallsLength !== counter) setNoHallse(false);
+      // console.log(sessionByDate.halls.forEach(x=> x.sessions.sort((a,b) => (Number(a.start_time.substring(2)) > Number(b.start_time.substring(2))) ? 1 : 1)))
+
+
+      for (let i = 0; i < sessionByDate.halls.length; i++) {
+         for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+            if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
+               let temp = sessionByDate.halls[i].sessions[j];
+               sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
+               sessionByDate.halls[i].sessions[j+1] = temp;
+            }
+         }
+      }
+
+
+      // console.log(sessionByDate)
+      // console.log(sessionByDate.halls.forEach(x=> x.sessions.sort((a,b) => (Number(a.start_time.substring(0,2))  > Number(b.start_time.substring(0,2))) ? 1 : -1)))
+      // console.log(Number(sessionByDate.halls[0].sessions[0].start_time.substring(0, 2)))
       await  setSessionByDateAndCinema(sessionByDate)
       console.log(sessionByDate)
    }
@@ -119,6 +168,7 @@ const MoviePage: React.FC = () => {
          // const sessionCinema1 = sessionsMovie.filter(x => x.cinema === 1)
          //  sessions.map((cinema, index) => <div>{cinema.cinemahall_detail.cinema_name} <div>{cinema}</div></div>)
          // const bla = sessionsMovie.map(s=>({cinema: s.cinemahall_detail.cinema_name, time:s.start_time}))
+         // console.log(sessionsMovie.sort())
          setSession(sessionsMovie)
 
          // setMovie(movie)
@@ -133,8 +183,6 @@ const MoviePage: React.FC = () => {
    const popupToggle = () => {
       if(popup) setPopup(false)
       else setPopup(true)
-
-      console.log(popup)
    }
    // const date = new Date();
    // const addInputValues = async () => {
@@ -250,14 +298,47 @@ const MoviePage: React.FC = () => {
                           </div>
                           <div className={s.session__bottom}>
                              {/*{inputValuesForSpecDate.la}*/}
-                             {sessionByDateAndCinema?.halls.map(x =>
-                                 <div className={s.session__bottom__items}>
-                                    <div>Hall №{x.id}</div>
-                                    <div className={s.session__bottom__items__flex}>
-                                       {x.sessions.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d.start_time.substring(d.start_time.length -3, 0)}</div>)}
-                                    </div>
-                                 </div>)
-                             }
+
+
+                             {/*{sessionByDateAndCinema?.halls.map(x =>*/}
+                             {/*    <div className={s.session__bottom__items}>*/}
+                             {/*       <div>Hall №{x.id}</div>*/}
+                             {/*       <div className={s.session__bottom__items__flex}>*/}
+                             {/*          {x.sessions.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d.start_time.substring(d.start_time.length -3, 0)}</div>)}*/}
+                             {/*       </div>*/}
+                             {/*    </div>)*/}
+                             {/*}*/}
+
+
+
+
+                             {(() => {
+
+                                if(noHalls) {
+                                   return (
+                                       <div className={s.session__bottom__items} style={{textAlign: "center"}}>
+                                          No sessions
+                                       </div>
+                                   )
+                                }else  {
+                                   return(
+                                       sessionByDateAndCinema?.halls.map(x =>
+                                           <div className={s.session__bottom__items}>
+                                              <div>Hall №{x.id}</div>
+                                              <div className={s.session__bottom__items__flex}>
+                                                 {x.sessions.map((d, index) => <div key={index}
+                                                         style={{cursor: "pointer"}}>{d?.start_time?.substring(d?.start_time?.length - 3, 0)}</div>)}
+                                              </div>
+                                           </div>
+                                   )
+
+                                   )}
+
+                             })()}
+
+
+
+
                              {/*<div className={s.session__bottom__items}>*/}
                              {/*   <div>{labels[0]}</div>*/}
                              {/*   <div className={s.session__bottom__items__flex}>*/}

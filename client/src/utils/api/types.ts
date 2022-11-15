@@ -133,6 +133,18 @@ export interface ISessionByDate {
     //     }
     // ]
 }
+export interface ISessionEmptyArray {
+            "id": number,
+            "date": string,
+            "start_time": string,
+            "end_time": string,
+            "base_price": number,
+            "movie": number,
+            "cinemahall": number,
+            "seats": []
+
+
+}
 export interface IHall {
             "id": number,
             "number": number,
