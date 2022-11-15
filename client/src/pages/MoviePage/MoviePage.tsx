@@ -47,9 +47,15 @@ const MoviePage: React.FC = () => {
          await setInputValues(dates);
 
          // session by date from today's date
-         const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
+         let sessionsByDate : ISessionByDate[] = []
+
+         if(inputValue === new Date()) sessionsByDate = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
+         else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10),  cinema: cinema?.id});
+
          let sessionByDate: ISessionByDate = sessionsByDate[0];
          // console.log(sessionByDate)
+         let hallsLength = sessionByDate.halls.length
+         let counter = 0 ;
          for (let i = 0; i < sessionByDate.halls.length; i++) {
             if(sessionByDate.halls[i].sessions.every(element => element === null)) {
                sessionByDate.halls[i].sessions.splice(i, 1)
@@ -66,6 +72,7 @@ const MoviePage: React.FC = () => {
                }
             }
          }
+         if(hallsLength !== counter) setNoHallse(false);
 
          for (let i = 0; i < sessionByDate.halls.length; i++) {
             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
