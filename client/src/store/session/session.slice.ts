@@ -6,7 +6,9 @@ const initialState: ISessionState = {
     order: null,
     ticket: [],
     snack: [],
-    snackOrder: []
+    snackOrder: [],
+    snackIndex: 0,
+    city: ''
 }
 
 export const sessionSlice = createSlice({
@@ -16,9 +18,6 @@ export const sessionSlice = createSlice({
         setSessionById(state, action) {
             state.current = action.payload
         },
-        // setTicketOrder(state, action) {
-        //     state.order!.ticket = action.payload
-        // },
         setTicket(state, action) {
             state.ticket = [...state.ticket, action.payload]
         },
@@ -29,14 +28,36 @@ export const sessionSlice = createSlice({
             state.snack = action.payload
         },
         setSnackOrder(state, action) {
-            state.snackOrder = [...state.snackOrder, action.payload]
+            state.snackIndex += 1
+            let obj={
+                index: state.snackIndex,
+                ...action.payload
+            }
+            state.snackOrder = [...state.snackOrder, obj]
         },
         setRemoveSnackOrder(state, action) {
-            state.snackOrder = state.snackOrder.filter(s => +s.id !== action.payload)
+            state.snackIndex -= 1
+            console.log(state.snackOrder.filter(s => +s.index !== +action.payload))
+            state.snackOrder = state.snackOrder.filter(s => +s.index !== +action.payload)
+        },
+        setOrder(state, action){
+            state.order = action.payload
+        },
+        setCity(state, action){
+            state.city= action.payload
         }
     }
 })
 
-export const {setSessionById, setSnack, setSnackOrder, setRemoveSnackOrder, setTicket, setRemoveTicket} = sessionSlice.actions;
+export const {
+    setSessionById,
+    setSnack,
+    setSnackOrder,
+    setRemoveSnackOrder,
+    setTicket,
+    setRemoveTicket,
+    setOrder,
+    setCity
+} = sessionSlice.actions;
 
 export default sessionSlice.reducer;

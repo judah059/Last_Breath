@@ -31,6 +31,8 @@ export interface ISessionState {
     ticket: ITicket[]
     snack: ISnack[]
     snackOrder: ISnack[]
+    snackIndex: number
+    city: string
 }
 
 export interface ITicket {
@@ -41,6 +43,7 @@ export interface ITicket {
 }
 
 export interface ISnack {
+    index: number
     id: number
     name: string
     logo: string
@@ -49,6 +52,8 @@ export interface ISnack {
 }
 
 export interface IOrder {
-    ticket: ITicket[]
-    snack: ISnack[]
+    tickets: ITicket[]
+    snackOrder: ISnack[]
+    session: ISession
+    city: string
 }

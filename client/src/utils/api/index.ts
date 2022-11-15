@@ -35,6 +35,13 @@ export let API = {
     getCinema(id: string) {
         return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
     },
+    postTicket(data: {session_seat: number, session: number}){
+        return baseApi2.post<IResUser>(`ticket/`, data, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    }
 }
 
 export let userAPI = {

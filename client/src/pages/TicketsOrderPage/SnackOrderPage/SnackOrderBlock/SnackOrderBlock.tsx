@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import s from './SnackOrderBlock.module.scss'
-import {useAppDispatch} from "../../../../utils/hooks/redux";
+import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/redux";
 import {ISnack} from "../../../../store/session/session.types";
 import {setRemoveSnackOrder, setSnackOrder} from "../../../../store/session/session.slice";
+import {RootState} from "../../../../store";
 
 interface SnackOrderBlockProps {
     emblem: string
@@ -13,7 +14,7 @@ interface SnackOrderBlockProps {
 }
 
 const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
-
+    const snackIndex = useAppSelector((state: RootState) => state.session.snackIndex);
     const dispatch = useAppDispatch()
 
     const [itemCount, setItemCount] = useState(0)
@@ -23,9 +24,10 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
         dispatch(setSnackOrder(snack))
     }
 
-    const itemMinus = (id: number) => {
+    const itemMinus = (index: number) => {
         setItemCount(p => p<=0 ? 0 : p-1)
-        dispatch(setRemoveSnackOrder(id))
+        dispatch(setRemoveSnackOrder(snackIndex))
+        console.log(snackIndex)
     }
 
     return (
@@ -44,7 +46,7 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
                 </div>
                 <div className={s.itemCountBlock}>
                     <div>
-                        <button className={s.minusButton} onClick={() => itemMinus(props.snack.id)}>
+                        <button className={s.minusButton} onClick={() => itemMinus(props.index)}>
                             -
                         </button>
                     </div>
