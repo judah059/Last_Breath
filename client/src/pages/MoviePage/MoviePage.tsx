@@ -56,6 +56,7 @@ const MoviePage: React.FC = () => {
          // console.log(sessionByDate)
          let hallsLength = sessionByDate.halls.length
          let counter = 0 ;
+
          for (let i = 0; i < sessionByDate.halls.length; i++) {
             if(sessionByDate.halls[i].sessions.every(element => element === null)) {
                sessionByDate.halls[i].sessions.splice(i, 1)
