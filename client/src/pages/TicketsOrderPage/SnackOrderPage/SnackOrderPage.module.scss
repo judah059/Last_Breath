@@ -79,6 +79,8 @@ body {
 
         .topWrapper {
           height: calc(100vh - 145px);
+          overflow: auto;
+
           .label {
             display: flex;
             .ticketText {
@@ -97,6 +99,12 @@ body {
               display: flex;
               align-items: center;
             }
+          }
+          .ticketList {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
           }
         }
 

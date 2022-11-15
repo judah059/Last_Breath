@@ -15,18 +15,17 @@ import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
 import {useNavigate, useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
-import {useAppDispatch} from "../../utils/hooks/redux";
 import {setSessionById} from "../../store/session/session.slice";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 
 
-const MoviePage: React.FC = () => {
+const MoviePage: React.FC= (props) => {
     const dispatch = useAppDispatch();
     const [movie, setMovie] = useState<ITestMovieItem>();
     const [session, setSession] = useState<ISession[] | undefined>()
     const {id} = useParams()
-    const {cinema} = useAppSelector((state: RootState) => state.session);
+    const {cinema} = useAppSelector((state: RootState) => state.cinema);
     const [inputValue, setInputValue] = useState<Date>(new Date());
     const [inputValues, setInputValues] = useState<Date[]>([]);
     const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
@@ -127,6 +126,7 @@ const MoviePage: React.FC = () => {
             await setSessionByDateAndCinema(sessionByDate)
             console.log(sessionByDate)
         }
+    }
 
         // const groupBy = (items : niceBackEnd[], key : string) =>
         //     items.reduce(
@@ -196,17 +196,14 @@ const MoviePage: React.FC = () => {
         }, [])
 
         const navigate = useNavigate()
-        const onClickTicketOpen = async () => {
-            const data = await API.getSessionById(1)
+        const onClickTicketOpen = async (id: number) => {
+            const data = await API.getSessionById(id)
             dispatch(setSessionById(data))
             navigate('/tickets-order')
         }
-
-
         return (
             <div>
                 <HeaderDrawer toLinkText='Now In Cinema'/>
-
                 {
                     movie == undefined ? <h1 style={{margin: "auto"}}>No movies were found</h1>
                         :
@@ -225,8 +222,6 @@ const MoviePage: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div className={s.main__info}>
                                     <div className={s.main__info__title}>{movie?.name}</div>
                                     <div className={s.main__info__flex}>
@@ -305,8 +300,6 @@ const MoviePage: React.FC = () => {
                                     </div>
                                     <div className={s.session__bottom}>
                                         {/*{inputValuesForSpecDate.la}*/}
-
-
                                         {/*{sessionByDateAndCinema?.halls.map(x =>*/}
                                         {/*    <div className={s.session__bottom__items}>*/}
                                         {/*       <div>Hall №{x.id}</div>*/}
@@ -315,10 +308,7 @@ const MoviePage: React.FC = () => {
                                         {/*       </div>*/}
                                         {/*    </div>)*/}
                                         {/*}*/}
-
-
                                         {(() => {
-
                                             if (noHalls) {
                                                 return (
                                                     <div className={s.session__bottom__items}
@@ -333,7 +323,7 @@ const MoviePage: React.FC = () => {
                                                             <div>Hall №{x.id}</div>
                                                             <div className={s.session__bottom__items__flex}>
                                                                 {x.sessions.map((d, index) => <div key={index}
-                                                                                                   onClick={onClickTicketOpen}
+                                                                                                   onClick={() => onClickTicketOpen(x.sessions[index].id)}
                                                                                                    style={{cursor: "pointer"}}>{d?.start_time?.substring(d?.start_time?.length - 3, 0)}</div>)}
                                                             </div>
                                                         </div>
@@ -341,25 +331,19 @@ const MoviePage: React.FC = () => {
 
                                                 )
                                             }
-
                                         })()}
-
-
                                         {/*<div className={s.session__bottom__items}>*/}
                                         {/*   <div>{labels[0]}</div>*/}
                                         {/*   <div className={s.session__bottom__items__flex}>*/}
                                         {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d}</div>)}*/}
                                         {/*   </div>*/}
                                         {/*</div>*/}
-
                                         {/*<div className={s.session__bottom__items}>*/}
                                         {/*   <div>{labels[1]}</div>*/}
                                         {/*   <div className={s.session__bottom__items__flex}>*/}
                                         {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
                                         {/*   </div>*/}
                                         {/*</div>*/}
-
-
                                         {/*<div className={s.session__bottom__items}>*/}
                                         {/*   <div>{labels[2]}</div>*/}
                                         {/*   <div className={s.session__bottom__items__flex}>*/}
@@ -373,12 +357,9 @@ const MoviePage: React.FC = () => {
                                         {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
                                         {/*   </div>*/}
                                         {/*</div>*/}
-
-
                                     </div>
                                 </div>
                             </div>
-
                             <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur
                                 adipisicing
                                 elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat
@@ -388,13 +369,10 @@ const MoviePage: React.FC = () => {
                                 qui
                                 quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!
                             </div>
-
                         </div>
-
-
                 }
             </div>
         );
     };
 
-    export default MoviePage;
+export default MoviePage;

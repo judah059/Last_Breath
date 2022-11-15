@@ -4,7 +4,9 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState: ISessionState = {
     current: null,
     order: null,
-    ticket: []
+    ticket: [],
+    snack: [],
+    snackOrder: []
 }
 
 export const sessionSlice = createSlice({
@@ -23,15 +25,19 @@ export const sessionSlice = createSlice({
         setRemoveTicket(state, action){
             state.ticket = state.ticket.filter(s=> +s.seat_id !== action.payload)
         },
-        setSnackOrder(state, action) {
-            state.order!.snack = action.payload
+        setSnack(state, action) {
+            state.snack = action.payload
         },
-        setOrder(state, action) {
-            state.order = action.payload
+        setSnackOrder(state, action) {
+            state.snackOrder = [...state.snackOrder, action.payload]
+        },
+
+        setRemoveSnack(state, action) {
+            state.snack = state.snack.filter(s => +s.id !== action.payload)
         }
     }
 })
 
-export const {setSessionById, setSnackOrder, setOrder, setTicket, setRemoveTicket} = sessionSlice.actions;
+export const {setSessionById, setSnack, setRemoveSnack, setTicket, setRemoveTicket} = sessionSlice.actions;
 
 export default sessionSlice.reducer;

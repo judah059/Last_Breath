@@ -10,9 +10,10 @@ import SeatElement from "./SeatElement/SeatElement";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import cinema from "../Cinema/Cinema";
-import {setRemoveTicket, setTicket} from "../../store/session/session.slice";
+import {setRemoveTicket, setSessionById, setSnack, setTicket} from "../../store/session/session.slice";
 import {ITicket} from "../../store/session/session.types";
 import Ticket from "./Ticket/Ticket";
+import {API} from "../../utils/api";
 
 const TicketsOrderPage: React.FC = (props) => {
 
@@ -20,9 +21,12 @@ const TicketsOrderPage: React.FC = (props) => {
 
     const navigate = useNavigate()
 
-    const snackPageLoader = () => {
+    const snackPageLoader = async (id: number | undefined) => {
+        const data = await API.getSnackByCinemaID(id)
+        dispatch(setSnack(data))
         navigate('/tickets-order/snack')
     }
+
 
     const session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
@@ -140,11 +144,11 @@ const TicketsOrderPage: React.FC = (props) => {
                                     To pay
                                 </div>
                                 <div className={s.priceText}>
-                                    0 UAH
+                                    {resultPrice} UAH
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
-                                <button onClick={snackPageLoader} className={s.buttonProceed}>Proceed</button>
+                                <button onClick={() => snackPageLoader(session?.cinemahall_detail.cinema)} className={s.buttonProceed}>Proceed</button>
                             </div>
                         </div>
                     </div>

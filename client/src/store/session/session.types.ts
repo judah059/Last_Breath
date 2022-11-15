@@ -29,6 +29,8 @@ export interface ISessionState {
     current: ISession | null
     order: IOrder | null
     ticket: ITicket[]
+    snack: ISnack[]
+    snackOrder: ISnack[]
 }
 
 export interface ITicket {
@@ -39,11 +41,14 @@ export interface ITicket {
 }
 
 export interface ISnack {
+    id: number
     name: string
+    logo: string
     price: number
+    cinema: number
 }
 
 export interface IOrder {
     ticket: ITicket[]
-    snack: ISnack[] | null
+    snack: ISnack[]
 }
