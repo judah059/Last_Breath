@@ -167,7 +167,7 @@ class BoughtSnackView(viewsets.ModelViewSet):
         qs = super().get_queryset()
         return qs.filter(user__id=self.request.user.id)
 
-class SnackFilterView(viewsets.ModelViewSet):
+class SnackFilterView(viewsets.ListAPIView):
     queryset = Snack.objects.all()
     serializer_class = SnackSerializer
 
