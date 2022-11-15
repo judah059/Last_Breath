@@ -109,39 +109,5 @@
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 80px;
     grid-row-gap: 50px;
-
-
-    .item {
-      display: flex;
-
-      .title {
-        img{
-          border-radius: 6px;
-        }
-        p {
-          margin-top: 20px;
-          text-align: center;
-        }
-      }
-
-      .timetable {
-        padding-left: 30px;
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        align-content: flex-start;
-
-        li {
-          color: #EB6969;
-          cursor: pointer;
-
-          &.active{
-            color: #F20C0C;
-            font-weight: bold;
-          }
-        }
-      }
-    }
   }
-
 }
