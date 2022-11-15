@@ -1,0 +1,39 @@
+.snackBody {
+  background: #FFFAFA;
+  border: 1px solid #00A9CE;
+  border-radius: 2px;
+  width: 87%;
+
+  .header {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .leftWrapper {
+      display: flex;
+
+      .price {
+        padding-top: 20px;
+      }
+
+      .close {
+        padding: 10px;
+        img{
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .centerBlock {
+    display: flex;
+    align-content: center;
+    padding-left: 20px;
+    padding-bottom: 20px;
+
+    .name {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

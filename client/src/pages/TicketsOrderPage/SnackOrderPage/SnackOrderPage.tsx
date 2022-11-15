@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
 import {RootState} from "../../../store";
 import {setRemoveTicket} from "../../../store/session/session.slice";
 import Ticket from "../Ticket/Ticket";
+import Snack from "./Snack/Snack";
 
 const SnackOrderPage: React.FC = (props) => {
 
@@ -19,6 +20,7 @@ const SnackOrderPage: React.FC = (props) => {
 
     const session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
+    const snacks = useAppSelector((state: RootState) => state.session.snack);
 
     const date = session?.date.split("-").reverse().join("/")
 
@@ -41,6 +43,10 @@ const SnackOrderPage: React.FC = (props) => {
 
     const onClickRemove = (id:number) => {
         dispatch(setRemoveTicket(id))
+    }
+
+    const onClickRemoveSnack = () => {
+
     }
 
     return (
@@ -69,14 +75,7 @@ const SnackOrderPage: React.FC = (props) => {
                     </div>
                     <div className={s.underPosterText}>Buy online, pick up at a separate checkout. That's faster!</div>
                     <div className={s.snacks}>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        {snacks.map((x, index) => <SnackOrderBlock key={index} index={index} emblem={x.logo} itemName={x.name} price={x.price} snack={x}/>)}
                     </div>
                 </div>
             </div>
@@ -106,7 +105,9 @@ const SnackOrderPage: React.FC = (props) => {
                                     0 items, 0 UAH
                                 </div>
                             </div>
-                            <div className={s.snackList}></div>
+                            <div className={s.snackList}>
+                                <Snack id={1} logo={'https://raw.githubusercontent.com/judah059/Last_Breath/fea10337e65e98a68111f021f374a60f45babdda/client/public/img/mdi_drink.svg'} name={'Popcorn Super Cheese'} price={180} onClickRemove={onClickRemoveSnack}/>
+                            </div>
                             <div className={s.ticketList}></div>
                         </div>
                         <div className={s.bottomWrapper}>
