@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import {API} from "../../utils/api";
 import {
-   IHall,
-   IMovieItem,
-   ISession,
-   ISessionByDate, ISessionEmptyArray,
-   ISessionItem,
-   ITestMovieItem,
-   niceBackEnd
+    IHall,
+    IMovieItem,
+    ISession,
+    ISessionByDate, ISessionEmptyArray,
+    ISessionItem,
+    ITestMovieItem,
+    niceBackEnd
 } from "../../utils/api/types";
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
@@ -17,7 +17,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
-import {setSessionById} from "../../store/session/session.slice";
+import {setCity, setSessionById} from "../../store/session/session.slice";
 
 
 const MoviePage: React.FC = () => {
@@ -40,132 +40,128 @@ const MoviePage: React.FC = () => {
             const movie: ITestMovieItem = await API.getCinemaMovie(id);
             setMovie(movie)
 
-         // dates
-         let dates = []
-         let multiplier = 0
-         for (let i = 0; i < 4; i++, multiplier++) {
-            dates.push(new Date(Date.now() + (( 3600 * 1000 * 24) * multiplier)))
-         }
-         await setInputValues(dates);
-
-         // session by date from today's date
-         let sessionsByDate : ISessionByDate[] = []
-
-         if(inputValue === nowDate) sessionsByDate = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
-         else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10),  cinema: cinema?.id});
-
-         let sessionByDate: ISessionByDate = sessionsByDate[0];
-         // console.log(sessionByDate)
-         let hallsLength = sessionByDate.halls.length
-         let counter = 0 ;
-
-         for (let i = 0; i < sessionByDate.halls.length; i++) {
-            if(sessionByDate.halls[i].sessions.every(element => element === null)) {
-               sessionByDate.halls[i].sessions.splice(i, 1)
-               if(sessionByDate.halls.every(element => element.sessions.length  as number === 0)){
-                  setNoHallse(true)
-                  break;
-               }
-               else   continue;
+            let dates = []
+            let multiplier = 0
+            for (let i = 0; i < 4; i++, multiplier++) {
+                dates.push(new Date(Date.now() + ((3600 * 1000 * 24) * multiplier)))
             }
-            for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
-               if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
-                  sessionByDate.halls[i].sessions.splice(j, 1)
-                  j--;
-               }
-            }
-         }
-         if(hallsLength !== counter) setNoHallse(false);
+            await setInputValues(dates);
 
-         for (let i = 0; i < sessionByDate.halls.length; i++) {
+            let sessionsByDate: ISessionByDate[] = []
+
+            if (inputValue === nowDate) sessionsByDate = await API.getSessionByDate({
+                date: dates[0].toISOString().substring(0, 10),
+                cinema: cinema?.id
+            });
+            else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10), cinema: cinema?.id});
+
+            let sessionByDate: ISessionByDate = sessionsByDate[0];
+            let hallsLength = sessionByDate.halls.length
+            let counter = 0;
+
+            for (let i = 0; i < sessionByDate.halls.length; i++) {
+                if (sessionByDate.halls[i].sessions.every(element => element === null)) {
+                    sessionByDate.halls[i].sessions.splice(i, 1)
+                    if (sessionByDate.halls.every(element => element.sessions.length as number === 0)) {
+                        setNoHallse(true)
+                        break;
+                    } else continue;
+                }
+                for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+                    if (movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+                        sessionByDate.halls[i].sessions.splice(j, 1)
+                        j--;
+                    }
+                }
+            }
+            if (hallsLength !== counter) setNoHallse(false);
+
+            for (let i = 0; i < sessionByDate.halls.length; i++) {
+                for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+                    if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
+                        let temp = sessionByDate.halls[i].sessions[j];
+                        sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
+                        sessionByDate.halls[i].sessions[j + 1] = temp;
+                    }
+                }
+            }
+
+            await setSessionByDateAndCinema(sessionByDate)
+            console.log(sessionByDate)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const fetchSessionBy = async (date: string) => {
+        const sessionsByDate: ISessionByDate[] = await API.getSessionByDate({date: date, cinema: cinema?.id});
+        let sessionByDate: ISessionByDate = sessionsByDate[0];
+        let hallsLength = sessionByDate.halls.length
+        let counter = 0
+        for (let i = 0; i < sessionByDate.halls.length; i++) {
+            if (sessionByDate.halls[i].sessions.every(element => element === null)) {
+                counter++
+                if (hallsLength === counter) {
+                    setNoHallse(true)
+                    console.log("No halls true")
+                    break;
+                } else continue;
+
+            }
+
             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-               if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
-                  let temp = sessionByDate.halls[i].sessions[j];
-                  sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
-                  sessionByDate.halls[i].sessions[j+1] = temp;
-               }
+                if (movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+                    sessionByDate.halls[i].sessions.splice(j, 1)
+                    j--;
+                }
             }
-         }
+        }
+        if (hallsLength !== counter) setNoHallse(false);
 
-         await  setSessionByDateAndCinema(sessionByDate)
-         console.log(sessionByDate)
-      } catch (e) {
-         console.log(e)
-      }
-   }
-
-   const fetchSessionBy = async (date: string) => {
-      const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: date,  cinema: cinema?.id});
-      let sessionByDate: ISessionByDate = sessionsByDate[0];
-      let hallsLength = sessionByDate.halls.length
-      let counter = 0
-      for (let i = 0; i < sessionByDate.halls.length; i++) {
-         if(sessionByDate.halls[i].sessions.every(element => element === null)) {
-            counter++
-            if(hallsLength === counter){
-               setNoHallse(true)
-               console.log("No halls true")
-               break;
+        for (let i = 0; i < sessionByDate.halls.length; i++) {
+            for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+                if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
+                    let temp = sessionByDate.halls[i].sessions[j];
+                    sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
+                    sessionByDate.halls[i].sessions[j + 1] = temp;
+                }
             }
-            else continue;
+        }
 
-         }
+        await setSessionByDateAndCinema(sessionByDate)
+        console.log(sessionByDate)
+    }
 
-         for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
-            if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
-               sessionByDate.halls[i].sessions.splice(j, 1)
-               j--;
-            }
-         }
-      }
-      if(hallsLength !== counter) setNoHallse(false);
-      // console.log(sessionByDate.halls.forEach(x=> x.sessions.sort((a,b) => (Number(a.start_time.substring(2)) > Number(b.start_time.substring(2))) ? 1 : 1)))
+    const fetchSession = async () => {
+        try {
+            const sessions: ISession[] = await API.getSession();
+            let sessionsMovie: ISession[] = sessions.filter(x => x.movie.toString() === id?.toString())
 
+            setSession(sessionsMovie)
 
-      for (let i = 0; i < sessionByDate.halls.length; i++) {
-         for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-            if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
-               let temp = sessionByDate.halls[i].sessions[j];
-               sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
-               sessionByDate.halls[i].sessions[j+1] = temp;
-            }
-         }
-      }
+            console.log(session)
 
-      await  setSessionByDateAndCinema(sessionByDate)
-      console.log(sessionByDate)
-   }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const popupToggle = () => {
+        if (popup) setPopup(false)
+        else setPopup(true)
+    }
 
-   const fetchSession = async () => {
-      try {
-         const sessions : ISession[] = await API.getSession();
-         let sessionsMovie : ISession[]  = sessions.filter(x => x.movie.toString() === id?.toString())
-         setSession(sessionsMovie)
+    useEffect(() => {
+        fetchData()
+        fetchSession()
 
-         // setMovie(movie)
-         console.log(session)
-         // console.log(bla)
-      } catch (e) {
-         console.log(e)
-         setMovie(undefined)
-         // alert(e)
-      }
-   }
-   const popupToggle = () => {
-      if(popup) setPopup(false)
-      else setPopup(true)
-   }
-   useEffect( () => {
-      fetchData()
-      fetchSession()
+        dispatch(setIsCinemaPage(false))
 
-      dispatch(setIsCinemaPage(false))
-
-      return () => {
-         dispatch(setIsCinemaPage(true))
-         dispatch(setCinema(null))
-      }
-   }, [])
+        return () => {
+            dispatch(setIsCinemaPage(true))
+            dispatch(setCinema(null))
+            dispatch(setCity(cinema?.location_details.city))
+        }
+    }, [])
 
 
     const navigate = useNavigate()
@@ -306,7 +302,10 @@ const MoviePage: React.FC = () => {
                             consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui
                             quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!
                         </div>
+
                     </div>
+
+
             }
         </div>
     );

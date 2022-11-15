@@ -10,9 +10,11 @@ import drinkBadge from "../../../assets/mdi_drink.svg"
 import SnackOrderBlock from "./SnackOrderBlock/SnackOrderBlock";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
 import {RootState} from "../../../store";
-import {setRemoveTicket} from "../../../store/session/session.slice";
+import {setOrder, setRemoveSnackOrder, setRemoveTicket} from "../../../store/session/session.slice";
 import Ticket from "../Ticket/Ticket";
 import Snack from "./Snack/Snack";
+import {useNavigate} from "react-router-dom";
+import {API} from "../../../utils/api";
 
 const SnackOrderPage: React.FC = (props) => {
 
@@ -21,6 +23,8 @@ const SnackOrderPage: React.FC = (props) => {
     const session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
     const snacks = useAppSelector((state: RootState) => state.session.snack);
+    const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
+    const city = useAppSelector((state: RootState) => state.session.city);
 
     const date = session?.date.split("-").reverse().join("/")
 
@@ -41,12 +45,19 @@ const SnackOrderPage: React.FC = (props) => {
 
     const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
 
-    const onClickRemove = (id:number) => {
+    const onClickRemove = (id: number) => {
         dispatch(setRemoveTicket(id))
     }
 
     const onClickRemoveSnack = () => {
+        // dispatch(setRemoveSnackOrder())
+    }
+    const navigate = useNavigate()
+    const onClickProceed = async () => {
+        navigate('/cart')
+        dispatch(setOrder({tickets, snackOrder, session, city}))
 
+        // const res = await API.postTicket({})
     }
 
     return (
@@ -75,7 +86,8 @@ const SnackOrderPage: React.FC = (props) => {
                     </div>
                     <div className={s.underPosterText}>Buy online, pick up at a separate checkout. That's faster!</div>
                     <div className={s.snacks}>
-                        {snacks.map((x, index) => <SnackOrderBlock key={index} index={index} emblem={x.logo} itemName={x.name} price={x.price} snack={x}/>)}
+                        {snacks.map((x, index) => <SnackOrderBlock key={index} index={index} emblem={x.logo}
+                                                                   itemName={x.name} price={x.price} snack={x}/>)}
                     </div>
                 </div>
             </div>
@@ -106,7 +118,10 @@ const SnackOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.snackList}>
-                                <Snack id={1} logo={'https://raw.githubusercontent.com/judah059/Last_Breath/fea10337e65e98a68111f021f374a60f45babdda/client/public/img/mdi_drink.svg'} name={'Popcorn Super Cheese'} price={180} onClickRemove={onClickRemoveSnack}/>
+                                {
+                                    snackOrder.map(s => <Snack id={s.id} logo={s.logo} name={s.name} price={s.price}
+                                                               onClickRemove={onClickRemoveSnack}/>)
+                                }
                             </div>
                             <div className={s.ticketList}></div>
                         </div>
@@ -120,12 +135,12 @@ const SnackOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
-                                <button className={s.buttonProceed}>Proceed</button>
+                                <button className={s.buttonProceed} onClick={onClickProceed}>Proceed</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     )
 };
