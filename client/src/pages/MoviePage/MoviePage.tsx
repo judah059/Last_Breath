@@ -13,195 +13,146 @@ import {
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
+import {setSessionById} from "../../store/session/session.slice";
 
 
 const MoviePage: React.FC = () => {
     const dispatch = useAppDispatch();
-    const [movie, setMovie] = useState<ITestMovieItem>();
+    const [movie, setMovie] = useState<ITestMovieItem | undefined>(undefined);
     const [session, setSession] = useState<ISession[] | undefined>()
     const {id} = useParams()
     const {cinema} = useAppSelector((state: RootState) => state.cinema);
-    const [inputValue, setInputValue] = useState<Date>(new Date());
+    const nowDate = new Date()
+    const [inputValue, setInputValue] = useState<Date>(nowDate);
     const [inputValues, setInputValues] = useState<Date[]>([]);
     const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
-    const [inputValuesForSpecDate, setInputValuesForSpecDate]= useState<ISessionItem | {}>();
+    const [inputValuesForSpecDate, setInputValuesForSpecDate] = useState<ISessionItem | {}>();
     const [popup, setPopup] = useState<Boolean>(true)
     const [noHalls, setNoHallse] = useState<Boolean>(false)
     const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
     const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
     const fetchData = async () => {
         try {
-            // movie
-            const movie : ITestMovieItem = await API.getCinemaMovie(id);
-            console.log(movie)
+            const movie: ITestMovieItem = await API.getCinemaMovie(id);
+            setMovie(movie)
 
-            // dates
             let dates = []
             let multiplier = 0
             for (let i = 0; i < 4; i++, multiplier++) {
-                dates.push(new Date(Date.now() + (( 3600 * 1000 * 24) * multiplier)))
+                dates.push(new Date(Date.now() + ((3600 * 1000 * 24) * multiplier)))
             }
             await setInputValues(dates);
 
-            // session by date from today's date
-            let sessionsByDate : ISessionByDate[] = []
+            let sessionsByDate: ISessionByDate[] = []
 
-            if(inputValue === new Date()) sessionsByDate = await API.getSessionByDate({date: dates[0].toISOString().substring(0, 10),  cinema: cinema?.id});
-            else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10),  cinema: cinema?.id});
+            if (inputValue === nowDate) sessionsByDate = await API.getSessionByDate({
+                date: dates[0].toISOString().substring(0, 10),
+                cinema: cinema?.id
+            });
+            else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10), cinema: cinema?.id});
 
             let sessionByDate: ISessionByDate = sessionsByDate[0];
-            // console.log(sessionByDate)
             let hallsLength = sessionByDate.halls.length
-            let counter = 0 ;
+            let counter = 0;
 
             for (let i = 0; i < sessionByDate.halls.length; i++) {
-                if(sessionByDate.halls[i].sessions.every(element => element === null)) {
+                if (sessionByDate.halls[i].sessions.every(element => element === null)) {
                     sessionByDate.halls[i].sessions.splice(i, 1)
-                    if(sessionByDate.halls.every(element => element.sessions.length  as number === 0)){
+                    if (sessionByDate.halls.every(element => element.sessions.length as number === 0)) {
                         setNoHallse(true)
                         break;
-                    }
-                    else   continue;
+                    } else continue;
                 }
-                for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
-                    if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+                for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+                    if (movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
                         sessionByDate.halls[i].sessions.splice(j, 1)
                         j--;
                     }
                 }
             }
-            if(hallsLength !== counter) setNoHallse(false);
+            if (hallsLength !== counter) setNoHallse(false);
 
             for (let i = 0; i < sessionByDate.halls.length; i++) {
                 for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-                    if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
+                    if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
                         let temp = sessionByDate.halls[i].sessions[j];
-                        sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
-                        sessionByDate.halls[i].sessions[j+1] = temp;
+                        sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
+                        sessionByDate.halls[i].sessions[j + 1] = temp;
                     }
                 }
             }
 
-            await setMovie(movie)
-            await  setSessionByDateAndCinema(sessionByDate)
+            await setSessionByDateAndCinema(sessionByDate)
             console.log(sessionByDate)
         } catch (e) {
             console.log(e)
-            // setMovie(undefined)
-            // alert(e)
         }
     }
 
     const fetchSessionBy = async (date: string) => {
-        const sessionsByDate : ISessionByDate[] = await API.getSessionByDate({date: date,  cinema: cinema?.id});
+        const sessionsByDate: ISessionByDate[] = await API.getSessionByDate({date: date, cinema: cinema?.id});
         let sessionByDate: ISessionByDate = sessionsByDate[0];
-        // console.log(sessionByDate)
-        // let emptyArray : ISessionEmptyArray[]= []
         let hallsLength = sessionByDate.halls.length
         let counter = 0
         for (let i = 0; i < sessionByDate.halls.length; i++) {
-            if(sessionByDate.halls[i].sessions.every(element => element === null)) {
+            if (sessionByDate.halls[i].sessions.every(element => element === null)) {
                 counter++
-                if(hallsLength === counter){
+                if (hallsLength === counter) {
                     setNoHallse(true)
                     console.log("No halls true")
                     break;
-                }
-                else continue;
+                } else continue;
 
             }
 
-            for (let j = 0; j <sessionByDate.halls[i].sessions.length; j++) {
-                if(movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
+            for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
+                if (movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
                     sessionByDate.halls[i].sessions.splice(j, 1)
                     j--;
                 }
             }
         }
-        if(hallsLength !== counter) setNoHallse(false);
-        // console.log(sessionByDate.halls.forEach(x=> x.sessions.sort((a,b) => (Number(a.start_time.substring(2)) > Number(b.start_time.substring(2))) ? 1 : 1)))
-
+        if (hallsLength !== counter) setNoHallse(false);
 
         for (let i = 0; i < sessionByDate.halls.length; i++) {
             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-                if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j+1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0,2)) > Number(sessionByDate.halls[i].sessions[j+1].start_time.substring(0,2)))) {
+                if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
                     let temp = sessionByDate.halls[i].sessions[j];
-                    sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j+1];
-                    sessionByDate.halls[i].sessions[j+1] = temp;
+                    sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
+                    sessionByDate.halls[i].sessions[j + 1] = temp;
                 }
             }
         }
 
-
-        // console.log(sessionByDate)
-        // console.log(sessionByDate.halls.forEach(x=> x.sessions.sort((a,b) => (Number(a.start_time.substring(0,2))  > Number(b.start_time.substring(0,2))) ? 1 : -1)))
-        // console.log(Number(sessionByDate.halls[0].sessions[0].start_time.substring(0, 2)))
-        await  setSessionByDateAndCinema(sessionByDate)
+        await setSessionByDateAndCinema(sessionByDate)
         console.log(sessionByDate)
     }
 
-    // const groupBy = (items : niceBackEnd[], key : string) =>
-    //     items.reduce(
-    //         (result, item) => ({
-    //            ...result,
-    //            // @ts-ignore
-    //            [item[key]]: [...(result[item[key]] || []), item.time]
-    //         }),
-    //         {}
-    //     );
-    // const changeInputValuesForSpecDate =  (date : Date) => {
-    //    let da = [];
-    //    if(session) {
-    //       for (let i = 0; i < session.length; i++) {
-    //             if(session[i].date === date.toISOString().substring(0, 10)) da.push(session[i]);
-    //       }
-    //       // setInputValuesForSpecDate(da);
-    //       let res = da.map((s) => ({
-    //          cinema: s.cinemahall_detail.cinema_name,
-    //          time: s.start_time
-    //       }));
-    //       const iLoveBackEnd : ISessionItem | {} = groupBy(res, "cinema")
-    //       setInputValuesForSpecDate(iLoveBackEnd);
-    //
-    //    }
-    //
-    // }
     const fetchSession = async () => {
         try {
-            const sessions : ISession[] = await API.getSession();
-            let sessionsMovie : ISession[]  = sessions.filter(x => x.movie.toString() === id?.toString())
-            // const sessionCinema1 = sessionsMovie.filter(x => x.cinema === 1)
-            //  sessions.map((cinema, index) => <div>{cinema.cinemahall_detail.cinema_name} <div>{cinema}</div></div>)
-            // const bla = sessionsMovie.map(s=>({cinema: s.cinemahall_detail.cinema_name, time:s.start_time}))
-            // console.log(sessionsMovie.sort())
+            const sessions: ISession[] = await API.getSession();
+            let sessionsMovie: ISession[] = sessions.filter(x => x.movie.toString() === id?.toString())
+
             setSession(sessionsMovie)
 
-            // setMovie(movie)
             console.log(session)
-            // console.log(bla)
+
         } catch (e) {
             console.log(e)
-            setMovie(undefined)
-            // alert(e)
         }
     }
     const popupToggle = () => {
-        if(popup) setPopup(false)
+        if (popup) setPopup(false)
         else setPopup(true)
     }
-    // const date = new Date();
-    // const addInputValues = async () => {
-    //
-    // }
-    useEffect( () => {
+
+    useEffect(() => {
         fetchData()
         fetchSession()
-        // fetchSessionByDate()
-        // console.log(datesForItems)
 
         dispatch(setIsCinemaPage(false))
 
@@ -212,35 +163,38 @@ const MoviePage: React.FC = () => {
     }, [])
 
 
+    const navigate = useNavigate()
+    const onClickTicketOpen = async (id: number) => {
+        const data = await API.getSessionById(id)
+        dispatch(setSessionById(data))
+        navigate('/tickets-order')
+    }
 
     return (
         <div>
             <HeaderDrawer toLinkText='Now In Cinema'/>
-
             {
-                movie == undefined ? <h1 style={{ margin: "auto"}}>No movies were found</h1>
+                movie == undefined ? <h1 style={{margin: "auto"}}>No movies were found</h1>
                     :
                     <div>
                         <div className={s.page__flex__Container}>
                             <div className={s.movie__poster}>
                                 <div className={s.movie__poster__Container}>
                                     <div className={s.image__Container}>
-                                        <img  src={movie?.poster}/>
+                                        <img src={movie?.poster}/>
                                     </div>
                                 </div>
                                 <div className={s.movie__poster__trailer__container}>
-                                    <div >
+                                    <div>
                                         <img src={play} alt=""/>
                                         <div className={s.poster__trailer__text}>Watch trailer</div>
                                     </div>
                                 </div>
                             </div>
-
-
                             <div className={s.main__info}>
                                 <div className={s.main__info__title}>{movie?.name}</div>
                                 <div className={s.main__info__flex}>
-                                    <div >
+                                    <div>
                                         <div className={s.main__info__text}>Age rating:</div>
                                         <div className={s.main__info__text}>Release year:</div>
                                         <div className={s.main__info__text}>Producer:</div>
@@ -260,129 +214,93 @@ const MoviePage: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-
-
                             <div className={s.session}>
                                 <div className={s.session__header}>
                                     <div className={s.session__header__title}>Sessions</div>
                                     <div className={s.session__header__dropdown} onClick={popupToggle}>
-                                        <div className={s.session__header__dropdown__label} >
+                                        <div className={s.session__header__dropdown__label}>
                                             <div>
-                                                {inputValue?.toLocaleString('en-us', {weekday:'short'})},  {inputValue?.toLocaleString('default', { month: 'long' })} {inputValue?.getDate()}
+                                                {inputValue?.toLocaleString('en-us', {weekday: 'short'})}, {inputValue?.toLocaleString('default', {month: 'long'})} {inputValue?.getDate()}
                                             </div>
                                             <img src={vector} className={s.vector} alt=""/>
                                         </div>
                                         {popup ?
                                             <div className={s.session__header__dropdown__menu}>
-                                                <div className={s.session__header__dropdown__menu__items}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
+                                                <div
+                                                    className={s.session__header__dropdown__menu__items}>{inputValues[0]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[0]?.toLocaleString('default', {month: 'long'})} {inputValues[0]?.getDate()}</div>
+                                                <div
+                                                    className={s.session__header__dropdown__menu__items}>{inputValues[1]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[1]?.toLocaleString('default', {month: 'long'})} {inputValues[1]?.getDate()}</div>
+                                                <div
+                                                    className={s.session__header__dropdown__menu__items}>{inputValues[2]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[2]?.toLocaleString('default', {month: 'long'})} {inputValues[2]?.getDate()}</div>
+                                                <div
+                                                    className={s.session__header__dropdown__menu__items}>{inputValues[3]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[3]?.toLocaleString('default', {month: 'long'})} {inputValues[3]?.getDate()}</div>
                                             </div>
                                             :
                                             <div className={`${s.session__header__dropdown__menu} ${s.active}`}>
-                                                <div className={s.session__header__dropdown__menu__items} onClick={() => {
-                                                    setInputValue(inputValues[0])
-                                                    fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
-                                                    popupToggle()
-                                                }}>{inputValues[0]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[0]?.toLocaleString('default', { month: 'long' })} {inputValues[0]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                                                    setInputValue(inputValues[1])
-                                                    fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
-                                                    popupToggle()
-                                                }}>{inputValues[1]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[1]?.toLocaleString('default', { month: 'long' })} {inputValues[1]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                                                    setInputValue(inputValues[2])
-                                                    fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
-                                                    popupToggle()
-                                                }}>{inputValues[2]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[2]?.toLocaleString('default', { month: 'long' })} {inputValues[2]?.getDate()}</div>
-                                                <div className={s.session__header__dropdown__menu__items}  onClick={() => {
-                                                    setInputValue(inputValues[3])
-                                                    fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
-                                                    popupToggle()
-                                                }}>{inputValues[3]?.toLocaleString('en-us', {weekday:'short'})},  {inputValues[3]?.toLocaleString('default', { month: 'long' })} {inputValues[3]?.getDate()}</div>
+                                                <div className={s.session__header__dropdown__menu__items}
+                                                     onClick={() => {
+                                                         setInputValue(inputValues[0])
+                                                         fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
+                                                         popupToggle()
+                                                     }}>{inputValues[0]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[0]?.toLocaleString('default', {month: 'long'})} {inputValues[0]?.getDate()}</div>
+                                                <div className={s.session__header__dropdown__menu__items}
+                                                     onClick={() => {
+                                                         setInputValue(inputValues[1])
+                                                         fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
+                                                         popupToggle()
+                                                     }}>{inputValues[1]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[1]?.toLocaleString('default', {month: 'long'})} {inputValues[1]?.getDate()}</div>
+                                                <div className={s.session__header__dropdown__menu__items}
+                                                     onClick={() => {
+                                                         setInputValue(inputValues[2])
+                                                         fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
+                                                         popupToggle()
+                                                     }}>{inputValues[2]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[2]?.toLocaleString('default', {month: 'long'})} {inputValues[2]?.getDate()}</div>
+                                                <div className={s.session__header__dropdown__menu__items}
+                                                     onClick={() => {
+                                                         setInputValue(inputValues[3])
+                                                         fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
+                                                         popupToggle()
+                                                     }}>{inputValues[3]?.toLocaleString('en-us', {weekday: 'short'})}, {inputValues[3]?.toLocaleString('default', {month: 'long'})} {inputValues[3]?.getDate()}</div>
                                             </div>
                                         }
                                     </div>
                                 </div>
                                 <div className={s.session__bottom}>
-                                    {/*{inputValuesForSpecDate.la}*/}
-
-
-                                    {/*{sessionByDateAndCinema?.halls.map(x =>*/}
-                                    {/*    <div className={s.session__bottom__items}>*/}
-                                    {/*       <div>Hall №{x.id}</div>*/}
-                                    {/*       <div className={s.session__bottom__items__flex}>*/}
-                                    {/*          {x.sessions.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d.start_time.substring(d.start_time.length -3, 0)}</div>)}*/}
-                                    {/*       </div>*/}
-                                    {/*    </div>)*/}
-                                    {/*}*/}
-
-
-
-
                                     {(() => {
 
-                                        if(noHalls) {
+                                        if (noHalls) {
                                             return (
                                                 <div className={s.session__bottom__items} style={{textAlign: "center"}}>
                                                     No sessions
                                                 </div>
                                             )
-                                        }else  {
-                                            return(
+                                        } else {
+                                            return (
                                                 sessionByDateAndCinema?.halls.map(x =>
                                                     <div className={s.session__bottom__items}>
                                                         <div>Hall №{x.id}</div>
                                                         <div className={s.session__bottom__items__flex}>
                                                             {x.sessions.map((d, index) => <div key={index}
+                                                                                               onClick={() => onClickTicketOpen(x.sessions[index].id)}
                                                                                                style={{cursor: "pointer"}}>{d?.start_time?.substring(d?.start_time?.length - 3, 0)}</div>)}
                                                         </div>
                                                     </div>
                                                 )
 
-                                            )}
-
+                                            )
+                                        }
                                     })()}
-
-
-
-
-                                    {/*<div className={s.session__bottom__items}>*/}
-                                    {/*   <div>{labels[0]}</div>*/}
-                                    {/*   <div className={s.session__bottom__items__flex}>*/}
-                                    {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}}>{d}</div>)}*/}
-                                    {/*   </div>*/}
-                                    {/*</div>*/}
-
-                                    {/*<div className={s.session__bottom__items}>*/}
-                                    {/*   <div>{labels[1]}</div>*/}
-                                    {/*   <div className={s.session__bottom__items__flex}>*/}
-                                    {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
-                                    {/*   </div>*/}
-                                    {/*</div>*/}
-
-
-                                    {/*<div className={s.session__bottom__items}>*/}
-                                    {/*   <div>{labels[2]}</div>*/}
-                                    {/*   <div className={s.session__bottom__items__flex}>*/}
-                                    {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}  </div>)}*/}
-                                    {/*   </div>*/}
-                                    {/*</div>*/}
-
-                                    {/*<div className={s.session__bottom__items}>*/}
-                                    {/*   <div>{labels[3]}</div>*/}
-                                    {/*   <div className={s.session__bottom__items__flex}>*/}
-                                    {/*      {datesForItems.map((d, index) => <div key={index} style={{cursor: "pointer"}} >{d}</div>)}*/}
-                                    {/*   </div>*/}
-                                    {/*</div>*/}
-
-
                                 </div>
                             </div>
                         </div>
 
-                        <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!</div>
+                        <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat
+                            illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias,
+                            reprehenderit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus
+                            consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui
+                            quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!
+                        </div>
 
                     </div>
 
