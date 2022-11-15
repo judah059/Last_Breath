@@ -269,3 +269,22 @@ class SnackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snack
         fields = "__all__"
+
+
+class TransactionPOSTSerializer(serializers.ModelSerializer):
+    payment = serializers.IntegerField()
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'payment',
+        )
+
+
+class TransactionGETSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'created_at',
+        )
