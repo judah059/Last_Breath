@@ -28,14 +28,17 @@ def transaction_post_save(sender, instance=None, created=False, **kwargs):
     if created:
         basket = instance.basket
         user = instance.basket.user
-        for item in user.snacks:
-            if not item.is_payed:
-                item.is_payed = True
-                item.save()
-        for item in user.tickets:
-            if not item.is_payed:
-                item.is_payed = True
-                item.save()
+        print(bool(user.snacks))
+        if user.snacks.all():
+            for item in user.snacks:
+                if not item.is_payed:
+                    item.is_payed = True
+                    item.save()
+        if user.tickets.all():
+            for item in user.tickets:
+                if not item.is_payed:
+                    item.is_payed = True
+                    item.save()
         basket.total_price = 0
         basket.save()
 
