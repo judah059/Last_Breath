@@ -51,6 +51,9 @@ routerPayment.register(r'payment', PaymentViewSet, basename='payment')
 routerSnack = routers.SimpleRouter()
 routerSnack.register(r'snack', SnackView, basename='snack')
 
+routerBoughtSnack = routers.SimpleRouter()
+routerBoughtSnack.register(r'bought_snack', BoughtSnackView, basename='bought_snack')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
@@ -73,5 +76,5 @@ urlpatterns = [
     path('api/', include(routerPayment.urls)),
     path('api/', include(routerSnack.urls)),
     path('api/filter/snack/<int:pk_cinema>/', SnackFilterView.as_view()),
-    path('api/bought/snack', BoughtSnackView.as_view()),
+    path('api/', include(routerBoughtSnack.urls)),
 ]
