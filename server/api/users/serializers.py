@@ -247,6 +247,7 @@ class BoughtSnackSerializer(serializers.ModelSerializer):
         model = BoughtSnack
         fields = "__all__"
 
+
 class SnackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snack
