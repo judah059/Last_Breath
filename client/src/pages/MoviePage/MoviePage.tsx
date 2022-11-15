@@ -13,10 +13,11 @@ import {
 import s from "./MoviePage.module.scss"
 import play from "../../assets/play-button.png"
 import vector from "../../assets/Vector.png"
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
+import {setSessionById} from "../../store/session/session.slice";
 
 
 const MoviePage: React.FC = () => {
@@ -305,10 +306,7 @@ const MoviePage: React.FC = () => {
                             consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui
                             quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!
                         </div>
-
                     </div>
-
-
             }
         </div>
     );
