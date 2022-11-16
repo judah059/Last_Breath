@@ -33,7 +33,7 @@ export interface ISessionState {
     snack: ISnack[]
     snackOrder: ISnack[]
     snackIndex: number
-    city: string
+    city: string,
 }
 
 export interface ITicket {

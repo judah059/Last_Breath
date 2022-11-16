@@ -1,5 +1,5 @@
 import axios from "axios";
-import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResTicket, IResUser, IUser} from "./types";
+import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResSnack, IResTicket, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
 import {ISession, ISnack} from "../../store/session/session.types";
 
@@ -49,9 +49,16 @@ export let API = {
             }
         }).then(res => res.data);
     },
-    postSnack(data: {amount: number, snack: number, user: number}){
-        return baseApi2.post(`bought_snack/`, data, ).then(res => res.data);
-    }
+    postSnack(data: { amount: number, snack: number, user: number }) {
+        return baseApi2.post(`bought_snack/`, data,).then(res => res.data);
+    },
+    getBoughtSnacks() {
+        return baseApi2.get<IResSnack[]>(`bought_snack/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
 }
 
 export let userAPI = {

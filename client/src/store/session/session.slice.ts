@@ -8,7 +8,7 @@ const initialState: ISessionState = {
     snack: [],
     snackOrder: [],
     snackIndex: 0,
-    city: ''
+    city: '',
 }
 
 export const sessionSlice = createSlice({
@@ -48,7 +48,7 @@ export const sessionSlice = createSlice({
         },
         setCity(state, action){
             state.city= action.payload
-        }
+        },
     }
 })
 
@@ -61,7 +61,7 @@ export const {
     setRemoveTicket,
     setOrder,
     setCity,
-    setEmptyTicket
+    setEmptyTicket,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

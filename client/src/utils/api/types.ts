@@ -246,3 +246,19 @@ export interface IResTicket {
         }
     }
 }
+
+export type IResSnack = {
+    id: number
+    amount: number
+    is_payed: boolean
+    snack: number
+    snack_detail: {
+        id: number
+        name: string
+        logo: string
+        price: number
+        cinema: number
+    }
+    total_price: number
+    user: number
+}

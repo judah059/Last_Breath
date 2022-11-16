@@ -71,14 +71,16 @@ const SnackOrderPage: React.FC = (props) => {
             }
 
 
-            for (let i = 0; i < snacks.length; i++) {
-                let obj = {
-                    amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
-                    snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
-                    user: user.id
-                }
-                await API.postSnack(obj);
-            }
+           if(snackOrder.length !== 0){
+               for (let i = 0; i < snacks.length; i++) {
+                   let obj = {
+                       amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
+                       snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
+                       user: user.id
+                   }
+                   await API.postSnack(obj);
+               }
+           }
 
 
         } catch (e) {
@@ -87,7 +89,11 @@ const SnackOrderPage: React.FC = (props) => {
         }
 
     }
-
+    useEffect(() => {
+        if (session === null) {
+            return navigate('/main');
+        }
+    }, [session]);
 
     return (
         <div className={s.wrapper}>

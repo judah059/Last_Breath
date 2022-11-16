@@ -31,7 +31,7 @@ const TicketsOrderPage: React.FC = (props) => {
             const data = await API.getSnackByCinemaID(id)
             dispatch(setSnack(data))
             navigate('/tickets-order/snack')
-        }else {
+        } else {
             setError(true)
         }
 
@@ -80,6 +80,11 @@ const TicketsOrderPage: React.FC = (props) => {
         dispatch(setRemoveTicket(id))
     }
 
+    useEffect(() => {
+        if (session === null) {
+            return navigate(-1);
+        }
+    }, [session]);
 
     return (
         <div className={s.wrapper}>
@@ -111,7 +116,7 @@ const TicketsOrderPage: React.FC = (props) => {
                         {session?.seats.map((x, i) => <SeatElement
                             isFree={x.is_free}
                             isSeatFree={isSeatFree}
-                            id={x.seat_id}
+                            id={x.id}
                             onClickAddTicketOrder={() => onClickAddTicketOrder({
                                 seat_number: x.seat_number,
                                 seat_row: x.seat_row,
