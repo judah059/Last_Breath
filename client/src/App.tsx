@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.scss';
 import {Route, Routes} from "react-router-dom";
 import StartPage from "./pages/StartPage/StartPage";
@@ -11,34 +11,37 @@ import Cart from "./pages/Cart/Cart";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import PaymentHistory from "./pages/PaymentHistory/PaymentHistory";
 import Cinema from "./pages/Cinema/Cinema";
-
-
+import {API} from "./utils/api";
+import {setPayment} from "./store/user/user.slice";
+import {useAppDispatch} from "./utils/hooks/redux";
 
 
 const App: React.FC = () => {
-    const options = {
-        // passing the client secret obtained in step 3
-        clientSecret: 'sk_test_51KnOKuJIsScGKPaNtwvJrsnekggV9qz5amBYnM7bnN1d4A9Dn1myTq3RKdODWi9obQ0wDXBH4qBdTyBrncbUt6FT00JMkpjZTr',
-        // Fully customizable with appearance API.
-        appearance: {/*...*/},
-    };
+    const dispatch = useAppDispatch()
+    const fetchPayment = async () => {
+        const res = await API.getPayment();
+        dispatch(setPayment(res))
+    }
 
+    useEffect(() => {
+        fetchPayment()
+    }, [])
 
     return (
         <div className="wrapper">
 
-                <Routes>
-                    <Route path='/' element={<StartPage/>}></Route>
-                    <Route path='main' element={<MainPage/>}></Route>
-                    <Route path='main/movies/:id' element={<MoviePage/>}></Route>
-                    <Route path='about-company' element={<AboutCompany/>}></Route>
-                    <Route path='profile' element={<ProfilePage/>}></Route>
-                    <Route path='tickets-order' element={<TicketsOrderPage/>}></Route>
-                    <Route path='tickets-order/snack' element={<SnackOrderPage/>}></Route>
-                    <Route path='cart' element={<Cart/>}></Route>
-                    <Route path='payment-history' element={<PaymentHistory/>}></Route>
-                    <Route path='cinema/:id' element={<Cinema/>}></Route>
-                </Routes>
+            <Routes>
+                <Route path='/' element={<StartPage/>}></Route>
+                <Route path='main' element={<MainPage/>}></Route>
+                <Route path='main/movies/:id' element={<MoviePage/>}></Route>
+                <Route path='about-company' element={<AboutCompany/>}></Route>
+                <Route path='profile' element={<ProfilePage/>}></Route>
+                <Route path='tickets-order' element={<TicketsOrderPage/>}></Route>
+                <Route path='tickets-order/snack' element={<SnackOrderPage/>}></Route>
+                <Route path='cart' element={<Cart/>}></Route>
+                <Route path='payment-history' element={<PaymentHistory/>}></Route>
+                <Route path='cinema/:id' element={<Cinema/>}></Route>
+            </Routes>
         </div>
     );
 }

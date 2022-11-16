@@ -14,6 +14,7 @@ interface CartProps {
 
 
 const Cart: React.FC<CartProps> = () => {
+    const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
 
     const [tickets, setTickets] = useState<IResTicket[]>()
     const [snacks, setSnacks] = useState<IResSnack[]>()
@@ -33,12 +34,12 @@ const Cart: React.FC<CartProps> = () => {
 
     const onClickSnackRemove = async (id: number) => {
         console.log(id)
-        setSnacks(snacks?.filter(s=> s.id !== id))
-        const res = await  API.removeBoughtSnack(id)
+        setSnacks(snacks?.filter(s => s.id !== id))
+        const res = await API.removeBoughtSnack(id)
     }
 
     const onClickTicketRemove = async (id: number) => {
-        setTickets(tickets?.filter(s=> s.id !== id))
+        setTickets(tickets?.filter(s => s.id !== id))
         const res = await API.removeTicket(id)
     }
 
@@ -46,18 +47,31 @@ const Cart: React.FC<CartProps> = () => {
         fetchTicket()
     }, [])
 
+
+    const snacksTotalPrice = snacks?.filter(t => t.is_payed === false).reduce((a, b) => a + b.total_price, 0) || 0
+    const ticketsTotalPrice = tickets?.filter(t => t.is_payed === false).reduce((a, b) => a + b.total_price, 0) || 0
+    const totalPrice = snacksTotalPrice + ticketsTotalPrice;
+    console.log(totalPrice)
     return (
         <>
             <HeaderDrawer toLinkText='Account'/>
             <div className={s.container}>
+                {
+                    totalPrice !== 0 && <div className={s.total}>
+                        <h3>Total Price: <span>₴{totalPrice}</span></h3>
+                        <button className={s.btn} onClick={() => setPaymentEditFormOpened(true)}>Pay</button>
+
+                    </div>
+                }
                 <div className={s.items}>
                     {(tickets?.length === 0 && snacks?.length === 0) && <div>Cart is empty :(</div>}
                     {
-                        tickets?.map(t => <CartItem ticket={t} onClickTicketRemove={()=>onClickTicketRemove(t.id)}/>)
+                        tickets?.filter(t => t.is_payed === false).map(t => <CartItem ticket={t}
+                                                                                      onClickTicketRemove={() => onClickTicketRemove(t.id)}/>)
                     }
                     <>
                         {
-                            snacks?.map(sn => (
+                            snacks?.filter(s => s.is_payed === false).map(sn => (
                                 <div className={`${s.item}`}>
                                     <div className={s.left}>
                                         <img src={sn.snack_detail.logo} alt="movie" width={125}/>
@@ -69,8 +83,8 @@ const Cart: React.FC<CartProps> = () => {
                                     </div>
                                     <div className={s.right}>
                                         <>
-                                            <button className={s.btn} onClick={()=>onClickSnackRemove(sn.id)}>Cancel</button>
-                                            <button className={s.btn}>Pay</button>
+                                            <button className={s.btn} onClick={() => onClickSnackRemove(sn.id)}>Cancel
+                                            </button>
                                         </>
                                     </div>
                                 </div>
@@ -79,6 +93,9 @@ const Cart: React.FC<CartProps> = () => {
                     </>
 
                 </div>
+                <PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
+                             onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}
+                             totalPrice={totalPrice}/>
             </div>
         </>
     );

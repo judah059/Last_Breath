@@ -1,5 +1,15 @@
 import axios from "axios";
-import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResSnack, IResTicket, IResUser, IUser} from "./types";
+import {
+    IChangePassword,
+    ICinema,
+    IReqSessionByDate,
+    IReqUser,
+    IResPayment,
+    IResSnack,
+    IResTicket,
+    IResUser,
+    IUser
+} from "./types";
 import {getWithExpiry} from "../localStorage";
 import {ISession, ISnack} from "../../store/session/session.types";
 
@@ -68,6 +78,27 @@ export let API = {
     },
     removeTicket(id: number){
         return baseApi2.delete(`ticket/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    getPayment(){
+        return baseApi2.get<IResPayment[]>(`payment/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    postPayment(token?: string){
+        return baseApi2.post(`payment/`,{token}, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    postTransaction(payment: number){
+        return baseApi2.post(`transaction/`,{payment}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

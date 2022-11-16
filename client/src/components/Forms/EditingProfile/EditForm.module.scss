@@ -34,7 +34,7 @@
     color: #9E9E9E;
     padding: 14px 18px;
 
-    input{
+    input {
       width: 100%;
     }
   }
@@ -53,7 +53,7 @@
     margin-top: 55px;
   }
 
-  .bottomText{
+  .bottomText {
     font-weight: 400;
     font-size: 16px;
     line-height: 20px;
@@ -82,12 +82,24 @@
   }
 }
 
-.myForm{
+.myForm {
   padding: 150px;
+  color: black !important;
 
-  .InputElement{
+  .InputElement {
     border: 1px solid black !important;
   }
+
+  .btnBlock{
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.cont {
+  color: black;
+  //display: flex;
+
 }
 
 .card {
