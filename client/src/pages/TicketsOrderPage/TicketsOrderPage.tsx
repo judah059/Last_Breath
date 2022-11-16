@@ -16,7 +16,7 @@ import Ticket from "./Ticket/Ticket";
 import {API} from "../../utils/api";
 
 const TicketsOrderPage: React.FC = (props) => {
-    const session = useAppSelector((state: RootState) => state.session.current);
+    let session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
     const dispatch = useAppDispatch()
 
@@ -26,14 +26,19 @@ const TicketsOrderPage: React.FC = (props) => {
 
     const snackPageLoader = async (id: number | undefined) => {
 
-        if (tickets.length !== 0) {
-            setError(false)
-            const data = await API.getSnackByCinemaID(id)
-            dispatch(setSnack(data))
-            navigate('/tickets-order/snack')
-        } else {
-            setError(true)
-        }
+        const data = await API.getSnackByCinemaID(id)
+        dispatch(setSnack(data))
+        navigate('/tickets-order/snack')
+
+
+        // if (tickets.length !== 0) {
+        //     setError(false)
+        //     const data = await API.getSnackByCinemaID(id)
+        //     dispatch(setSnack(data))
+        //     navigate('/tickets-order/snack')
+        // } else {
+        //     setError(true)
+
 
     }
 
@@ -112,15 +117,14 @@ const TicketsOrderPage: React.FC = (props) => {
                     </div>
 
                     <div className={s.seats}>
-
-                        {session?.seats.map((x, i) => <SeatElement
+                        {session?.seats.slice().sort((a, b) => a.id - b.id).map((x, i) => <SeatElement
                             isFree={x.is_free}
                             isSeatFree={isSeatFree}
                             id={x.id}
                             onClickAddTicketOrder={() => onClickAddTicketOrder({
                                 seat_number: x.seat_number,
                                 seat_row: x.seat_row,
-                                price: x.seat_additional_price + session?.base_price,
+                                price: x.seat_additional_price + session!.base_price,
                                 seat_id: x.seat_id,
                                 id: x.id
                             })}/>)}

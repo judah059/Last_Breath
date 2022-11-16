@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import s from "./SnackOrderPage.module.scss";
 import TicketsHeader from "../../../components/TicketsHeader/TicketsHeader";
 import TicketsOrderInformationBlock from "../TicketsOrderInformationBlock";
@@ -32,6 +32,7 @@ const SnackOrderPage: React.FC = (props) => {
     const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
     const city = useAppSelector((state: RootState) => state.session.city);
     const user = useAppSelector((state: RootState) => state.user);
+    const [error, setError] = useState(false)
 
     const date = session?.date.split("-").reverse().join("/")
 
@@ -63,32 +64,52 @@ const SnackOrderPage: React.FC = (props) => {
     const onClickProceed = async () => {
         dispatch(setEmptyTicket())
         try {
+            if (snackOrder.length !== 0 || tickets.length !== 0) {
+                setError(false)
+                dispatch(setOrder({tickets, snackOrder, session, city}))
 
-            dispatch(setOrder({tickets, snackOrder, session, city}))
+                for (let i = 0; i < tickets.length; i++) {
+                    await API.postTicket({session: session?.id, session_seat: tickets[i].id});
+                }
 
-            for (let i = 0; i < tickets.length; i++) {
-                await API.postTicket({session: session?.id, session_seat: tickets[i].id});
+                if (snackOrder.length !== 0) {
+                    for (let i = 0; i < snackOrder.length; i++) {
+                        let obj = {
+                            amount: snackOrder.filter(s => s.id === snackOrder[i].id)?.length,
+                            snack: snackOrder.filter(s => s.id === snackOrder[i].id)[0]?.id,
+                            user: user.id
+                        }
+                        await API.postSnack(obj);
+                    }
+                }
+                navigate('/cart')
+            } else {
+                setError(true)
             }
-
-
-           if(snackOrder.length !== 0){
-               for (let i = 0; i < snacks.length; i++) {
-                   let obj = {
-                       amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
-                       snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
-                       user: user.id
-                   }
-                   await API.postSnack(obj);
-               }
-           }
-            navigate('/cart')
+            // dispatch(setOrder({tickets, snackOrder, session, city}))
+            //
+            // for (let i = 0; i < tickets.length; i++) {
+            //     await API.postTicket({session: session?.id, session_seat: tickets[i].id});
+            // }
+            //
+            //
+            // if(snackOrder.length !== 0){
+            //     for (let i = 0; i < snacks.length; i++) {
+            //         let obj = {
+            //             amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
+            //             snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
+            //             user: user.id
+            //         }
+            //         await API.postSnack(obj);
+            //     }
+            // }
+            // navigate('/cart')
 
         } catch (e) {
             console.log(e)
-            alert(e)
         }
-
     }
+
     useEffect(() => {
         if (session === null) {
             return navigate('/main');
@@ -170,6 +191,9 @@ const SnackOrderPage: React.FC = (props) => {
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
+                                {
+                                    error && <p>Please choose a seat/bar item</p>
+                                }
                                 <button className={s.buttonProceed} onClick={onClickProceed}>Proceed</button>
                             </div>
                         </div>

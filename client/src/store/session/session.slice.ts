@@ -24,6 +24,9 @@ export const sessionSlice = createSlice({
         setEmptyTicket(state){
             state.ticket = []
         },
+        setEmptySnack(state) {
+            state.snackOrder = []
+        },
         setRemoveTicket(state, action) {
             state.ticket = state.ticket.filter(s => +s.seat_id !== action.payload)
         },
@@ -62,6 +65,7 @@ export const {
     setOrder,
     setCity,
     setEmptyTicket,
+    setEmptySnack
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
