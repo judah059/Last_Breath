@@ -29,7 +29,7 @@ const Cinema: React.FC<CinemaProps> = () => {
     const [currCinema, setCurrCinema] = useState<ICinema>()
     const dispatch = useAppDispatch();
     const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.cinema);
-    const [dateNumber, setDateNumber] = useState<Number>(0)
+    const [dateNumber, setDateNumber] = useState<number>(0)
     const [movies, setMovies] = useState<IMovieItem[]>([])
     const [noHalls, setNoHallse] = useState<Boolean>(false)
 
@@ -108,12 +108,12 @@ const Cinema: React.FC<CinemaProps> = () => {
         await setSessionByDateAndCinema(sessionByDate)
         console.log(sessionByDate)
     }
-    const switchSession = (divNumber : Number) => {
+    const switchSession = async (divNumber : number) => {
         const divs = document.querySelectorAll(".dayBlock");
-        if(divNumber === dateNumber) return;
+        if (divNumber === dateNumber) return;
         else {
-            divs[dateNumber].classList.remove({s.active})
-            divs[divNumber].classList.add({s.active})
+            divs[dateNumber].classList.remove(s.active)
+            divs[divNumber].classList.add(s.active)
             setDateNumber(divNumber)
         }
         //
