@@ -114,6 +114,7 @@ const Cinema: React.FC<CinemaProps> = () => {
         else {
             divs[dateNumber].classList.remove({s.active})
             divs[divNumber].classList.add({s.active})
+            setDateNumber(divNumber)
         }
         //
         console.log(divs)
