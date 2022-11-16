@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.users.serializers import *
+from users.helper import MakeCharge
 from users.models import *
 
 UserModel = get_user_model()
@@ -157,3 +158,52 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = MyUser.objects.get(pk=self.request.user.pk, email=self.request.user.email)
         return Payments.payment_objects.get_queryset(user=user)
+
+
+class BoughtSnackView(viewsets.ModelViewSet):
+    queryset = BoughtSnack.objects.all()
+    serializer_class = BoughtSnackSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user__id=self.request.user.id)
+
+
+class SnackFilterView(generics.ListAPIView):
+    queryset = Snack.objects.all()
+    serializer_class = SnackSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(cinema=Cinema.objects.get(id=self.kwargs['pk_cinema']))
+
+
+class SnackView(viewsets.ModelViewSet):
+    queryset = Snack.objects.all()
+    serializer_class = SnackSerializer
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+        basket = Basket.objects.get(user=user)
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # breakpoint()
+        payment_id = serializer.validated_data['payment']
+        payment = Payments.objects.get(id=payment_id)
+        MakeCharge(user=user, basket=basket, payment=payment).pay_basket()
+        Transaction.objects.create(basket=basket)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get_serializer_class(self):
+        if self.request.method != 'GET':
+            return TransactionPOSTSerializer
+        else:
+            return TransactionGETSerializer
+
+    def get_queryset(self):
+        qs = super(TransactionViewSet, self).get_queryset()
+        return qs.filter(basket__user=self.request.user.id)
