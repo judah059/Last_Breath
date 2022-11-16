@@ -119,7 +119,7 @@ class SessionSeatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SessionSeat
-        fields = ["seat_id", "seat_number", "seat_row", "seat_additional_price", "is_free"]
+        fields = ["id", "seat_id", "seat_number", "seat_row", "seat_additional_price", "is_free"]
 
 
 class SessionSerializer(serializers.ModelSerializer):
@@ -155,11 +155,28 @@ class SessionSerializer(serializers.ModelSerializer):
         return session_instance
 
 
+class SessionWithoutSeatsSerializer(serializers.ModelSerializer):
+    cinemahall_detail = CinemaHallSerializer(read_only=True, source="cinemahall")
+    movie_name = serializers.CharField(read_only=True, source="movie.name")
+    movie_poster = serializers.CharField(read_only=True, source="movie.poster")
+
+    class Meta:
+        model = Session
+        fields = ["id", "date", "start_time", "end_time", "base_price", "movie", "movie_name", "movie_poster",
+                  "cinemahall", "cinemahall_detail"]
+
+
 class TicketSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    is_payed = serializers.BooleanField(read_only=True)
+    total_price = serializers.IntegerField(read_only=True)
+    seat_detail = SessionSeatSerializer(read_only=True, source="session_seat")
+    session_detail = SessionWithoutSeatsSerializer(read_only=True, source="session")
+
     class Meta:
         model = Ticket
         # fields = ["user", "session_seat", "session"]
-        fields = ["session_seat", "session"]
+        fields = ["id", "total_price", "is_payed", "session", "session_seat", "seat_detail", "session_detail"]
 
     def create(self, validated_data):
         if not validated_data['session_seat'].is_free:
@@ -252,3 +269,22 @@ class SnackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snack
         fields = "__all__"
+
+
+class TransactionPOSTSerializer(serializers.ModelSerializer):
+    payment = serializers.IntegerField()
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'payment',
+        )
+
+
+class TransactionGETSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = (
+            'created_at',
+        )
