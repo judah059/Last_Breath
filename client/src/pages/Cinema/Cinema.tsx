@@ -245,7 +245,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                 </div>
                 <div className={s.divider}></div>
                 <div className={s.movieBlock}>
-                    {movies.map(x => <Movie poster={x.poster} name={x.name} session={sessionByDateAndCinema}/>)}
+                    {movies.map(x => <Movie movie_id={x.id} poster={x.poster} name={x.name} session={sessionByDateAndCinema}/>)}
                     {/*<div className={s.item}>*/}
                     {/*    <div className={s.title}>*/}
                     {/*        <img src={mov} alt="" width={200}/>*/}
