@@ -108,16 +108,21 @@ const Cinema: React.FC<CinemaProps> = () => {
         await setSessionByDateAndCinema(sessionByDate)
         console.log(sessionByDate)
     }
-    const switchSession = () => {
+    const switchSession = (divNumber : Number) => {
         const divs = document.querySelectorAll(".dayBlock");
-
+        if(divNumber === dateNumber) return;
+        else {
+            divs[dateNumber].classList.remove({s.active})
+            divs[divNumber].classList.add({s.active})
+        }
+        //
         console.log(divs)
     }
 
     useEffect(() => {
         fetchCinema()
         fetchDate()
-        fetchSessionBy(new Date().toISOString().substring(0, 10),)
+        fetchSessionBy(new Date().toISOString().substring(0, 10))
         fetchMovies()
         return () => {
             dispatch(setCinema(null))
@@ -157,7 +162,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                     {/*    </p>*/}
                     {/*</div>)}*/}
 
-                    <div className={`${s.dayBlock} ${s.active}`} onClick={switchSession}>
+                    <div className={`${s.dayBlock} ${s.active}`} onClick={() => {
+                        switchSession(0)
+                        fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[0]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[0]?.getDate()}</h3>
@@ -167,7 +175,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[0]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(1)
+                        fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[1]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[1]?.getDate()}</h3>
@@ -177,7 +188,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[1]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(2)
+                        fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[2]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[2]?.getDate()}</h3>
@@ -187,7 +201,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[2]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(3)
+                        fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[3]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[3]?.getDate()}</h3>
@@ -197,7 +214,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[3]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(4)
+                        fetchSessionBy(inputValues[4].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[4]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[4]?.getDate()}</h3>
@@ -207,7 +227,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[4]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(5)
+                        fetchSessionBy(inputValues[5].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[5]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[5]?.getDate()}</h3>
@@ -217,7 +240,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[5]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(6)
+                        fetchSessionBy(inputValues[6].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[6]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[6]?.getDate()}</h3>
@@ -227,7 +253,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[6]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(7)
+                        fetchSessionBy(inputValues[7].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[7]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[7]?.getDate()}</h3>
@@ -237,7 +266,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[7]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={switchSession}>
+                    <div className={s.dayBlock} onClick={() => {
+                        switchSession(8)
+                        fetchSessionBy(inputValues[8].toISOString().substring(0, 10))
+                    }}>
                         <h3>{inputValues[8]?.toLocaleString('default', {month: 'long'})}
                             {' '}
                             {inputValues[8]?.getDate()}</h3>
