@@ -8,10 +8,11 @@ import {IResTicket} from "../../utils/api/types";
 interface CartItemProps {
     disableBtn?: boolean
     ticket?: IResTicket | null
+    onClickTicketRemove?: ()=> void
 }
 
 
-const CartItem: React.FC<CartItemProps> = ({disableBtn = false, ticket = {}}) => {
+const CartItem: React.FC<CartItemProps> = ({disableBtn = false, ticket = {}, onClickTicketRemove}) => {
     const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
     return (
         <div className={`${s.item} ${disableBtn && s.disabled}`}>
@@ -31,7 +32,7 @@ const CartItem: React.FC<CartItemProps> = ({disableBtn = false, ticket = {}}) =>
                 {
                     !disableBtn && (
                         <>
-                            <button className={s.btn}>Cancel</button>
+                            <button className={s.btn} onClick={onClickTicketRemove}>Cancel</button>
                             <button className={s.btn} onClick={() => setPaymentEditFormOpened(true)}>Pay</button>
                         </>
                     )

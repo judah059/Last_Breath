@@ -15,8 +15,6 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = () => {
 
-    const order = useAppSelector((state: RootState) => state.session.order);
-
     const [tickets, setTickets] = useState<IResTicket[]>()
     const [snacks, setSnacks] = useState<IResSnack[]>()
 
@@ -33,6 +31,17 @@ const Cart: React.FC<CartProps> = () => {
         }
     }
 
+    const onClickSnackRemove = async (id: number) => {
+        console.log(id)
+        setSnacks(snacks?.filter(s=> s.id !== id))
+        const res = await  API.removeBoughtSnack(id)
+    }
+
+    const onClickTicketRemove = async (id: number) => {
+        setTickets(tickets?.filter(s=> s.id !== id))
+        const res = await API.removeTicket(id)
+    }
+
     useEffect(() => {
         fetchTicket()
     }, [])
@@ -44,7 +53,7 @@ const Cart: React.FC<CartProps> = () => {
                 <div className={s.items}>
                     {tickets?.length === 0 && <div>Cart is empty :(</div>}
                     {
-                        tickets?.map(t => <CartItem ticket={t}/>)
+                        tickets?.map(t => <CartItem ticket={t} onClickTicketRemove={()=>onClickTicketRemove(t.id)}/>)
                     }
                     <>
                         {
@@ -55,20 +64,15 @@ const Cart: React.FC<CartProps> = () => {
                                         <div className={s.info}>
                                             <h3>{sn.snack_detail.name}</h3>
                                             <p>Quantity: {sn.amount}</p>
+                                            <p>Total Price: ₴{sn.total_price}</p>
                                         </div>
                                     </div>
                                     <div className={s.right}>
-                                        {/*<p>{ticket?.session_detail?.date}<br/>{ticket?.session_detail?.start_time} - {ticket?.session_detail?.end_time}*/}
-                                        {/*</p>*/}
-
                                         <>
-                                            <button className={s.btn}>Cancel</button>
+                                            <button className={s.btn} onClick={()=>onClickSnackRemove(sn.id)}>Cancel</button>
                                             <button className={s.btn}>Pay</button>
                                         </>
                                     </div>
-                                    {/*<PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}*/}
-                                    {/*             onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}*/}
-                                    {/*             price={ticket?.session_detail?.base_price}/>*/}
                                 </div>
                             ))
                         }

@@ -59,6 +59,20 @@ export let API = {
             }
         }).then(res => res.data);
     },
+    removeBoughtSnack(id: number){
+        return baseApi2.delete(`bought_snack/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    removeTicket(id: number){
+        return baseApi2.delete(`ticket/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    }
 }
 
 export let userAPI = {
