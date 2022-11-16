@@ -262,3 +262,20 @@ export type IResSnack = {
     total_price: number
     user: number
 }
+
+export type IResPayment = {
+    id: number
+    user: {
+        id: number
+        username: string
+        first_name: string
+        last_name: string
+        birth_date: any
+        role: string
+        email: string
+    }
+    card_type: string
+    last_4: string
+    expire_date: string
+    stripe_id: string
+}

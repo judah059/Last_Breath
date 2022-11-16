@@ -12,7 +12,8 @@ const initialState: UserState = {
     role: '',
     email: '',
     isLoading: false,
-    error: ''
+    error: '',
+    payment: []
 }
 
 export const userSlice = createSlice({
@@ -29,7 +30,11 @@ export const userSlice = createSlice({
         },
         setError(state, action) {
             state.error = action.payload
+        },
+        setPayment(state, action){
+            state.payment = action.payload
         }
+
     },
     extraReducers: builder => {
         builder.addCase(getMe.pending, (state) => {
@@ -71,6 +76,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const {setEmptyUser, setError} = userSlice.actions;
+export const {setEmptyUser, setError, setPayment} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -4,6 +4,8 @@ import mov from "../../assets/tempMovieImage.jpg";
 import {IOrder} from "../../store/session/session.types";
 import PaymentForm from "../../components/Forms/EditingProfile/PaymentForm/PaymentForm";
 import {IResTicket} from "../../utils/api/types";
+import {useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
 
 interface CartItemProps {
     disableBtn?: boolean
@@ -13,7 +15,7 @@ interface CartItemProps {
 
 
 const CartItem: React.FC<CartItemProps> = ({disableBtn = false, ticket = {}, onClickTicketRemove}) => {
-    const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
+
     return (
         <div className={`${s.item} ${disableBtn && s.disabled}`}>
             <div className={s.left}>
@@ -33,14 +35,11 @@ const CartItem: React.FC<CartItemProps> = ({disableBtn = false, ticket = {}, onC
                     !disableBtn && (
                         <>
                             <button className={s.btn} onClick={onClickTicketRemove}>Cancel</button>
-                            <button className={s.btn} onClick={() => setPaymentEditFormOpened(true)}>Pay</button>
                         </>
                     )
                 }
             </div>
-            <PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
-                         onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}
-                         price={ticket?.session_detail?.base_price}/>
+
         </div>
     );
 };

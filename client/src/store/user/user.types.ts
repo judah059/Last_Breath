@@ -1,3 +1,5 @@
+import {IResPayment} from "../../utils/api/types";
+
 export interface UserState {
     id: number
     username: string
@@ -8,4 +10,5 @@ export interface UserState {
     email: string
     isLoading: boolean
     error: string
+    payment: IResPayment[]
 }
