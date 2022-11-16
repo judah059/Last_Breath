@@ -110,6 +110,7 @@ const Cinema: React.FC<CinemaProps> = () => {
     }
     const switchSession = () => {
         const divs = document.querySelectorAll(".dayBlock");
+
         console.log(divs)
     }
 
