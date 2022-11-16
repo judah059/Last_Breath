@@ -1,6 +1,7 @@
 import axios from "axios";
 import {IChangePassword, ICinema, IReqSessionByDate, IReqUser, IResUser, IUser} from "./types";
 import {getWithExpiry} from "../localStorage";
+import {ISession, ISnack} from "../../store/session/session.types";
 
 
 const cookieToken = getWithExpiry('access_token')
@@ -19,6 +20,12 @@ export let API = {
     getSession(cinemaId?: string, date?: Date) {
         return baseApi2.get(`session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
     },
+    getSessionById(id: number) {
+        return baseApi2.get<ISession>(`session/${id}`).then(res => res.data)
+    },
+    getSnackByCinemaID(id: number | undefined) {
+        return baseApi2.get<ISnack>(`filter/snack/${id}`).then(res => res.data)
+    },
     getCinemas() {
         return baseApi2.get<ICinema[]>(`cinema/`).then(res => res.data)
     },
@@ -28,6 +35,13 @@ export let API = {
     getCinema(id: string) {
         return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
     },
+    postTicket(data: {session_seat: number, session: number}){
+        return baseApi2.post<IResUser>(`ticket/`, data, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    }
 }
 
 export let userAPI = {

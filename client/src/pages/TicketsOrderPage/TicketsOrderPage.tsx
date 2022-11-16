@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TicketsHeader from "../../components/TicketsHeader/TicketsHeader";
 import s from './TicketsOrderPage.module.scss'
 import locationBadge from '../../assets/locationBadge.svg'
@@ -7,13 +7,77 @@ import clockBadge from '../../assets/clock.svg'
 import TicketsOrderInformationBlock from "./TicketsOrderInformationBlock";
 import {useNavigate} from "react-router-dom";
 import SeatElement from "./SeatElement/SeatElement";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
+import cinema from "../Cinema/Cinema";
+import {setRemoveTicket, setSessionById, setSnack, setTicket} from "../../store/session/session.slice";
+import {ITicket} from "../../store/session/session.types";
+import Ticket from "./Ticket/Ticket";
+import {API} from "../../utils/api";
 
 const TicketsOrderPage: React.FC = (props) => {
+    const session = useAppSelector((state: RootState) => state.session.current);
+    const tickets = useAppSelector((state: RootState) => state.session.ticket);
+    const dispatch = useAppDispatch()
 
     const navigate = useNavigate()
 
-    const snackPageLoader = () => {
-        navigate('/tickets-order/snack')
+    const [error, setError] = useState(false)
+
+    const snackPageLoader = async (id: number | undefined) => {
+
+        if (tickets.length !== 0) {
+            setError(false)
+            const data = await API.getSnackByCinemaID(id)
+            dispatch(setSnack(data))
+            navigate('/tickets-order/snack')
+        }else {
+            setError(true)
+        }
+
+    }
+
+
+    const date = session?.date.split("-").reverse().join("/")
+
+    console.log(date)
+
+    let thirdDate = session?.date
+
+    let firstDateDate = undefined
+
+    let day
+
+    if (thirdDate) {
+        firstDateDate = new Date(thirdDate);
+        console.log(firstDateDate)
+        day = firstDateDate.toLocaleString('en-us', {weekday: 'long'});
+    }
+
+    let startTime = session?.start_time.slice(0, session?.start_time.length - 3)
+    let endTime = session?.end_time.slice(0, session?.end_time.length - 3)
+
+    const onClickAddTicketOrder = (ticket: ITicket) => {
+        setError(false)
+        const findItem = tickets.find(e => +e.seat_id === +ticket.seat_id);
+        if (findItem) {
+            dispatch(setRemoveTicket(ticket.seat_id))
+        } else {
+            dispatch(setTicket(ticket))
+        }
+
+
+    }
+
+    const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
+    console.log(resultPrice)
+
+    const isSeatFree = (id: number) => {
+        return tickets.some(s => Number(s.seat_id) === Number(id))
+    }
+
+    const onClickRemove = (id: number) => {
+        dispatch(setRemoveTicket(id))
     }
 
     return (
@@ -24,24 +88,34 @@ const TicketsOrderPage: React.FC = (props) => {
                     <div className={s.topBlock}>
                         <>
                             <img
-                                src={"https://m.media-amazon.com/images/M/MV5BYzZkOGUwMzMtMTgyNS00YjFlLTg5NzYtZTE3Y2E5YTA5NWIyXkEyXkFqcGdeQXVyMjkwOTAyMDU@._V1_FMjpg_UY720_.jpg"}
+                                src={session?.movie_poster}
                                 className={s.poster} alt={'movieImage'}/>
                         </>
                         <div className={s.mediaBlock}>
-                            <span className={s.movieName}>Black Adam</span>
+                            <span className={s.movieName}>{session?.movie_name}</span>
                             <div className={s.textBoxWrapper}>
-                                <TicketsOrderInformationBlock badgeUrl={locationBadge} upperText={'Hall #1'}
-                                                              lowerText={'Cinema “KinoLand”'}/>
-                                <TicketsOrderInformationBlock badgeUrl={calendarBadge} upperText={'11.06.2022'}
-                                                              lowerText={'Saturday'}/>
+                                <TicketsOrderInformationBlock badgeUrl={locationBadge}
+                                                              upperText={`Hall #${session?.cinemahall}`}
+                                                              lowerText={`Cinema "${session?.cinemahall_detail.cinema_name}"`}/>
+                                <TicketsOrderInformationBlock badgeUrl={calendarBadge} upperText={date}
+                                                              lowerText={day}/>
                                 <TicketsOrderInformationBlock badgeUrl={clockBadge} upperText={'Time'}
-                                                              lowerText={'11:00 - 13:10'}/>
+                                                              lowerText={`${startTime} - ${endTime}`}/>
                             </div>
                         </div>
                     </div>
+
                     <div className={s.seats}>
-                        <SeatElement/>
-                        <SeatElement/>
+
+                        {session?.seats.map((x, i) => <SeatElement
+                            isSeatFree={isSeatFree}
+                            id={x.seat_id}
+                            onClickAddTicketOrder={() => onClickAddTicketOrder({
+                                seat_number: x.seat_number,
+                                seat_row: x.seat_row,
+                                price: x.seat_additional_price + session?.base_price,
+                                seat_id: x.seat_id
+                            })}/>)}
                     </div>
                 </div>
             </div>
@@ -54,14 +128,21 @@ const TicketsOrderPage: React.FC = (props) => {
                                     Tickets
                                 </div>
                                 <div className={s.ticketsCountPrice}>
-                                    0 tickets, 0 UAH
+                                    {tickets.length} tickets, {resultPrice} UAH
                                 </div>
                             </div>
-                            <div className={s.ticketList}></div>
+                            <div className={s.ticketList}>
+
+                                {tickets.map(x => <Ticket row={x.seat_row}
+                                                          place={x.seat_number}
+                                                          price={x.price}
+                                                          id={x.seat_id} onClickRemove={onClickRemove}/>)}
+                            </div>
                             <div className={s.label}>
                                 <div className={s.ticketText}>
                                     Bar goods
                                 </div>
+
                                 <div className={s.ticketsCountPrice}>
                                     0 items, 0 UAH
                                 </div>
@@ -74,11 +155,17 @@ const TicketsOrderPage: React.FC = (props) => {
                                     To pay
                                 </div>
                                 <div className={s.priceText}>
-                                    0 UAH
+                                    {resultPrice} UAH
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
-                                <button onClick={snackPageLoader} className={s.buttonProceed}>Proceed</button>
+                                {
+                                    error && <p>Please choose a seat</p>
+                                }
+                                <button onClick={() => snackPageLoader(session?.cinemahall_detail.cinema)}
+                                        className={s.buttonProceed}>Proceed
+                                </button>
+
                             </div>
                         </div>
                     </div>

@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({
 
     const isAuth = useAuth()
 
-    const {cinema} = useAppSelector((state: RootState) => state.session);
+    const {cinema} = useAppSelector((state: RootState) => state.cinema);
 
     return (
         <header className={s.header}>

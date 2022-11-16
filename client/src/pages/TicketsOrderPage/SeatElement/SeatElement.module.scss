@@ -4,4 +4,8 @@
   background: #FFFFFF;
   border: 1px solid #3430E0;
   border-radius: 3px;
+  cursor: pointer;
+  &.active {
+    background: #7168DF;
+  }
 }

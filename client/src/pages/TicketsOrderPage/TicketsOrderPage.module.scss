@@ -15,6 +15,8 @@ body {
       margin-left: 250px;
       margin-top: 150px;
       margin-bottom: 20px;
+      width: 480px;
+      justify-content: center;
     }
 
     .leftSide {
@@ -49,12 +51,14 @@ body {
           }
         }
       }
-      .underPosterText{
+
+      .underPosterText {
         margin: 20px 50px;
         font-size: 20px;
         line-height: 24px;
         color: #706565;
       }
+
       .snacks {
         display: flex;
         flex-wrap: wrap;
@@ -73,8 +77,11 @@ body {
 
         .topWrapper {
           height: calc(100vh - 145px);
+          overflow: auto;
+
           .label {
             display: flex;
+
             .ticketText {
               padding: 20px 30px;
               font-size: 32px;
@@ -91,6 +98,13 @@ body {
               display: flex;
               align-items: center;
             }
+          }
+
+          .ticketList {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
           }
         }
 
@@ -116,6 +130,11 @@ body {
             text-align: center;
             margin-top: 20px;
             margin-bottom: 20px;
+
+            p {
+              padding-bottom: 10px;
+              color: #9f2d2d;
+            }
 
             .buttonProceed {
               width: 500px;

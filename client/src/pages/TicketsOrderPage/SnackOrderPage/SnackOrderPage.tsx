@@ -8,8 +8,58 @@ import clockBadge from "../../../assets/clock.svg";
 import popcornBadge from "../../../assets/emojione_popcorn.svg"
 import drinkBadge from "../../../assets/mdi_drink.svg"
 import SnackOrderBlock from "./SnackOrderBlock/SnackOrderBlock";
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
+import {RootState} from "../../../store";
+import {setOrder, setRemoveSnackOrder, setRemoveTicket} from "../../../store/session/session.slice";
+import Ticket from "../Ticket/Ticket";
+import Snack from "./Snack/Snack";
+import {useNavigate} from "react-router-dom";
+import {API} from "../../../utils/api";
 
 const SnackOrderPage: React.FC = (props) => {
+
+    const dispatch = useAppDispatch()
+
+    const session = useAppSelector((state: RootState) => state.session.current);
+    const tickets = useAppSelector((state: RootState) => state.session.ticket);
+    const snacks = useAppSelector((state: RootState) => state.session.snack);
+    const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
+    const city = useAppSelector((state: RootState) => state.session.city);
+
+    const date = session?.date.split("-").reverse().join("/")
+
+    let thirdDate = session?.date
+
+    let firstDateDate = undefined
+
+    let day
+
+    if (thirdDate) {
+        firstDateDate = new Date(thirdDate);
+        console.log(firstDateDate)
+        day = firstDateDate.toLocaleString('en-us', {weekday: 'long'});
+    }
+
+    let startTime = session?.start_time.slice(0, session?.start_time.length - 3)
+    let endTime = session?.end_time.slice(0, session?.end_time.length - 3)
+
+    const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
+
+    const onClickRemove = (id: number) => {
+        dispatch(setRemoveTicket(id))
+    }
+
+    const onClickRemoveSnack = () => {
+        // dispatch(setRemoveSnackOrder())
+    }
+    const navigate = useNavigate()
+    const onClickProceed = async () => {
+        navigate('/cart')
+        dispatch(setOrder({tickets, snackOrder, session, city}))
+
+        // const res = await API.postTicket({})
+    }
+
     return (
         <div className={s.wrapper}>
             <div>
@@ -24,25 +74,20 @@ const SnackOrderPage: React.FC = (props) => {
                         <div className={s.mediaBlock}>
                             <span className={s.movieName}>Black Adam</span>
                             <div className={s.textBoxWrapper}>
-                                <TicketsOrderInformationBlock badgeUrl={locationBadge} upperText={'Hall #1'}
-                                                              lowerText={'Cinema “KinoLand”'}/>
-                                <TicketsOrderInformationBlock badgeUrl={calendarBadge} upperText={'11.06.2022'}
-                                                              lowerText={'Saturday'}/>
+                                <TicketsOrderInformationBlock badgeUrl={locationBadge}
+                                                              upperText={`Hall #${session?.cinemahall}`}
+                                                              lowerText={`Cinema "${session?.cinemahall_detail.cinema_name}"`}/>
+                                <TicketsOrderInformationBlock badgeUrl={calendarBadge} upperText={date}
+                                                              lowerText={day}/>
                                 <TicketsOrderInformationBlock badgeUrl={clockBadge} upperText={'Time'}
-                                                              lowerText={'11:00 - 13:10'}/>
+                                                              lowerText={`${startTime} - ${endTime}`}/>
                             </div>
                         </div>
                     </div>
                     <div className={s.underPosterText}>Buy online, pick up at a separate checkout. That's faster!</div>
                     <div className={s.snacks}>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
-                        <SnackOrderBlock emblem={popcornBadge} itemName={'Popcorn Super \n Cheese'} price={'180'}/>
+                        {snacks.map((x, index) => <SnackOrderBlock key={index} index={index} emblem={x.logo}
+                                                                   itemName={x.name} price={x.price} snack={x}/>)}
                     </div>
                 </div>
             </div>
@@ -55,8 +100,14 @@ const SnackOrderPage: React.FC = (props) => {
                                     Tickets
                                 </div>
                                 <div className={s.ticketsCountPrice}>
-                                    0 tickets, 0 UAH
+                                    {tickets.length} tickets, {resultPrice} UAH
                                 </div>
+                            </div>
+                            <div className={s.ticketList}>
+                                {tickets.map(x => <Ticket row={x.seat_row}
+                                                          place={x.seat_number}
+                                                          price={x.price}
+                                                          id={x.seat_id} onClickRemove={onClickRemove}/>)}
                             </div>
                             <div className={s.label}>
                                 <div className={s.ticketText}>
@@ -66,7 +117,12 @@ const SnackOrderPage: React.FC = (props) => {
                                     0 items, 0 UAH
                                 </div>
                             </div>
-                            <div className={s.snackList}></div>
+                            <div className={s.snackList}>
+                                {
+                                    snackOrder.map(s => <Snack id={s.id} logo={s.logo} name={s.name} price={s.price}
+                                                               onClickRemove={onClickRemoveSnack}/>)
+                                }
+                            </div>
                             <div className={s.ticketList}></div>
                         </div>
                         <div className={s.bottomWrapper}>
@@ -75,16 +131,16 @@ const SnackOrderPage: React.FC = (props) => {
                                     To pay
                                 </div>
                                 <div className={s.priceText}>
-                                    0 UAH
+                                    {resultPrice} UAH
                                 </div>
                             </div>
                             <div className={s.buttonWrapper}>
-                                <button className={s.buttonProceed}>Proceed</button>
+                                <button className={s.buttonProceed} onClick={onClickProceed}>Proceed</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     )
 };

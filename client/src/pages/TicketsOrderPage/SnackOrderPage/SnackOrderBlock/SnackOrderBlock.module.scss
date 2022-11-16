@@ -1,5 +1,6 @@
 .block {
   display: inline-block;
+  width: 160px;
 
   .emblemBlock {
     display: flex;
@@ -18,6 +19,7 @@
     }
     .itemName{
       padding-bottom: 10px;
+      text-align: center;
     }
   }
 
