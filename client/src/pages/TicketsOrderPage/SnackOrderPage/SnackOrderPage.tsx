@@ -63,7 +63,7 @@ const SnackOrderPage: React.FC = (props) => {
     const onClickProceed = async () => {
         dispatch(setEmptyTicket())
         try {
-            navigate('/cart')
+
             dispatch(setOrder({tickets, snackOrder, session, city}))
 
             for (let i = 0; i < tickets.length; i++) {
@@ -81,7 +81,7 @@ const SnackOrderPage: React.FC = (props) => {
                    await API.postSnack(obj);
                }
            }
-
+            navigate('/cart')
 
         } catch (e) {
             console.log(e)
