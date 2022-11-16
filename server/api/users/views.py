@@ -2,6 +2,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, viewsets, generics, status
+from rest_framework.exceptions import APIException
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -121,9 +122,12 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         try:
+            pk = self.kwargs.get('pk')
+            if pk:
+                return Ticket.objects.get(pk=pk, user=self.request.user.id)
             return Ticket.objects.get(user=self.request.user.id)
-        except Ticket.DoesNotExist:
-            raise Ticket()
+        except Ticket.DoesNotExist as e:
+            raise APIException({"error": e})
 
 
 class SessionFilteredView(generics.ListAPIView):
