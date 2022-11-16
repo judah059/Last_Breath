@@ -1,4 +1,5 @@
 export interface ISeat {
+    id: number
     seat_id: number
     seat_number: number,
     seat_row: number,
@@ -32,10 +33,11 @@ export interface ISessionState {
     snack: ISnack[]
     snackOrder: ISnack[]
     snackIndex: number
-    city: string
+    city: string,
 }
 
 export interface ITicket {
+    id:number
     seat_id: number
     seat_number: number,
     seat_row: number

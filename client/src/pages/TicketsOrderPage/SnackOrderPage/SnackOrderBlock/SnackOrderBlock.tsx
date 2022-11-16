@@ -15,6 +15,7 @@ interface SnackOrderBlockProps {
 
 const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
     const snackIndex = useAppSelector((state: RootState) => state.session.snackIndex);
+    const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
     const dispatch = useAppDispatch()
 
     const [itemCount, setItemCount] = useState(0)
@@ -22,6 +23,7 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
     const itemPlus = (snack: ISnack) => {
         setItemCount(itemCount + 1)
         dispatch(setSnackOrder(snack))
+        console.log(snackOrder)
     }
 
     const itemMinus = (index: number) => {

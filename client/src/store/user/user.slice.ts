@@ -4,6 +4,7 @@ import {getMe, updateMe} from "./user.actions";
 import {registration} from "../authentication/authentication.actions";
 
 const initialState: UserState = {
+    id: 0,
     username: '',
     first_name: '',
     last_name: '',
@@ -35,6 +36,7 @@ export const userSlice = createSlice({
             state.isLoading = true;
         })
         builder.addCase(getMe.fulfilled, (state, action) => {
+            state.id = action.payload.id || 0;
             state.username = action.payload.username || '';
             state.first_name = action.payload.first_name || '';
             state.last_name = action.payload.last_name || '';

@@ -17,7 +17,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {setCinema, setIsCinemaPage} from "../../store/cinema/cinema.slice";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
-import {setCity, setSessionById} from "../../store/session/session.slice";
+import {setCity, setEmptyTicket, setSessionById} from "../../store/session/session.slice";
 
 
 const MoviePage: React.FC = () => {
@@ -151,6 +151,7 @@ const MoviePage: React.FC = () => {
     }
 
     useEffect(() => {
+        dispatch(setEmptyTicket())
         fetchData()
         fetchSession()
 
@@ -160,9 +161,9 @@ const MoviePage: React.FC = () => {
             dispatch(setIsCinemaPage(true))
             dispatch(setCinema(null))
             dispatch(setCity(cinema?.location_details.city))
+
         }
     }, [])
-
 
     const navigate = useNavigate()
     const onClickTicketOpen = async (id: number) => {

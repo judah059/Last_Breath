@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TicketsHeader from "../../components/TicketsHeader/TicketsHeader";
 import s from './TicketsOrderPage.module.scss'
 import locationBadge from '../../assets/locationBadge.svg'
@@ -10,7 +10,7 @@ import SeatElement from "./SeatElement/SeatElement";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import cinema from "../Cinema/Cinema";
-import {setRemoveTicket, setSessionById, setSnack, setTicket} from "../../store/session/session.slice";
+import {setEmptyTicket, setRemoveTicket, setSessionById, setSnack, setTicket} from "../../store/session/session.slice";
 import {ITicket} from "../../store/session/session.types";
 import Ticket from "./Ticket/Ticket";
 import {API} from "../../utils/api";
@@ -31,7 +31,7 @@ const TicketsOrderPage: React.FC = (props) => {
             const data = await API.getSnackByCinemaID(id)
             dispatch(setSnack(data))
             navigate('/tickets-order/snack')
-        }else {
+        } else {
             setError(true)
         }
 
@@ -80,6 +80,12 @@ const TicketsOrderPage: React.FC = (props) => {
         dispatch(setRemoveTicket(id))
     }
 
+    useEffect(() => {
+        if (session === null) {
+            return navigate(-1);
+        }
+    }, [session]);
+
     return (
         <div className={s.wrapper}>
             <div>
@@ -108,13 +114,15 @@ const TicketsOrderPage: React.FC = (props) => {
                     <div className={s.seats}>
 
                         {session?.seats.map((x, i) => <SeatElement
+                            isFree={x.is_free}
                             isSeatFree={isSeatFree}
-                            id={x.seat_id}
+                            id={x.id}
                             onClickAddTicketOrder={() => onClickAddTicketOrder({
                                 seat_number: x.seat_number,
                                 seat_row: x.seat_row,
                                 price: x.seat_additional_price + session?.base_price,
-                                seat_id: x.seat_id
+                                seat_id: x.seat_id,
+                                id: x.id
                             })}/>)}
                     </div>
                 </div>
