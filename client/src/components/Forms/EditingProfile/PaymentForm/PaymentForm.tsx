@@ -85,12 +85,25 @@ const MyForm: React.FC = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className={s.myForm}>
-            <CardElement />
-            <button type="submit" disabled={!stripe || !elements} className={s.buttonSave}>
-                Pay
-            </button>
-        </form>
+        <div className={s.card}>
+            <form id={'payment-form'} onSubmit={handleSubmit}>
+                <label htmlFor={"card-element"}>Payment</label>
+                <div className={s.line}></div>
+                {/*<div className={s.cardNumber}>*/}
+                {/*    <div className={s.cardNumberText}>*/}
+                {/*        Card Number*/}
+                {/*    </div>*/}
+                {/*    <div className={s.cardBody}>*/}
+                {/*        <CardNumberElement id={'card-element'}/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                <CardElement className={s.cardBody} id={'card-element'}/>
+                <button className={s.button} type="submit" disabled={!stripe || !elements}>Pay</button>
+                <div className={s.underButtonText}>
+                    Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
+                </div>
+            </form>
+        </div>
     );
 };
 

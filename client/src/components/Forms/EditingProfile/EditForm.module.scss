@@ -89,3 +89,95 @@
     border: 1px solid black !important;
   }
 }
+
+.card {
+  display: flex;
+  color: black;
+
+  .cardBody {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  label {
+    margin-left: 35px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 50px;
+    /* or 138% */
+
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.02em;
+
+    color: #0A0D13;
+  }
+
+  .line {
+    margin-top: 5px;
+    margin-bottom: 30px;
+    margin-left: 5%;
+    border: 1.77334px solid #ACACAC;
+    transform: rotate(0.08deg);
+    width: 90%;
+  }
+
+  .button {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 21px;
+    text-align: center;
+    color: white;
+    margin-left: 32%;
+    height: 55px;
+    width: 35%;
+    text-align: center;
+    background: #D83D3D;
+    border-radius: 10px;
+    margin-top: 35px;
+  }
+
+  .underButtonText {
+    margin-top: 25px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 39px;
+    text-align: center;
+    color: #ACACAC;
+  }
+
+  .cardNumber {
+    margin-left: 40px;
+
+    .cardNumberText {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 27px;
+      line-height: 39px;
+      /* or 144% */
+      /* Text */
+      color: #0A0D13;
+    }
+
+    .cardBody {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 21px;
+      line-height: 39px;
+      /* or 186% */
+
+
+      /* Stroke */
+
+      color: #ACACAC;
+      border: 2.66001px solid #ACACAC;
+      border-radius: 7.09336px;
+    }
+  }
+}

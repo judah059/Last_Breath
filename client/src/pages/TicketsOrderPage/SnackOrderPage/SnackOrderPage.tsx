@@ -21,11 +21,13 @@ import Ticket from "../Ticket/Ticket";
 import Snack from "./Snack/Snack";
 import {useNavigate} from "react-router-dom";
 import {API} from "../../../utils/api";
+import {useAuth} from "../../../utils/hooks/useAuth";
 
 const SnackOrderPage: React.FC = (props) => {
 
     const dispatch = useAppDispatch()
 
+    const snackIndex = useAppSelector((state: RootState) => state.session.snackIndex);
     const session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
     const snacks = useAppSelector((state: RootState) => state.session.snack);
@@ -51,14 +53,17 @@ const SnackOrderPage: React.FC = (props) => {
     let startTime = session?.start_time.slice(0, session?.start_time.length - 3)
     let endTime = session?.end_time.slice(0, session?.end_time.length - 3)
 
-    const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
+    const ticketPrice = tickets.reduce((a, b) => a + b.price, 0)
+    const snacksPrice = snackOrder.reduce((a, b) => a + b.price, 0)
+
+    const resultPrice = ticketPrice + snacksPrice
 
     const onClickRemove = (id: number) => {
         dispatch(setRemoveTicket(id))
     }
 
     const onClickRemoveSnack = () => {
-        // dispatch(setRemoveSnackOrder())
+        dispatch(setRemoveSnackOrder(snackIndex))
     }
     const navigate = useNavigate()
     const onClickProceed = async () => {
@@ -86,25 +91,6 @@ const SnackOrderPage: React.FC = (props) => {
             } else {
                 setError(true)
             }
-            // dispatch(setOrder({tickets, snackOrder, session, city}))
-            //
-            // for (let i = 0; i < tickets.length; i++) {
-            //     await API.postTicket({session: session?.id, session_seat: tickets[i].id});
-            // }
-            //
-            //
-            // if(snackOrder.length !== 0){
-            //     for (let i = 0; i < snacks.length; i++) {
-            //         let obj = {
-            //             amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
-            //             snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
-            //             user: user.id
-            //         }
-            //         await API.postSnack(obj);
-            //     }
-            // }
-            // navigate('/cart')
-
         } catch (e) {
             console.log(e)
         }
@@ -156,7 +142,7 @@ const SnackOrderPage: React.FC = (props) => {
                                     Tickets
                                 </div>
                                 <div className={s.ticketsCountPrice}>
-                                    {tickets.length} tickets, {resultPrice} UAH
+                                    {tickets.length} tickets, {ticketPrice} UAH
                                 </div>
                             </div>
                             <div className={s.ticketList}>
@@ -170,7 +156,7 @@ const SnackOrderPage: React.FC = (props) => {
                                     Bar goods
                                 </div>
                                 <div className={s.ticketsCountPrice}>
-                                    0 items, 0 UAH
+                                    {snackOrder.length} items, {snacksPrice} UAH
                                 </div>
                             </div>
                             <div className={s.snackList}>

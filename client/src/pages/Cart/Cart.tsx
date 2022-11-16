@@ -51,7 +51,7 @@ const Cart: React.FC<CartProps> = () => {
             <HeaderDrawer toLinkText='Account'/>
             <div className={s.container}>
                 <div className={s.items}>
-                    {tickets?.length === 0 && <div>Cart is empty :(</div>}
+                    {(tickets?.length === 0 && snacks?.length === 0) && <div>Cart is empty :(</div>}
                     {
                         tickets?.map(t => <CartItem ticket={t} onClickTicketRemove={()=>onClickTicketRemove(t.id)}/>)
                     }

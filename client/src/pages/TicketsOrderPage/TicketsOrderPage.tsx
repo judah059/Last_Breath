@@ -10,36 +10,41 @@ import SeatElement from "./SeatElement/SeatElement";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import cinema from "../Cinema/Cinema";
-import {setEmptyTicket, setRemoveTicket, setSessionById, setSnack, setTicket} from "../../store/session/session.slice";
+import {
+    setEmptyTicket,
+    setRemoveSnackOrder,
+    setRemoveTicket,
+    setSessionById,
+    setSnack,
+    setTicket
+} from "../../store/session/session.slice";
 import {ITicket} from "../../store/session/session.types";
 import Ticket from "./Ticket/Ticket";
 import {API} from "../../utils/api";
+import Snack from "./SnackOrderPage/Snack/Snack";
+import {useAuth} from "../../utils/hooks/useAuth";
 
 const TicketsOrderPage: React.FC = (props) => {
+    const snackIndex = useAppSelector((state: RootState) => state.session.snackIndex);
     let session = useAppSelector((state: RootState) => state.session.current);
     const tickets = useAppSelector((state: RootState) => state.session.ticket);
+    const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
     const dispatch = useAppDispatch()
+    const isAuth = useAuth()
 
     const navigate = useNavigate()
 
     const [error, setError] = useState(false)
 
     const snackPageLoader = async (id: number | undefined) => {
-
-        const data = await API.getSnackByCinemaID(id)
-        dispatch(setSnack(data))
-        navigate('/tickets-order/snack')
-
-
-        // if (tickets.length !== 0) {
-        //     setError(false)
-        //     const data = await API.getSnackByCinemaID(id)
-        //     dispatch(setSnack(data))
-        //     navigate('/tickets-order/snack')
-        // } else {
-        //     setError(true)
-
-
+        if (isAuth) {
+            setError(false)
+            const data = await API.getSnackByCinemaID(id)
+            dispatch(setSnack(data))
+            navigate('/tickets-order/snack')
+        } else {
+            setError(true)
+        }
     }
 
 
@@ -74,8 +79,10 @@ const TicketsOrderPage: React.FC = (props) => {
 
     }
 
-    const resultPrice = tickets.reduce((a, b) => a + b.price, 0)
-    console.log(resultPrice)
+    const ticketPrice = tickets.reduce((a, b) => a + b.price, 0)
+    const snacksPrice = snackOrder.reduce((a, b) => a + b.price, 0)
+
+    const resultPrice = ticketPrice + snacksPrice
 
     const isSeatFree = (id: number) => {
         return tickets.some(s => Number(s.seat_id) === Number(id))
@@ -90,6 +97,10 @@ const TicketsOrderPage: React.FC = (props) => {
             return navigate(-1);
         }
     }, [session]);
+
+    const onClickRemoveSnack = () => {
+        dispatch(setRemoveSnackOrder(snackIndex))
+    }
 
     return (
         <div className={s.wrapper}>
@@ -140,11 +151,10 @@ const TicketsOrderPage: React.FC = (props) => {
                                     Tickets
                                 </div>
                                 <div className={s.ticketsCountPrice}>
-                                    {tickets.length} tickets, {resultPrice} UAH
+                                    {tickets.length} tickets, {ticketPrice} UAH
                                 </div>
                             </div>
                             <div className={s.ticketList}>
-
                                 {tickets.map(x => <Ticket row={x.seat_row}
                                                           place={x.seat_number}
                                                           price={x.price}
@@ -154,12 +164,16 @@ const TicketsOrderPage: React.FC = (props) => {
                                 <div className={s.ticketText}>
                                     Bar goods
                                 </div>
-
                                 <div className={s.ticketsCountPrice}>
-                                    0 items, 0 UAH
+                                    {snackOrder.length} items, {snacksPrice} UAH
                                 </div>
                             </div>
-                            <div className={s.snackList}></div>
+                            <div className={s.snackList}>
+                                {
+                                    snackOrder.map(s => <Snack id={s.id} logo={s.logo} name={s.name} price={s.price}
+                                                               onClickRemove={onClickRemoveSnack}/>)
+                                }
+                            </div>
                         </div>
                         <div className={s.bottomWrapper}>
                             <div className={s.toPayTextAndPrice}>
@@ -172,12 +186,11 @@ const TicketsOrderPage: React.FC = (props) => {
                             </div>
                             <div className={s.buttonWrapper}>
                                 {
-                                    error && <p>Please choose a seat</p>
+                                    error && <p>Please register/auth</p>
                                 }
                                 <button onClick={() => snackPageLoader(session?.cinemahall_detail.cinema)}
                                         className={s.buttonProceed}>Proceed
                                 </button>
-
                             </div>
                         </div>
                     </div>
