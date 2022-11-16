@@ -5,6 +5,11 @@
   border: 1px solid #3430E0;
   border-radius: 3px;
   cursor: pointer;
+
+  &.free{
+    pointer-events: none;
+    background: #464C51;
+  }
   &.active {
     background: #7168DF;
   }

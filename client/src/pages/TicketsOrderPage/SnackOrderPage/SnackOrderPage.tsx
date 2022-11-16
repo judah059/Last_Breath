@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import s from "./SnackOrderPage.module.scss";
 import TicketsHeader from "../../../components/TicketsHeader/TicketsHeader";
 import TicketsOrderInformationBlock from "../TicketsOrderInformationBlock";
@@ -10,7 +10,13 @@ import drinkBadge from "../../../assets/mdi_drink.svg"
 import SnackOrderBlock from "./SnackOrderBlock/SnackOrderBlock";
 import {useAppDispatch, useAppSelector} from "../../../utils/hooks/redux";
 import {RootState} from "../../../store";
-import {setOrder, setRemoveSnackOrder, setRemoveTicket} from "../../../store/session/session.slice";
+import {
+    setEmptyTicket,
+    setOrder,
+    setRemoveSnackOrder,
+    setRemoveTicket,
+    setTicket
+} from "../../../store/session/session.slice";
 import Ticket from "../Ticket/Ticket";
 import Snack from "./Snack/Snack";
 import {useNavigate} from "react-router-dom";
@@ -25,6 +31,7 @@ const SnackOrderPage: React.FC = (props) => {
     const snacks = useAppSelector((state: RootState) => state.session.snack);
     const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
     const city = useAppSelector((state: RootState) => state.session.city);
+    const user = useAppSelector((state: RootState) => state.user);
 
     const date = session?.date.split("-").reverse().join("/")
 
@@ -54,11 +61,33 @@ const SnackOrderPage: React.FC = (props) => {
     }
     const navigate = useNavigate()
     const onClickProceed = async () => {
-        navigate('/cart')
-        dispatch(setOrder({tickets, snackOrder, session, city}))
+        dispatch(setEmptyTicket())
+        try {
+            navigate('/cart')
+            dispatch(setOrder({tickets, snackOrder, session, city}))
 
-        // const res = await API.postTicket({})
+            for (let i = 0; i < tickets.length; i++) {
+                await API.postTicket({session: session?.id, session_seat: tickets[i].id});
+            }
+
+
+            for (let i = 0; i < snacks.length; i++) {
+                let obj = {
+                    amount: snackOrder.filter(s => s.id === snacks[i].id)?.length,
+                    snack: snackOrder.filter(s => s.id === snacks[i].id)[0]?.id,
+                    user: user.id
+                }
+                await API.postSnack(obj);
+            }
+
+
+        } catch (e) {
+            console.log(e)
+            alert(e)
+        }
+
     }
+
 
     return (
         <div className={s.wrapper}>

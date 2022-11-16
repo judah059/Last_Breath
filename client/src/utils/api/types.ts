@@ -162,6 +162,7 @@ export interface IHall {
             ]
 }
 export interface IUser {
+    id?: number
     username?: string
     first_name?: string
     last_name?: string
@@ -211,4 +212,37 @@ export interface iChangePayment {
     card_number: string
     expiration_date: string
     cvv: number
+}
+
+export interface IResTicket {
+    id: number
+    total_price: number
+    is_payed: boolean
+    session: number
+    session_seat: number
+    seat_detail: {
+        id: number
+        seat_id: number
+        seat_number: number
+        seat_row: number
+        seat_additional_price: number
+        is_free: boolean
+    }
+    session_detail: {
+        id: number
+        date: string
+        start_time: string
+        end_time: string
+        base_price: number
+        movie: number
+        movie_name: string
+        movie_poster: string
+        cinemahall: number
+        cinemahall_detail: {
+            id: number
+            number: number
+            cinema: number
+            cinema_name: string
+        }
+    }
 }
