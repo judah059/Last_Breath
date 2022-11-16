@@ -259,16 +259,21 @@ class PaymentPostSerializer(ModelSerializer):
         return Payments.save(self, validated_data=validated_data)
 
 
-class BoughtSnackSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BoughtSnack
-        fields = "__all__"
-
-
 class SnackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snack
         fields = "__all__"
+
+
+class BoughtSnackSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    is_payed = serializers.BooleanField(read_only=True)
+    total_price = serializers.IntegerField(read_only=True)
+    snack_detail = SnackSerializer(read_only=True, source="snack")
+
+    class Meta:
+        model = BoughtSnack
+        fields = ["id", "amount", "is_payed", "snack", "snack_detail","total_price",  "user"]
 
 
 class TransactionPOSTSerializer(serializers.ModelSerializer):
