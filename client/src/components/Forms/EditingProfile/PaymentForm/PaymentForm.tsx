@@ -105,25 +105,28 @@ const MyForm: React.FC = () => {
     }
 
     return (
-        // <div className={s.card}>
-        //     <form id={'payment-form'} onSubmit={handleSubmit}>
-        //         <label htmlFor={"card-element"}>Payment</label>
-        //         <div className={s.line}></div>
-        //         <CardElement className={s.cardBody} id={'card-element'}/>
-        //         <button className={s.button} type="submit" disabled={!stripe || !elements}>Pay</button>
-        //         <div className={s.underButtonText}>
-        //             Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
-        //         </div>
-        //     </form>
-        // </div>
-        <form onSubmit={handleSubmit} className={s.myForm}>
-            <CardElement/>
-            <div className={s.btnBlock}>
-                <button type="submit" disabled={!stripe || !elements} className={s.buttonSave}>
-                    Add card
-                </button>
-            </div>
-        </form>
+        <div className={s.card}>
+            <form id={'payment-form'} onSubmit={handleSubmit}>
+                <label htmlFor={"card-element"}>Payment</label>
+                <div className={s.line}></div>
+                <CardElement className={s.cardBody} id={'card-element'}/>
+                <div className={s.btnBlock}>
+                    <button className={s.button} type="submit" disabled={!stripe || !elements}>Add card</button>
+                </div>
+                {/*<button className={s.button} type="submit" disabled={!stripe || !elements}>Add card</button>*/}
+                <div className={s.underButtonText}>
+                    Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.
+                </div>
+            </form>
+        </div>
+        // <form onSubmit={handleSubmit} className={s.myForm}>
+        //     <CardElement/>
+        //     <div className={s.btnBlock}>
+        //         <button type="submit" disabled={!stripe || !elements} className={s.buttonSave}>
+        //             Add card
+        //         </button>
+        //     </div>
+        // </form>
     );
 };
 

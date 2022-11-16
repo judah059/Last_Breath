@@ -31,7 +31,7 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({totalPrice, onClickPayme
                 onClickPaymentChangeFormClose()
             }
 
-            navigate('/main')
+            navigate('/payment-history')
             const res = await API.postTransaction(selectedCardId)
 
 
