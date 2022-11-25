@@ -13,6 +13,10 @@ const StartPage: React.FC = () => {
         navigate('/main')
     }
 
+    const cinemaOnlineLoader = () => {
+        navigate('/online')
+    }
+
     return (
         <div>
             <div className={s.wrapper}>
@@ -25,7 +29,7 @@ const StartPage: React.FC = () => {
                         <button onClick={mainLoader}>BUY TICKET</button>
                     </div>
                     <div className={s.watch_online}>
-                        <button>WATCH ONLINE</button>
+                        <button onClick={cinemaOnlineLoader}>WATCH ONLINE</button>
                     </div>
                 </div>
             </div>

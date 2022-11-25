@@ -1,0 +1,26 @@
+.content {
+  padding-top: 70px;
+  padding-left: 30px;
+
+  .categoryName {
+    padding-left: 2px;
+  }
+
+  .serial {
+    gap: 15px;
+    display: flex;
+
+    .seriesBlock {
+      text-align: center;
+      padding-top: 30px;
+
+      img {
+        width: 400px;
+        height: 250px;
+      }
+
+      .name {
+      }
+    }
+  }
+}

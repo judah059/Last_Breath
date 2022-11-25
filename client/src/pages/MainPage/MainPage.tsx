@@ -18,7 +18,6 @@ const MainPage: React.FC = () => {
     const token = getWithExpiry('access_token')
 
 
-
     useEffect(() => {
         dispatch(getMe(token))
 
@@ -27,7 +26,7 @@ const MainPage: React.FC = () => {
     return (
         <>
             <HeaderDrawer toLinkText='Now In Cinema'/>
-           <NowInCinema/>
+            <NowInCinema/>
         </>
     )
 };
