@@ -1,5 +1,6 @@
 import React from 'react';
 import s from './CategoryItem.module.scss'
+import SerialItem from "./SerialItem/SerialItem";
 
 interface CategoryItemPros {
     categoryName: string
@@ -13,30 +14,9 @@ const CategoryItem: React.FC<CategoryItemPros> = (props) => (
             {props.categoryName}
         </div>
         <div className={s.serial}>
-            <div className={s.seriesBlock}>
-                <div>
-                    <img src={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} alt={'poster'}/>
-                </div>
-                <div className={s.name}>
-                    Object name
-                </div>
-            </div>
-            <div className={s.seriesBlock}>
-                <div>
-                    <img src={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} alt={'poster'}/>
-                </div>
-                <div className={s.name}>
-                    Object name
-                </div>
-            </div>
-            <div className={s.seriesBlock}>
-                <div>
-                    <img src={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} alt={'poster'}/>
-                </div>
-                <div className={s.name}>
-                    Object name
-                </div>
-            </div>
+            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
+            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
+            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
         </div>
     </div>
 );

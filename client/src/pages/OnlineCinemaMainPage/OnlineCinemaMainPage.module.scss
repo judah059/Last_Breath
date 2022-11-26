@@ -1,0 +1,36 @@
+.bottom {
+  padding-left: 50px;
+  padding-bottom: 15px;
+
+  .divider {
+    opacity: 0.8;
+    width: 100%;
+    margin-bottom: 25px;
+    margin-top: 40px;
+
+    p {
+      margin-top: 16px;
+      color: #988B8B;
+    }
+  }
+
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      //margin-bottom: 40px;
+
+      img {
+        margin-right: 10px;
+      }
+    }
+
+  }
+}
