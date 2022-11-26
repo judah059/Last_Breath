@@ -81,4 +81,5 @@ urlpatterns = [
     path('api/filter/snack/<int:pk_cinema>/', SnackFilterView.as_view()),
     path('api/', include(routerBoughtSnack.urls)),
     path('api/', include(routerTransaction.urls)),
+    path('api/', include('onlineWatch.urls')),
 ]

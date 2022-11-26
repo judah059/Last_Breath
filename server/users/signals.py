@@ -28,14 +28,11 @@ def transaction_post_save(sender, instance=None, created=False, **kwargs):
     if created:
         basket = instance.basket
         user = instance.basket.user
-        print(user.snacks.all().filter(is_payed=False))
-        print(user.snacks)
         if user.snacks.all().filter(is_payed=False):
             for item in user.snacks.all():
                 if not item.is_payed:
                     item.is_payed = True
                     item.save()
-        print(user.tickets.all())
         if user.tickets.all():
             for item in user.tickets.all():
                 if not item.is_payed:
