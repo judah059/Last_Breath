@@ -1,8 +1,13 @@
-import React, {useState} from 'react';
-import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
-import s from "../MoviePage/MoviePage.module.scss";
+import React, {useEffect, useState} from 'react';
+import s from "./MovieOnlinePage.module.scss";
 import play from "../../assets/play-button.png";
-import {ITestMovieItem} from "../../utils/api/types";
+import {IOnlineMovie, ISeries} from "../../utils/api/types";
+import {useParams} from "react-router-dom";
+import {API} from "../../utils/api";
+import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
+import VideoPlayer from "./VideoPlayer";
+import {useHorizontalScroll} from "../../utils/hooks/useHorizontalScroll";
+
 
 interface MovieOnlinePageProps {
 
@@ -11,61 +16,130 @@ interface MovieOnlinePageProps {
 
 const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
-    const [movie, setMovie] = useState<ITestMovieItem | null>(null)
+    const {id} = useParams()
+    const [isFetching, setIsFetching] = useState(true)
+    const [movie, setMovie] = useState<IOnlineMovie | null>(null)
+    const [selectedSeason, setSelectedSeason] = useState(1)
+    const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
+
+    const scrollRef = useHorizontalScroll();
+
+    useEffect(() => {
+        fetchMovie()
+        setIsFetching(false)
+    }, [])
+
+    const fetchMovie = async () => {
+        try {
+            // const resMovie = await API.getOnlineMovie(id)
+            const resMovie = await API.getSerial(id)
+            setMovie(resMovie)
+            setSelectedEpisode(resMovie?.seasons[0]?.series[0])
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
+    const onClickSeason = (season: number) => {
+        setSelectedSeason(season)
+        setSelectedEpisode(movie?.seasons[season - 1]?.series[0])
+    }
+
+    const onClickEpisode = (episode: ISeries) => {
+        setSelectedEpisode(episode)
+    }
+
 
     return (
         <div>
-            <HeaderDrawer toLinkText='Now In Cinema'/>
-                    <div>
-                        <div className={s.page__flex__Container}>
-                            <div className={s.movie__poster}>
-                                <div className={s.movie__poster__Container}>
-                                    <div className={s.image__Container}>
-                                        <img src={movie?.poster}/>
-                                    </div>
-                                </div>
-                                <div className={s.movie__poster__trailer__container}>
-                                    <div>
-                                        <img src={play} alt=""/>
-                                        <div className={s.poster__trailer__text}>Watch trailer</div>
-                                    </div>
+            <OnlineCHeaderCommon toLinkText={'Online'}/>
+            {
+                isFetching ? <div>Loading...</div> : <>
+                    <div className={s.page__flex__Container}>
+                        <div className={s.movie__poster}>
+                            <div className={s.movie__poster__Container}>
+                                <div className={s.image__Container}>
+                                    <img src={movie?.poster} alt="poster"/>
                                 </div>
                             </div>
-                            <div className={s.main__info}>
-                                <div className={s.main__info__title}>{movie?.name}</div>
-                                <div className={s.main__info__flex}>
-                                    <div>
-                                        <div className={s.main__info__text}>Age rating:</div>
-                                        <div className={s.main__info__text}>Release year:</div>
-                                        <div className={s.main__info__text}>Producer:</div>
-                                        <div className={s.main__info__text}>Genre:</div>
-                                        <div className={s.main__info__text}>Duration:</div>
-                                        <div className={s.main__info__text}>Studio:</div>
-                                        <div className={s.main__info__text}>Starring:</div>
-                                    </div>
-                                    <div>
-                                        <div className={s.main__info__text}>{movie?.ageLimit}</div>
-                                        <div className={s.main__info__text}>{movie?.release_date}</div>
-                                        <div className={s.main__info__text}>{movie?.producer}</div>
-                                        <div className={s.main__info__text}>Нет такого</div>
-                                        <div className={s.main__info__text}>{movie?.length}</div>
-                                        <div className={s.main__info__text}>Нет такого</div>
-                                        <div className={s.main__info__text}>{movie?.cast}</div>
-                                    </div>
+                            <div className={s.movie__poster__trailer__container}>
+                                <div>
+                                    <img src={play} alt=""/>
+                                    <div className={s.poster__trailer__text}>Watch trailer</div>
                                 </div>
                             </div>
                         </div>
+                        <div className={s.main__info}>
+                            <div className={s.main__info__title}>{movie?.name}</div>
+                            <div className={s.main__info__flex}>
 
-                        <div className={s.main__info__description}>Lorem ipsum dolor sit amet, consectetur adipisicing
+                                <div>
+                                    <div className={s.main__info__text}>Age rating:</div>
+                                    <div className={s.main__info__text}>Release date:</div>
+                                    <div className={s.main__info__text}>Producer:</div>
+                                    <div className={s.main__info__text}>Genre:</div>
+                                    <div className={s.main__info__text}>Duration:</div>
+                                    <div className={s.main__info__text}>Cast:</div>
+                                </div>
+
+                                <div>
+                                    <div className={s.main__info__text}>{movie?.ageLimit}</div>
+                                    <div className={s.main__info__text}>{movie?.release_date}</div>
+                                    <div className={s.main__info__text}>{movie?.producer}</div>
+                                    <div className={s.main__info__text}>{movie?.main_genre}</div>
+                                    <div className={s.main__info__text}>{movie?.length} min</div>
+                                    <div className={s.main__info__text}>{movie?.cast}</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={s.main__content}>
+                        <p className={s.main__content__description}>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
                             elit. Accusamus consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat
                             illum labore qui quia quibusdam, quis soluta totam veniam voluptas! Alias,
                             reprehenderit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus
                             consequuntur debitis deleniti dolore ducimus eaque enim explicabo fugiat illum labore qui
                             quia quibusdam, quis soluta totam veniam voluptas! Alias, reprehenderit!
-                        </div>
+                        </p>
 
+
+                        <div className={s.main__content__video}>
+                            <div className={s.main__content__series}>
+                                <ul ref={scrollRef}>
+                                    {
+                                        movie?.seasons?.map(el => <li
+                                            className={el.number === selectedSeason ? s.active : ''}
+                                            onClick={() => onClickSeason(el.number)}
+                                        > {el.number}&nbsp;season</li>)
+                                    }
+                                </ul>
+                            </div>
+
+                            <VideoPlayer
+                                videoUrl={`${selectedEpisode?.video}`}/>
+
+                            <div className={s.main__content__series}>
+                                <ul ref={scrollRef}>
+
+                                    {
+                                        movie?.seasons[selectedSeason - 1]?.series?.map(el => <li
+                                            className={el.number === selectedEpisode?.number ? s.active : ''}
+                                            onClick={() => onClickEpisode(el)}
+                                        > {el?.number}&nbsp;episode</li>)
+                                    }
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
+
+                </>
+            }
 
 
         </div>

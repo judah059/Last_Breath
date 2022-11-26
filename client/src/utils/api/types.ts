@@ -23,6 +23,9 @@ export interface ITestMovieItem {
 }
 
 
+
+
+
 export interface ISession {
     "base_price": number,
     "cinemahall": number,
@@ -278,4 +281,36 @@ export type IResPayment = {
     last_4: string
     expire_date: string
     stripe_id: string
+}
+
+export interface ISeries {
+    id: number
+    number: number
+    video: string
+    season: number
+}
+
+export interface ISerial{
+    seasons: Array<{
+        number: number
+        series: Array<ISeries>
+    }>
+}
+
+export interface IOnlineMovie extends ISerial{
+    id: number
+    name: string
+    video: string
+    poster: string
+    trailer: string
+    premier: string
+    release_date: string
+    length: number
+    cast: string
+    ageLimit: string
+    producer: string
+    language: string
+    country: string
+    main_genre: string
+    genre_list: Array<string>
 }

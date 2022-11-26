@@ -1,13 +1,13 @@
 import axios from "axios";
 import {
     IChangePassword,
-    ICinema,
+    ICinema, IOnlineMovie,
     IReqSessionByDate,
     IReqUser,
     IResPayment,
     IResSnack,
     IResTicket,
-    IResUser,
+    IResUser, ISerial,
     IUser
 } from "./types";
 import {getWithExpiry} from "../localStorage";
@@ -99,6 +99,21 @@ export let API = {
     },
     postTransaction(payment: number){
         return baseApi2.post(`transaction/`,{payment}, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+
+    getOnlineMovie(id?: string){
+        return baseApi2.get<IOnlineMovie>(`online/watch/film/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    getSerial(id?: string){
+        return baseApi2.get<IOnlineMovie>(`online/watch/serial/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
