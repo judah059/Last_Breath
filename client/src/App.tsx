@@ -15,6 +15,9 @@ import {API} from "./utils/api";
 import {setPayment} from "./store/user/user.slice";
 import {useAppDispatch} from "./utils/hooks/redux";
 import OnlineCinemaMainPage from "./pages/OnlineCinemaMainPage/OnlineCinemaMainPage";
+import MovieOnlinePage from "./pages/MovieOnlinePage/MovieOnlinePage";
+import {getWithExpiry} from "./utils/localStorage";
+import {getMe} from "./store/user/user.actions";
 
 
 const App: React.FC = () => {
@@ -22,10 +25,13 @@ const App: React.FC = () => {
     const fetchPayment = async () => {
         const res = await API.getPayment();
         dispatch(setPayment(res))
+
     }
+    const token = getWithExpiry('access_token')
 
     useEffect(() => {
         fetchPayment()
+        dispatch(getMe(token))
     }, [])
 
     return (
@@ -43,6 +49,7 @@ const App: React.FC = () => {
                 <Route path='payment-history' element={<PaymentHistory/>}></Route>
                 <Route path='cinema/:id' element={<Cinema/>}></Route>
                 <Route path='online' element={<OnlineCinemaMainPage/>}></Route>
+                <Route path='online/watch/:id' element={<MovieOnlinePage/>}></Route>
             </Routes>
         </div>
     );
