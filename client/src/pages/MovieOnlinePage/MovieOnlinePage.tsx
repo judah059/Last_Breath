@@ -5,8 +5,9 @@ import {IOnlineMovie, ISeries} from "../../utils/api/types";
 import {useParams} from "react-router-dom";
 import {API} from "../../utils/api";
 import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
-import VideoPlayer from "./VideoPlayer";
 import {useHorizontalScroll} from "../../utils/hooks/useHorizontalScroll";
+import ReactPlayer from "react-player";
+import Comments from "./Comments/Comments";
 
 
 interface MovieOnlinePageProps {
@@ -23,6 +24,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
 
     const scrollRef = useHorizontalScroll();
+
 
     useEffect(() => {
         fetchMovie()
@@ -110,7 +112,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
                         <div className={s.main__content__video}>
                             <div className={s.main__content__series}>
-                                <ul ref={scrollRef}>
+                                <ul>
                                     {
                                         movie?.seasons?.map(el => <li
                                             className={el.number === selectedSeason ? s.active : ''}
@@ -120,10 +122,9 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                 </ul>
                             </div>
 
-                            <VideoPlayer
-                                videoUrl={`${selectedEpisode?.video}`}/>
+                            <ReactPlayer url={`${selectedEpisode?.video}`} controls/>
 
-                            <div className={s.main__content__series}>
+                            <div className={s.main__content__series} >
                                 <ul ref={scrollRef}>
 
                                     {
@@ -135,6 +136,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                 </ul>
                             </div>
                         </div>
+                        <Comments/>
                     </div>
 
 

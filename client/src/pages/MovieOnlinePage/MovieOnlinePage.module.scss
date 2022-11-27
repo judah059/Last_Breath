@@ -1,12 +1,9 @@
 .page__flex__Container {
   display: flex;
-  font-family: 'Montserrat';
-  //justify-content: center
+
 }
 
 .movie__poster__Container {
-  //display: flex;
-  //max-width: 800px;
   img {
     max-width: 350px;
   }
@@ -31,8 +28,7 @@
 }
 
 .movie__poster__trailer__container {
-  //flex: 0 1 40px;
-  //display: inline-block;
+
   max-width: 220px;
   background-color: whitesmoke;
   border-radius: 15px;
@@ -113,19 +109,18 @@
 
   .main__content__video {
     margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding-bottom: 20px;
 
+    display: grid;
+    justify-items: center;
 
 
     .main__content__series {
       margin-top: 20px;
+      width: 640px;
 
       ul {
         display: flex;
-        overflow: auto;
+        overflow-x: scroll;
         max-width: 640px;
 
         /* scroll style */
@@ -146,11 +141,12 @@
           background-color: #62527e;
           padding: 20px;
           cursor: pointer;
+
           &:hover {
             background-color: #563c7c;
           }
 
-          &.active{
+          &.active {
             background-color: #3f2d50;
           }
         }
