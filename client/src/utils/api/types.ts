@@ -40,12 +40,14 @@ export interface ISession {
     "movie_name": number,
     "movie_poster": number,
     "seats": Array<object>,
-    "start_time":string
+    "start_time": string
 }
+
 export interface niceBackEnd {
-    "cinema" : string,
-    "time" : string,
+    "cinema": string,
+    "time": string,
 }
+
 export interface ICinema {
     "id": number,
     "name": string,
@@ -76,6 +78,7 @@ export interface IReqSessionByDate {
     date?: string
     cinema?: number
 }
+
 export interface IResUser {
     refresh: string
     access: string
@@ -85,27 +88,26 @@ export interface ISessionItem {
     label: string,
     dates: Array<string>
 }
+
 export interface ISessionByDate {
     "id": number,
     "halls": [
-    {
-        "id": number,
-        "number": number,
-        "sessions": [
-            {
-                "id": number,
-                "date": string,
-                "start_time": string,
-                "end_time": string,
-                "base_price": number,
-                "movie": number,
-                "cinemahall": number,
-                "seats": []
-            }
-        ]
-    }]
-
-
+        {
+            "id": number,
+            "number": number,
+            "sessions": [
+                {
+                    "id": number,
+                    "date": string,
+                    "start_time": string,
+                    "end_time": string,
+                    "base_price": number,
+                    "movie": number,
+                    "cinemahall": number,
+                    "seats": []
+                }
+            ]
+        }]
 
 
     // "id": number,
@@ -133,7 +135,25 @@ export interface ISessionByDate {
     //     }
     // ]
 }
+
 export interface ISessionEmptyArray {
+    "id": number,
+    "date": string,
+    "start_time": string,
+    "end_time": string,
+    "base_price": number,
+    "movie": number,
+    "cinemahall": number,
+    "seats": []
+
+
+}
+
+export interface IHall {
+    "id": number,
+    "number": number,
+    "sessions": [
+        {
             "id": number,
             "date": string,
             "start_time": string,
@@ -142,25 +162,10 @@ export interface ISessionEmptyArray {
             "movie": number,
             "cinemahall": number,
             "seats": []
-
-
+        }
+    ]
 }
-export interface IHall {
-            "id": number,
-            "number": number,
-            "sessions": [
-                {
-                    "id": number,
-                    "date": string,
-                    "start_time": string,
-                    "end_time": string,
-                    "base_price": number,
-                    "movie": number,
-                    "cinemahall": number,
-                    "seats": []
-                }
-            ]
-}
+
 export interface IUser {
     id?: number
     username?: string
@@ -278,4 +283,17 @@ export type IResPayment = {
     last_4: string
     expire_date: string
     stripe_id: string
+}
+
+export type IOnlineCinemaItem = {
+    id: number
+    name: string
+    poster: string
+    ageLimit: number
+}
+
+export type IOnlineCinemaItems = {
+    name: string
+    films: IOnlineCinemaItem[]
+    serials: IOnlineCinemaItem[]
 }

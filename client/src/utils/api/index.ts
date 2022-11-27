@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
     IChangePassword,
-    ICinema,
+    ICinema, IOnlineCinemaItems,
     IReqSessionByDate,
     IReqUser,
     IResPayment,
@@ -146,5 +146,11 @@ export let userAPI = {
                 Authorization: "Bearer " + token || cookieToken
             }
         }).then(res => res.data)
+    }
+}
+
+export let OnlineAPI = {
+    getOnlineWatch() {
+        return baseApi2.get('online/watch/').then(res => res.data)
     }
 }

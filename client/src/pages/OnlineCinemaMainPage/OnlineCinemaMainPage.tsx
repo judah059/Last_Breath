@@ -1,18 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
 import CategoryItem from "./CategoryItem/CategoryItem";
 import phone from "../../assets/phone.svg";
 import telegram from "../../assets/telegram.svg";
 import viber from "../../assets/viber.svg";
 import s from './OnlineCinemaMainPage.module.scss'
+import {IOnlineCinemaItems} from "../../utils/api/types";
+import {OnlineAPI} from "../../utils/api";
 
 const OnlineCinemaMainPage: React.FC = (props) => {
+
+    const [onlineItems, setOnlineItems] = useState<IOnlineCinemaItems[]>([])
+
+    const fetchOnlineItems = async () => {
+        try {
+            const onlineItems = await OnlineAPI.getOnlineWatch()
+            setOnlineItems(onlineItems)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // const isEmpthy = () => {
+    // }
+
+    useEffect(() => {
+        fetchOnlineItems()
+    }, [])
+
     return (
         <>
             <OnlineCHeaderCommon toLinkText={'Online'}/>
-            <CategoryItem categoryName={'POPULAR SERIES'}/>
-            <CategoryItem categoryName={'POPULAR SERIES'}/>
-            <CategoryItem categoryName={'POPULAR SERIES'}/>
+            {onlineItems.map(o => o.films.length == 0 && o.serials.length == 0 ? <></> : <CategoryItem categoryName={o.name} films={o.films} serials={o.serials}/>)}
             <div className={s.bottom}>
                 <div className={s.divider}>
                     <p>Support</p>

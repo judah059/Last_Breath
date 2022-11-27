@@ -1,11 +1,12 @@
 import React from 'react';
 import s from './CategoryItem.module.scss'
 import SerialItem from "./SerialItem/SerialItem";
+import {IOnlineCinemaItem} from "../../../utils/api/types";
 
 interface CategoryItemPros {
     categoryName: string
-    // poster: string
-    // name: string
+    films: IOnlineCinemaItem[]
+    serials: IOnlineCinemaItem[]
 }
 
 const CategoryItem: React.FC<CategoryItemPros> = (props) => (
@@ -14,9 +15,8 @@ const CategoryItem: React.FC<CategoryItemPros> = (props) => (
             {props.categoryName}
         </div>
         <div className={s.serial}>
-            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
-            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
-            <SerialItem poster={'https://thumbs.dfs.ivi.ru/storage32/contents/7/8/f59c54b1e43edd7fa8bdc94df8bff6.jpg/858x483/?q=60'} name={'Object name'}/>
+            {props.films.slice(0, 3).map(f => <SerialItem poster={f.poster} name={f.name}/>)}
+            {props.serials.slice(0, 3).map(f => <SerialItem poster={f.poster} name={f.name}/>)}
         </div>
     </div>
 );
