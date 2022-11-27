@@ -8,6 +8,8 @@ import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeade
 import {useHorizontalScroll} from "../../utils/hooks/useHorizontalScroll";
 import ReactPlayer from "react-player";
 import Comments from "./Comments/Comments";
+import {useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
 
 
 interface MovieOnlinePageProps {
@@ -25,6 +27,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
     const scrollRef = useHorizontalScroll();
 
+    const itemType = useAppSelector((state: RootState) => state.onlineItem.itemType)
+
 
     useEffect(() => {
         fetchMovie()
@@ -34,10 +38,12 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const fetchMovie = async () => {
         try {
             // const resMovie = await API.getOnlineMovie(id)
-            const resMovie = await API.getSerial(id)
+            const resMovie = await API.getSerial(id, itemType)
             setMovie(resMovie)
-            setSelectedEpisode(resMovie?.seasons[0]?.series[0])
+            if (itemType === 'serial') {
+                setSelectedEpisode(resMovie?.seasons[0]?.series[0])
 
+            }
         } catch (e) {
             console.log(e)
         }
@@ -111,30 +117,32 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
 
                         <div className={s.main__content__video}>
-                            <div className={s.main__content__series}>
-                                <ul>
-                                    {
-                                        movie?.seasons?.map(el => <li
-                                            className={el.number === selectedSeason ? s.active : ''}
-                                            onClick={() => onClickSeason(el.number)}
-                                        > {el.number}&nbsp;season</li>)
-                                    }
-                                </ul>
-                            </div>
+                            {itemType === 'film' ? <></> :
+                                <div className={s.main__content__series}>
+                                    <ul>
+                                        {
+                                            movie?.seasons?.map(el => <li
+                                                className={el.number === selectedSeason ? s.active : ''}
+                                                onClick={() => onClickSeason(el.number)}
+                                            > {el.number}&nbsp;season</li>)
+                                        }
+                                    </ul>
+                                </div>}
 
-                            <ReactPlayer url={`${selectedEpisode?.video}`} controls/>
+                            <ReactPlayer url={`${itemType==='film' ? movie?.video : selectedEpisode?.video}`} controls/>
 
-                            <div className={s.main__content__series} >
-                                <ul ref={scrollRef}>
+                            {itemType === 'film' ? <></> :
+                                <div className={s.main__content__series}>
+                                    <ul ref={scrollRef}>
 
-                                    {
-                                        movie?.seasons[selectedSeason - 1]?.series?.map(el => <li
-                                            className={el.number === selectedEpisode?.number ? s.active : ''}
-                                            onClick={() => onClickEpisode(el)}
-                                        > {el?.number}&nbsp;episode</li>)
-                                    }
-                                </ul>
-                            </div>
+                                        {
+                                            movie?.seasons[selectedSeason - 1]?.series?.map(el => <li
+                                                className={el.number === selectedEpisode?.number ? s.active : ''}
+                                                onClick={() => onClickEpisode(el)}
+                                            > {el?.number}&nbsp;episode</li>)
+                                        }
+                                    </ul>
+                                </div>}
                         </div>
                         <Comments/>
                     </div>

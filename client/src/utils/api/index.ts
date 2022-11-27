@@ -112,8 +112,8 @@ export let API = {
             }
         }).then(res => res.data);
     },
-    getSerial(id?: string){
-        return baseApi2.get<IOnlineMovie>(`online/watch/serial/${id}/`, {
+    getSerial(id?: string, itemType?: string){
+        return baseApi2.get<IOnlineMovie>(`online/watch/${itemType}/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

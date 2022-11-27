@@ -3,6 +3,7 @@ import {authSlice} from "./authentication/authentication.slice";
 import {userSlice} from "./user/user.slice";
 import {cinemaSlice} from "./cinema/cinema.slice";
 import {sessionSlice} from "./session/session.slice";
+import {onlineItemSlice} from "./onlineItem/onlineItem.slice";
 
 
 const store = configureStore({
@@ -10,7 +11,8 @@ const store = configureStore({
         auth: authSlice.reducer,
         user: userSlice.reducer,
         cinema: cinemaSlice.reducer,
-        session: sessionSlice.reducer
+        session: sessionSlice.reducer,
+        onlineItem: onlineItemSlice.reducer
     },
 });
 

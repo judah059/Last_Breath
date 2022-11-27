@@ -2,13 +2,16 @@ import React from 'react';
 import s from "../CategoryItem.module.scss";
 
 interface SerialItemProps {
+    id: number
+    type: string
     poster: string
     name: string
+    onClickAction: (id: number, type: string) => void
 }
 
 const SerialItem: React.FC<SerialItemProps> = (props) => {
     return (
-        <div className={s.seriesBlock}>
+        <div className={s.seriesBlock} onClick={() => props.onClickAction(props.id, props.type)}>
             <div>
                 <img src={props.poster} alt={'poster'}/>
             </div>
