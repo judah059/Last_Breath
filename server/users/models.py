@@ -52,7 +52,7 @@ class Movie(models.Model):
     trailer = models.TextField(null=False)  # url
     premier = models.TextField()
     release_date = models.DateField()
-    length = models.IntegerField()
+    length = models.IntegerField()  # TODO: IntegerField -> TextField
     cast = models.TextField()  # Я бы сделал отдельную таблицу под актёров
     ageLimit = models.TextField()  # или .IntegerField() Если будем сравнивать напрямую с User
     producer = models.TextField()  # тоже что и с актёрами
