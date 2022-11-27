@@ -16,6 +16,8 @@ import {setPayment} from "./store/user/user.slice";
 import {useAppDispatch} from "./utils/hooks/redux";
 import OnlineCinemaMainPage from "./pages/OnlineCinemaMainPage/OnlineCinemaMainPage";
 import MovieOnlinePage from "./pages/MovieOnlinePage/MovieOnlinePage";
+import {getWithExpiry} from "./utils/localStorage";
+import {getMe} from "./store/user/user.actions";
 
 
 const App: React.FC = () => {
@@ -23,10 +25,13 @@ const App: React.FC = () => {
     const fetchPayment = async () => {
         const res = await API.getPayment();
         dispatch(setPayment(res))
+
     }
+    const token = getWithExpiry('access_token')
 
     useEffect(() => {
         fetchPayment()
+        dispatch(getMe(token))
     }, [])
 
     return (
