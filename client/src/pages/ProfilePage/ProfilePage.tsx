@@ -13,6 +13,7 @@ import EmailEdit from "../../components/Forms/EditingProfile/EmailEditForm";
 import UsernameEdit from "../../components/Forms/EditingProfile/UsernameEditForm";
 import PasswordEditForm from "../../components/Forms/EditingProfile/PasswordEditForm";
 import PaymentChangeForm from "../../components/Forms/EditingProfile/PaymentChangeForm/PaymentChangeForm";
+import PaymentForm from "../../components/Forms/EditingProfile/PaymentForm/PaymentForm";
 
 const ProfilePage: React.FC = (props) => {
     const [isUsernameEditFormOpened, setUsernameEditFormOpened] = useState(false)
@@ -21,6 +22,7 @@ const ProfilePage: React.FC = (props) => {
     const [isPasswordEditFormOpened, setPasswordEditFormOpened] = useState(false)
     const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
     const [isDeleteFormOpened, setDeleteFormOpened] = useState(false)
+
     const [selectedSettingName, setSelectedSettingName] = useState('')
 
     const {email, username, birth_date} = useAppSelector((state: RootState) => state.user);
@@ -82,8 +84,10 @@ const ProfilePage: React.FC = (props) => {
                                  onClickDateOfBirthClose={() => setDateOfBirthEditOpened(false)}/>
             <PasswordEditForm isPasswordEditFormOpened={isPasswordEditFormOpened} onClickUsernameEditClose={
                 () => setPasswordEditFormOpened(false)}/>
-            <PaymentChangeForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
-                               onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}/>
+            <PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
+                         onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}
+                         isProfilePage
+                         />
         </div>
     )
 };
