@@ -7,7 +7,7 @@ import {
     IResPayment,
     IResSnack,
     IResTicket,
-    IResUser, ISerial,
+    IResUser,
     IUser
 } from "./types";
 import {getWithExpiry} from "../localStorage";
@@ -114,6 +114,13 @@ export let API = {
     },
     getSerial(id?: string, itemType?: string){
         return baseApi2.get<IOnlineMovie>(`online/watch/${itemType}/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    deletePayment(id: number){
+        return baseApi2.delete(`/payment/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

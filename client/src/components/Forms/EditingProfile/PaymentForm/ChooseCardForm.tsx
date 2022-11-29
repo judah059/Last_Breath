@@ -23,8 +23,10 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
 
     const payment = useAppSelector((state: RootState) => state.user.payment);
     const [selectedCardId, setSelectedCardId] = useState<number>(-1)
+    const [reload, setReload] = useState(false)
 
     const onClickCard = (id: number) => {
+        console.log(id)
         setSelectedCardId(id)
     }
 
@@ -33,9 +35,12 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
     const onClickPay = async () => {
 
         try {
+
+
             if (onClickPaymentChangeFormClose) {
                 onClickPaymentChangeFormClose()
             }
+
 
             navigate('/payment-history')
             const res = await API.postTransaction(selectedCardId)
@@ -45,6 +50,16 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
             console.log(e)
         }
     }
+    const onClickDelete = async () => {
+        try {
+            await API.deletePayment(selectedCardId)
+            alert('Deleted successfully')
+            setReload(true)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     const dispatch = useAppDispatch()
     const fetchPayment = async () => {
         const res = await API.getPayment();
@@ -54,8 +69,10 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
 
     useEffect(() => {
         fetchPayment()
-    }, [])
+    }, [reload])
 
+
+    console.log('RENDER')
     return (
         <div className={s.container}>
             {selectedCardId === -1 && <p className={s.title}>Please choose a card</p>}
@@ -78,7 +95,7 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
             }
             <div className={s.btnBlock}>
                 {
-                    isProfilePage ? <button className={s.buttonSave}>Delete</button> :
+                    isProfilePage ? <button className={s.buttonSave} onClick={onClickDelete}>Delete</button> :
                         <>
                             {selectedCardId !== -1 && <button className={s.buttonSave} onClick={onClickPay}>
                                 Pay ₴{totalPrice}
