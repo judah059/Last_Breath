@@ -3,7 +3,8 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState: IOnlineItemType = {
     id: '',
-    itemType: ''
+    itemType: '',
+    isLoading: true
 }
 
 export const onlineItemSlice = createSlice(
@@ -16,11 +17,14 @@ export const onlineItemSlice = createSlice(
             },
             setItemId(state, action) {
                 state.id = action.payload
+            },
+            setIsLoading(state, action){
+                state.isLoading = action.payload
             }
         }
     }
 )
 
-export const {setItemType, setItemId} = onlineItemSlice.actions
+export const {setItemType, setItemId, setIsLoading} = onlineItemSlice.actions
 
 export default onlineItemSlice.reducer
