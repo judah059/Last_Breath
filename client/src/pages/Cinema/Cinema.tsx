@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import HeaderDrawer from "../../components/HeaderDrawer/HeaderDrawer";
 import s from './Cinema.module.scss'
 import mov from "../../assets/tempMovieImage.jpg";
@@ -11,7 +11,7 @@ import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {setCinema} from "../../store/cinema/cinema.slice";
 import {RootState} from "../../store";
 import Movie from "../MoviePage/Movie/Movie";
-
+import * as events from "events";
 
 interface CinemaProps {
 
@@ -25,14 +25,13 @@ const Cinema: React.FC<CinemaProps> = () => {
     const [sessionByDateAndCinema, setSessionByDateAndCinema] = useState<ISessionByDate>()
     const [movie, setMovie] = useState<ITestMovieItem | undefined>(undefined);
     const {id} = useParams() as { id: string };
-
     const [currCinema, setCurrCinema] = useState<ICinema>()
     const dispatch = useAppDispatch();
     const {cinema, isCinemaPage} = useAppSelector((state: RootState) => state.cinema);
     const [dateNumber, setDateNumber] = useState<number>(0)
     const [movies, setMovies] = useState<IMovieItem[]>([])
     const [noHalls, setNoHallse] = useState<Boolean>(false)
-
+    const div0 = useRef<HTMLDivElement | null>(null)
 
     const fetchMovies = async () => {
         try {
@@ -65,12 +64,26 @@ const Cinema: React.FC<CinemaProps> = () => {
             console.log(e)
         }
     }
+    const handleClick = (event : Event)  => {
+        // 👇️ toggle class on click
+        // event?.currentTarget?.classList.toggle(`${s.dayBlock}`);
 
+        // 👇️ add class on click
+        // event.currentTarget.classList.add('bg-salmon');
+
+        // 👇️ remove class on click
+        // event.currentTarget.classList.remove('bg-salmon');
+    };
+    const a =() => {
+
+    }
+    const switchSession = async (divNumber : number) => {
+        if (divNumber === dateNumber) return;
+        setDateNumber(divNumber)
+    }
     const fetchSessionBy = async (date: string) => {
-
         const movie: ITestMovieItem = await API.getCinemaMovie(id);
         setMovie(movie)
-
         const sessionsByDate: ISessionByDate[] = await API.getSessionByDate({date: date, cinema: cinema?.id});
         let sessionByDate: ISessionByDate = sessionsByDate[0];
         let hallsLength = sessionByDate.halls.length
@@ -108,17 +121,6 @@ const Cinema: React.FC<CinemaProps> = () => {
         await setSessionByDateAndCinema(sessionByDate)
         console.log(sessionByDate)
     }
-    const switchSession = async (divNumber : number) => {
-        const divs = document.querySelectorAll(".dayBlock");
-        if (divNumber === dateNumber) return;
-        else {
-            divs[dateNumber].classList.remove(s.active)
-            divs[divNumber].classList.add(s.active)
-            setDateNumber(divNumber)
-        }
-        //
-        console.log(divs)
-    }
 
     useEffect(() => {
         fetchCinema()
@@ -131,6 +133,7 @@ const Cinema: React.FC<CinemaProps> = () => {
     }, [id])
 
 
+    // @ts-ignore
     return (
         <>
             <HeaderDrawer toLinkText='Cinema Name'/>
@@ -163,7 +166,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                     {/*    </p>*/}
                     {/*</div>)}*/}
 
-                    <div className={`${s.dayBlock} ${s.active}`} onClick={() => {
+                    <div className={dateNumber == 0 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(0)
                         fetchSessionBy(inputValues[0].toISOString().substring(0, 10))
                     }}>
@@ -176,9 +179,10 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[0]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 1 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(1)
                         fetchSessionBy(inputValues[1].toISOString().substring(0, 10))
+
                     }}>
                         <h3>{inputValues[1]?.toLocaleString('default', {month: 'long'})}
                             {' '}
@@ -189,7 +193,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[1]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 2 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(2)
                         fetchSessionBy(inputValues[2].toISOString().substring(0, 10))
                     }}>
@@ -202,7 +206,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[2]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 3 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(3)
                         fetchSessionBy(inputValues[3].toISOString().substring(0, 10))
                     }}>
@@ -215,7 +219,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[3]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 4 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(4)
                         fetchSessionBy(inputValues[4].toISOString().substring(0, 10))
                     }}>
@@ -228,7 +232,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[4]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 5 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(5)
                         fetchSessionBy(inputValues[5].toISOString().substring(0, 10))
                     }}>
@@ -241,7 +245,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[5]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 6 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(6)
                         fetchSessionBy(inputValues[6].toISOString().substring(0, 10))
                     }}>
@@ -254,7 +258,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[6]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 7 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(7)
                         fetchSessionBy(inputValues[7].toISOString().substring(0, 10))
                     }}>
@@ -267,7 +271,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                             {' '}
                             {inputValues[7]?.getDate()}</p>
                     </div>
-                    <div className={s.dayBlock} onClick={() => {
+                    <div className={dateNumber == 8 ? `${s.dayBlock} ${s.active}` : `${s.dayBlock}`}  onClick={() => {
                         switchSession(8)
                         fetchSessionBy(inputValues[8].toISOString().substring(0, 10))
                     }}>
@@ -283,7 +287,7 @@ const Cinema: React.FC<CinemaProps> = () => {
                 </div>
                 <div className={s.divider}></div>
                 <div className={s.movieBlock}>
-                    {movies.map(x => <Movie movie_id={x.id} poster={x.poster} name={x.name} session={sessionByDateAndCinema}/>)}
+                    {movies.map(x => <Movie  movie_id={x.id} poster={x.poster} date={inputValues[dateNumber].toISOString().substring(0, 10)} name={x.name} />)}
                     {/*<div className={s.item}>*/}
                     {/*    <div className={s.title}>*/}
                     {/*        <img src={mov} alt="" width={200}/>*/}
