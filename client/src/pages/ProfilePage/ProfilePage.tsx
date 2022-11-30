@@ -67,7 +67,7 @@ const ProfilePage: React.FC = (props) => {
                                        setFormOpened={() => setPaymentEditFormOpened(true)}
                         />
                         <SettingObject settingName='Subscription' settingContent='Premium'
-                                        setFormOpened={onClickToSub}
+                                        setFormOpened={onClickToSub} isSub
                         />
                         <SettingObject settingName='Password' settingContent='*********'
                                        setFormOpened={() => setPasswordEditFormOpened(true)}
