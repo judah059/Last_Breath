@@ -18,6 +18,7 @@ import OnlineCinemaMainPage from "./pages/OnlineCinemaMainPage/OnlineCinemaMainP
 import MovieOnlinePage from "./pages/MovieOnlinePage/MovieOnlinePage";
 import {getWithExpiry} from "./utils/localStorage";
 import {getMe} from "./store/user/user.actions";
+import SubscriptionPage from "./pages/SubscriptionPage/SubscriptionPage";
 
 
 const App: React.FC = () => {
@@ -36,7 +37,6 @@ const App: React.FC = () => {
 
     return (
         <div className="wrapper">
-
             <Routes>
                 <Route path='/' element={<StartPage/>}></Route>
                 <Route path='main' element={<MainPage/>}></Route>
@@ -50,6 +50,7 @@ const App: React.FC = () => {
                 <Route path='cinema/:id' element={<Cinema/>}></Route>
                 <Route path='online' element={<OnlineCinemaMainPage/>}></Route>
                 <Route path='online/watch/:id' element={<MovieOnlinePage/>}></Route>
+                <Route path='subscription' element={<SubscriptionPage/>}></Route>
             </Routes>
         </div>
     );

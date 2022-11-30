@@ -25,10 +25,13 @@ const ProfilePage: React.FC = (props) => {
 
     const {email, username, birth_date} = useAppSelector((state: RootState) => state.user);
 
-
     const isAuth = useAuth()
 
     let navigate = useNavigate();
+
+    const onClickToSub = () => {
+        navigate('../subscription')
+    }
 
     useEffect(() => {
         if (!isAuth) {
@@ -61,7 +64,9 @@ const ProfilePage: React.FC = (props) => {
                         <SettingObject settingName='Payment method' settingContent='**** 4444'
                                        setFormOpened={() => setPaymentEditFormOpened(true)}
                         />
-                        <SettingObject settingName='Subscription' settingContent='Premium'/>
+                        <SettingObject settingName='Subscription' settingContent='Premium'
+                                        setFormOpened={onClickToSub}
+                        />
                         <SettingObject settingName='Password' settingContent='*********'
                                        setFormOpened={() => setPasswordEditFormOpened(true)}
                         />

@@ -1,0 +1,55 @@
+.wrapper {
+  background-color: white;
+  height: 100vh;
+  color: black;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #000000;
+
+    .logo {
+      padding-bottom: 20px;
+      padding-left: 30px;
+      padding-top: 10px;
+    }
+
+    .lefSide {
+      padding-right: 40px;
+      cursor: pointer;
+
+      &:hover {
+        color: #a43939;
+      }
+    }
+  }
+
+  .planText {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 32px;
+  }
+
+  .wrapperBox {
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-evenly;
+
+    .textLine {
+      display: flex;
+      flex-flow: column;
+      gap: 50px;
+      margin-top: 120px;
+      color: #857272;
+    }
+  }
+
+  .lowerSide {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+  }
+}
