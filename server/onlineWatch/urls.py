@@ -18,6 +18,12 @@ routerSeason.register(r'season', DevSeasonViewSet, basename='season')
 routerSeries = routers.SimpleRouter()
 routerSeries.register(r'series', DevSeriesViewSet, basename='series')
 
+routerSubscription = routers.SimpleRouter()
+routerSubscription.register(r'subscription', SubscriptionViewSet, basename='subscription')
+
+routerClientSub = routers.SimpleRouter()
+routerClientSub.register(r'client-subscription', ClientSubscriptionViewSet, basename='client-subscription')
+
 urlpatterns = [
     path('online/', include(routerGenre.urls)),
     path('online/', include(routerFilm.urls)),
@@ -27,4 +33,7 @@ urlpatterns = [
     path('online/watch/film/<int:pk>/', GetFilmPage.as_view()),
     path('online/watch/serial/<int:pk>/', GetSerialPage.as_view()),
     path('online/watch/', MainPageView.as_view()),
+    path('online/', include(routerSubscription.urls)),
+    path('online/', include(routerClientSub.urls)),
+
 ]

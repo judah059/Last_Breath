@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
+from api.users.serializers import MyUserProfileSerializer
 from users.models import *
 from onlineWatch.models import *
 
@@ -96,3 +97,27 @@ class GetAllRelatedToGenre(ModelSerializer):
     class Meta:
         model = Genre
         fields = ["name", "films", "serials"]
+
+
+class SubscriptionSerializer(ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+
+class ClientSubscriptionPOSTSerializer(ModelSerializer):
+
+    class Meta:
+        model = ClientSubscription
+        fields = (
+            'subscription',
+        )
+
+
+class ClientSubscriptionGETSerializer(ModelSerializer):
+    client = MyUserProfileSerializer()
+    subscription = SubscriptionSerializer()
+
+    class Meta:
+        model = ClientSubscription
+        fields = '__all__'
