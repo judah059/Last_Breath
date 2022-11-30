@@ -14,10 +14,10 @@
     .seriesBlock {
       text-align: center;
       padding-top: 30px;
-
+      cursor: pointer;
       img {
-        width: 400px;
-        height: 250px;
+        width: 300px;
+        max-height: 400px;
       }
 
       .name {

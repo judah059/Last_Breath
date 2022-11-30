@@ -11,7 +11,7 @@ const initialState: UserState = {
     birth_date: '',
     role: '',
     email: '',
-    isLoading: false,
+    isLoading: true,
     error: '',
     payment: []
 }

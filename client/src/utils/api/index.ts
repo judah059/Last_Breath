@@ -1,13 +1,14 @@
 import axios from "axios";
 import {
     IChangePassword,
-    ICinema, IOnlineMovie,
+    ICinema,
+    IOnlineMovie,
     IReqSessionByDate,
     IReqUser,
     IResPayment,
     IResSnack,
     IResTicket,
-    IResUser, ISerial,
+    IResUser,
     IUser
 } from "./types";
 import {getWithExpiry} from "../localStorage";
@@ -69,51 +70,64 @@ export let API = {
             }
         }).then(res => res.data);
     },
-    removeBoughtSnack(id: number){
+    removeBoughtSnack(id: number) {
         return baseApi2.delete(`bought_snack/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    removeTicket(id: number){
+    removeTicket(id: number) {
         return baseApi2.delete(`ticket/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    getPayment(){
+    getPayment() {
         return baseApi2.get<IResPayment[]>(`payment/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    postPayment(token?: string){
-        return baseApi2.post(`payment/`,{token}, {
+    postPayment(token?: string) {
+        return baseApi2.post(`payment/`, {token}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    postTransaction(payment: number){
-        return baseApi2.post(`transaction/`,{payment}, {
+    postTransaction(payment: number) {
+        return baseApi2.post(`transaction/`, {payment}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
 
-    getOnlineMovie(id?: string){
+    getOnlineMovie(id?: string) {
         return baseApi2.get<IOnlineMovie>(`online/watch/film/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    getSerial(id?: string, itemType?: string){
-        return baseApi2.get<IOnlineMovie>(`online/watch/${itemType}/${id}/`, {
+    getSerial(id: string, itemType: string) {
+        let type;
+        if (!itemType) {
+            type = localStorage.getItem('onlineType')
+        } else {
+            type = itemType
+        }
+        return baseApi2.get<IOnlineMovie>(`online/watch/${type}/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    deletePayment(id: number) {
+        return baseApi2.delete(`/payment/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

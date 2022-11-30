@@ -1,24 +1,32 @@
-import React, {useState} from 'react';
-import {useAppSelector} from "../../../../utils/hooks/redux";
+import React, {useEffect, useState} from 'react';
+import {useAppDispatch, useAppSelector} from "../../../../utils/hooks/redux";
 import {RootState} from "../../../../store";
 import s from './PaymentForm.module.scss'
 import PaymentCard from 'react-payment-card-component'
 import mark from '../../../../assets/checkmark.svg'
 import {API} from "../../../../utils/api";
 import {useNavigate} from "react-router-dom";
+import {setPayment} from "../../../../store/user/user.slice";
 
 interface ChooseCardFormProps {
     totalPrice: number | undefined
     onClickPaymentChangeFormClose: (() => void) | undefined
+    isProfilePage?: boolean
 }
 
 
-const ChooseCardForm: React.FC<ChooseCardFormProps> = ({totalPrice, onClickPaymentChangeFormClose}) => {
+const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
+                                                           totalPrice,
+                                                           onClickPaymentChangeFormClose,
+                                                           isProfilePage = false
+                                                       }) => {
 
     const payment = useAppSelector((state: RootState) => state.user.payment);
     const [selectedCardId, setSelectedCardId] = useState<number>(-1)
+    const [reload, setReload] = useState(false)
 
     const onClickCard = (id: number) => {
+        console.log(id)
         setSelectedCardId(id)
     }
 
@@ -27,9 +35,12 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({totalPrice, onClickPayme
     const onClickPay = async () => {
 
         try {
+
+
             if (onClickPaymentChangeFormClose) {
                 onClickPaymentChangeFormClose()
             }
+
 
             navigate('/payment-history')
             const res = await API.postTransaction(selectedCardId)
@@ -39,7 +50,29 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({totalPrice, onClickPayme
             console.log(e)
         }
     }
+    const onClickDelete = async () => {
+        try {
+            await API.deletePayment(selectedCardId)
+            alert('Deleted successfully')
+            setReload(true)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
+    const dispatch = useAppDispatch()
+    const fetchPayment = async () => {
+        const res = await API.getPayment();
+        dispatch(setPayment(res))
+
+    }
+
+    useEffect(() => {
+        fetchPayment()
+    }, [reload])
+
+
+    console.log('RENDER')
     return (
         <div className={s.container}>
             {selectedCardId === -1 && <p className={s.title}>Please choose a card</p>}
@@ -61,10 +94,15 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({totalPrice, onClickPayme
 
             }
             <div className={s.btnBlock}>
-                {selectedCardId !== -1 && <button className={s.buttonSave} onClick={onClickPay}>
-                    Pay ₴{totalPrice}
-                </button>}
+                {
+                    isProfilePage ? <button className={s.buttonSave} onClick={onClickDelete}>Delete</button> :
+                        <>
+                            {selectedCardId !== -1 && <button className={s.buttonSave} onClick={onClickPay}>
+                                Pay ₴{totalPrice}
+                            </button>}
+                        </>
 
+                }
             </div>
         </div>
     );

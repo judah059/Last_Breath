@@ -2,14 +2,16 @@ import React, {useEffect, useState} from 'react';
 import s from "./MovieOnlinePage.module.scss";
 import play from "../../assets/play-button.png";
 import {IOnlineMovie, ISeries} from "../../utils/api/types";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {API} from "../../utils/api";
 import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
 import {useHorizontalScroll} from "../../utils/hooks/useHorizontalScroll";
 import ReactPlayer from "react-player";
 import Comments from "./Comments/Comments";
-import {useAppSelector} from "../../utils/hooks/redux";
+import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
+import {useAuth} from "../../utils/hooks/useAuth";
+import {setIsLoading, setItemType} from "../../store/onlineItem/onlineItem.slice";
 
 
 interface MovieOnlinePageProps {
@@ -18,6 +20,18 @@ interface MovieOnlinePageProps {
 
 
 const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
+
+    const isLoading = useAppSelector((state: RootState) => state.user.isLoading)
+
+
+    const isAuth = useAuth()
+    let navigate = useNavigate();
+    useEffect(() => {
+        if (!isLoading && !isAuth) {
+            alert('Please login to your account')
+            return navigate("/online");
+        }
+    }, [!isAuth]);
 
     const {id} = useParams()
     const [isFetching, setIsFetching] = useState(true)
@@ -30,20 +44,35 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const itemType = useAppSelector((state: RootState) => state.onlineItem.itemType)
 
 
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
+
         fetchMovie()
         setIsFetching(false)
+
+        return () => {
+            if (itemType) {
+                localStorage.setItem('onlineType', itemType)
+            }
+        }
+
     }, [])
 
     const fetchMovie = async () => {
         try {
-            // const resMovie = await API.getOnlineMovie(id)
-            const resMovie = await API.getSerial(id, itemType)
+
+            const onlineType = localStorage.getItem('onlineType')
+            dispatch(setItemType(onlineType))
+
+            const resMovie = await API.getSerial(`${id}`, itemType)
             setMovie(resMovie)
             if (itemType === 'serial') {
                 setSelectedEpisode(resMovie?.seasons[0]?.series[0])
 
             }
+
+
         } catch (e) {
             console.log(e)
         }
@@ -121,7 +150,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                 <div className={s.main__content__series}>
                                     <ul>
                                         {
-                                            movie?.seasons?.map(el => <li
+                                            movie?.seasons?.map(el => <li key={el.number}
                                                 className={el.number === selectedSeason ? s.active : ''}
                                                 onClick={() => onClickSeason(el.number)}
                                             > {el.number}&nbsp;season</li>)
@@ -129,7 +158,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                     </ul>
                                 </div>}
 
-                            <ReactPlayer url={`${itemType==='film' ? movie?.video : selectedEpisode?.video}`} controls/>
+                            <ReactPlayer url={`${itemType === 'film' ? movie?.video : selectedEpisode?.video}`}
+                                         controls/>
 
                             {itemType === 'film' ? <></> :
                                 <div className={s.main__content__series}>
@@ -137,6 +167,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
                                         {
                                             movie?.seasons[selectedSeason - 1]?.series?.map(el => <li
+                                                key={el.id}
                                                 className={el.number === selectedEpisode?.number ? s.active : ''}
                                                 onClick={() => onClickEpisode(el)}
                                             > {el?.number}&nbsp;episode</li>)

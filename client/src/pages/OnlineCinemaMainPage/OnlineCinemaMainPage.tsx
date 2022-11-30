@@ -8,6 +8,7 @@ import s from './OnlineCinemaMainPage.module.scss'
 import {IOnlineCinemaItems} from "../../utils/api/types";
 import {OnlineAPI} from "../../utils/api";
 
+
 const OnlineCinemaMainPage: React.FC = (props) => {
 
     const [onlineItems, setOnlineItems] = useState<IOnlineCinemaItems[]>([])
@@ -21,12 +22,12 @@ const OnlineCinemaMainPage: React.FC = (props) => {
         }
     }
 
-    // const isEmpthy = () => {
-    // }
 
     useEffect(() => {
         fetchOnlineItems()
     }, [])
+
+
 
     return (
         <>
