@@ -87,12 +87,12 @@ class GetSerialPageSeasonSerializer(ModelSerializer):
 
 
 class CommentSerialSerilaizer(ModelSerializer):
-    author_name = serializers.CharField(read_only=True, source='user.first_name')
+    author_name = serializers.CharField(read_only=True, source='user.username')
     author_picture = serializers.CharField(read_only=True, source='user.profile_picture')
 
     class Meta:
         model = CommentsSerial
-        fields = ["comment_type", "comment_text", "serial", "author_name", "author_picture"]
+        fields = ["id","comment_type", "comment_text", "serial", "author_name", "author_picture"]
 
     def create(self, validated_data):
         instance = CommentsSerial()
