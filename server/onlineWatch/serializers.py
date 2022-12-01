@@ -38,12 +38,12 @@ class SeriesSerializer(ModelSerializer):
 
 
 class CommentFilmSerilaizer(ModelSerializer):
-    author_name = serializers.CharField(read_only=True, source='user.first_name')
+    author_name = serializers.CharField(read_only=True, source='user.username')
     author_picture = serializers.CharField(read_only=True, source='user.profile_picture')
 
     class Meta:
         model = CommentsFilm
-        fields = ["comment_type", "comment_text", "film", "author_name", "author_picture"]
+        fields = ["id", "comment_type", "comment_text", "film", "author_name", "author_picture"]
 
     def create(self, validated_data):
         instance = CommentsFilm()
