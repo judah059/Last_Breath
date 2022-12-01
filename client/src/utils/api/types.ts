@@ -328,6 +328,15 @@ export interface IOnlineMovie extends ISerial {
     country: string
     main_genre: string
     genre_list: Array<string>
+    comments: IComment[]
+}
+
+export interface IComment {
+    comment_type: string
+    comment_text: string
+    film: number
+    author_name: string
+    author_picture: string
 }
 
 export interface ISub {

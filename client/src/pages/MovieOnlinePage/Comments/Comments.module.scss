@@ -20,6 +20,12 @@
 
   }
 
+  .blockBtn{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
   .divider {
     width: 100%;
     height: 1px;
@@ -27,6 +33,14 @@
   }
 
   .comments {
+
+    input{
+      padding: 20px;
+      color: white;
+      width: 100%;
+      background: #6D6060;
+    }
+
     .item {
       display: flex;
       justify-content: space-between;

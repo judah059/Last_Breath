@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
     IChangePassword,
-    ICinema,
+    ICinema, IComment,
     IOnlineMovie,
     IReqSessionByDate,
     IReqUser,
@@ -152,6 +152,13 @@ export let API = {
     },
     deleteUserSub(id: number) {
         return baseApi2.delete(`online/client-subscription/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    postFilmComment({comment_type, comment_text, film}: IComment) {
+        return baseApi2.post(`/online/commentfilm/`, {comment_type, comment_text, film}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

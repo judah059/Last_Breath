@@ -7,28 +7,30 @@ import editBtn from '../../../assets/editBtn.svg'
 import {useOutsideAlerter} from "../../../utils/hooks/useOutside";
 
 interface CommentItemProps {
-
+    comment: string
+    username: string
+    avatarUrl: string
 }
 
 
-const CommentItem: React.FC<CommentItemProps> = () => {
+const CommentItem: React.FC<CommentItemProps> = ({comment, username, avatarUrl}) => {
 
 
     const {ref, isShow, setIsShow} = useOutsideAlerter(false);
 
     return (
-        <div className={s.item}>
+        <div className={avatarUrl === '' ? s.item : avatarUrl}>
             <div className={s.right}>
-                <img src={userLogo} alt="userLogo"  width={64}/>
+                <img src={userLogo} alt="userLogo" width={64}/>
                 <div className={s.content}>
-                    <div className={s.name}>StarKitten123</div>
-                    <div className={s.text}>Good movie!</div>
+                    <div className={s.name}>{username}</div>
+                    <div className={s.text}>{comment}</div>
                 </div>
             </div>
             <div className={s.left} ref={ref}>
-                <img src={commentBtn} alt="commentBtn" onClick={()=>setIsShow(!isShow)}/>
+                <img src={commentBtn} alt="commentBtn" onClick={() => setIsShow(!isShow)}/>
                 {
-                    isShow ? (<div className={s.popup} >
+                    isShow ? (<div className={s.popup}>
                         <button>
                             <img src={editBtn} alt=""/>
                             Edit

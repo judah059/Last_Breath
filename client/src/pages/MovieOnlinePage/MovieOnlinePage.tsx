@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import s from "./MovieOnlinePage.module.scss";
 import play from "../../assets/play-button.png";
-import {IOnlineMovie, ISeries} from "../../utils/api/types";
+import {IComment, IOnlineMovie, ISeries} from "../../utils/api/types";
 import {useNavigate, useParams} from "react-router-dom";
 import {API} from "../../utils/api";
 import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
@@ -38,6 +38,9 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const [movie, setMovie] = useState<IOnlineMovie | null>(null)
     const [selectedSeason, setSelectedSeason] = useState(1)
     const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
+    const [comments, setComments] = useState<IComment[]>([])
+    const [reviews, setReviews] = useState<IComment[]>([])
+
 
     const scrollRef = useHorizontalScroll();
 
@@ -71,6 +74,9 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                 setSelectedEpisode(resMovie?.seasons[0]?.series[0])
 
             }
+
+            setComments(resMovie.comments)
+            setReviews(resMovie.comments.filter(c=> c.comment_type === 'R'))
 
 
         } catch (e) {
@@ -151,8 +157,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                     <ul>
                                         {
                                             movie?.seasons?.map(el => <li key={el.number}
-                                                className={el.number === selectedSeason ? s.active : ''}
-                                                onClick={() => onClickSeason(el.number)}
+                                                                          className={el.number === selectedSeason ? s.active : ''}
+                                                                          onClick={() => onClickSeason(el.number)}
                                             > {el.number}&nbsp;season</li>)
                                         }
                                     </ul>
@@ -175,7 +181,12 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                     </ul>
                                 </div>}
                         </div>
-                        <Comments/>
+                        <Comments movieId={movie?.id}
+                                  comments={comments}
+                                  setComments={setComments}
+                                  reviews={reviews}
+                                  setReviews={setReviews}
+                        />
                     </div>
 
 
