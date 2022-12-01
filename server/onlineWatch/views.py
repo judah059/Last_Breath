@@ -51,3 +51,35 @@ class GetSerialPage(generics.RetrieveAPIView):
 class MainPageView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GetAllRelatedToGenre
+
+class CommentFilmViewSet(viewsets.ModelViewSet):
+    queryset = CommentsFilm.objects.all()
+    serializer_class = CommentFilmSerilaizer
+
+class CommentSerialViewSet(viewsets.ModelViewSet):
+    queryset = CommentsSerial.objects.all()
+    serializer_class = CommentSerialSerilaizer
+
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+
+class ClientSubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = ClientSubscription.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method != 'GET':
+            return ClientSubscriptionPOSTSerializer
+        else:
+            return ClientSubscriptionGETSerializer
+
+    def get_queryset(self):
+        qs = super(ClientSubscriptionViewSet, self).get_queryset()
+        user = self.request.user
+        return qs.filter(client=user)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(client=user)
