@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import s from './Comments.module.scss'
 import userLogo from '../../../assets/userLogo.svg'
 import commentBtn from '../../../assets/commentBtn.svg'
@@ -7,6 +7,7 @@ import editBtn from '../../../assets/editBtn.svg'
 import {useOutsideAlerter} from "../../../utils/hooks/useOutside";
 import {API} from "../../../utils/api";
 import {IComment} from "../../../utils/api/types";
+import Button from "../../../components/common/Buttons/Button";
 
 interface CommentItemProps {
     id?: number
@@ -19,6 +20,8 @@ interface CommentItemProps {
     setReviews?: (comments: IComment[]) => void
     type: string
     author: string
+    movieId?: number
+    selectedBlock?: string
 }
 
 
@@ -32,11 +35,16 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                                      reviews,
                                                      setReviews,
                                                      type,
-                                                     author
+                                                     author,
+                                                     movieId,
+                                                     selectedBlock
                                                  }) => {
 
 
     const {ref, isShow, setIsShow} = useOutsideAlerter(false);
+    const [changeCommentMode, setChangeCommentMode] = useState(false)
+    const [changeCommentContent, setChangeCommentContent] = useState(comment)
+
 
     const onClickDeleteComment = async () => {
         try {
@@ -56,14 +64,53 @@ const CommentItem: React.FC<CommentItemProps> = ({
         }
     }
 
-    console.log(author, username)
+    const onClickEditComment = () => {
+        setIsShow(false)
+        setChangeCommentMode(true)
+    }
+
+    const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setChangeCommentContent(e.target.value)
+    }
+
+    const onClickSaveChangedComment = async () => {
+        try {
+            let obj: IComment = {
+                comment_type: `${selectedBlock}`,
+                comment_text: changeCommentContent,
+                film: +`${movieId}`,
+                author_name: username,
+            }
+
+
+        }catch (e) {
+            console.log(e)
+        }
+
+    }
+
+    const onClickCancelChangeComment = () => {
+        setChangeCommentMode(false)
+        setChangeCommentContent(comment)
+    }
+
     return (
         <div className={s.item}>
             <div className={s.right}>
                 <img src={userLogo} alt="userLogo" width={64}/>
                 <div className={s.content}>
                     <div className={s.name}>{author}</div>
-                    <div className={s.text}>{comment}</div>
+                    <div className={s.text}>
+                        {
+                            changeCommentMode ? <div className={s.changeBlock}>
+                                <input type="text" className={s.changeComment} value={changeCommentContent}
+                                       onChange={onChangeCommentHandler}/>
+                                <Button buttonContent='Save' onClickAction={onClickSaveChangedComment}/>
+                                <Button buttonContent='Cancel' onClickAction={onClickCancelChangeComment}/>
+                            </div> : <>{comment}</>
+                        }
+
+                    </div>
                 </div>
             </div>
             {
@@ -71,7 +118,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     <img src={commentBtn} alt="commentBtn" onClick={() => setIsShow(!isShow)}/>
                     {
                         isShow ? (<div className={s.popup}>
-                            <button>
+                            <button onClick={onClickEditComment}>
                                 <img src={editBtn} alt=""/>
                                 Edit
                             </button>

@@ -28,6 +28,7 @@ const Comments: React.FC<CommentsProps> = ({
     const [commentContent, setCommentContent] = useState('')
     const [selectedBlock, setSelectedBlock] = useState<'C' | 'R'>('C')
 
+
     const onClickSendComment = async () => {
         try {
 
@@ -79,6 +80,8 @@ const Comments: React.FC<CommentsProps> = ({
                                                                              avatarUrl={c.author_picture}
                                                                              comments={comments}
                                                                              setComments={setComments}
+                                                                             movieId={movieId}
+                                                                             selectedBlock={selectedBlock}
 
                     />)
                 }
@@ -95,9 +98,12 @@ const Comments: React.FC<CommentsProps> = ({
                     />)
                 }
 
-                {role === 'RG' && selectedBlock === 'C' && <input type="text" onChange={onChangeCommentHandler}/>}
-                {role === 'RC' && selectedBlock === 'C' && <input type="text" onChange={onChangeCommentHandler}/>}
-                {role === 'RC' && selectedBlock === 'R' && <input type="text" onChange={onChangeCommentHandler}/>}
+                {role === 'RG' && selectedBlock === 'C' &&
+                    <input type="text" onChange={onChangeCommentHandler} value={commentContent}/>}
+                {role === 'RC' && selectedBlock === 'C' &&
+                    <input type="text" onChange={onChangeCommentHandler} value={commentContent}/>}
+                {role === 'RC' && selectedBlock === 'R' &&
+                    <input type="text" onChange={onChangeCommentHandler} value={commentContent}/>}
 
 
             </div>

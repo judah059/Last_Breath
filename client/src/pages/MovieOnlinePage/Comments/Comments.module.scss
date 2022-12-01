@@ -12,7 +12,8 @@
       font-size: 28px;
       line-height: 44px;
       cursor: pointer;
-      &.active{
+
+      &.active {
         color: #F93232;
       }
     }
@@ -20,7 +21,7 @@
 
   }
 
-  .blockBtn{
+  .blockBtn {
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
@@ -34,7 +35,7 @@
 
   .comments {
 
-    input{
+    input {
       padding: 20px;
       color: white;
       width: 100%;
@@ -58,12 +59,23 @@
           .text {
             text-align: justify;
             margin-top: 10px;
+
+            .changeBlock {
+              display: flex;
+              gap: 15px;
+
+              .changeComment {
+                padding: 5px;
+
+              }
+            }
           }
         }
       }
 
       .left {
         position: relative;
+
         img {
           cursor: pointer;
           border-radius: 50%;
@@ -83,6 +95,7 @@
           flex-direction: column;
           overflow: hidden;
           border: 1px solid #000000;
+
           button {
 
             width: 100%;
@@ -95,7 +108,7 @@
               margin-right: 15px;
             }
 
-            &:hover{
+            &:hover {
               background-color: #4c4c56;
             }
           }
