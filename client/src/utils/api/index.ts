@@ -163,6 +163,13 @@ export let API = {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
+    },
+    deleteComment(id?: string) {
+        return baseApi2.delete(`/online/commentfilm/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
     }
 }
 

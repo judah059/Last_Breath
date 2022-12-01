@@ -332,11 +332,12 @@ export interface IOnlineMovie extends ISerial {
 }
 
 export interface IComment {
+    id?: number
     comment_type: string
     comment_text: string
     film: number
     author_name: string
-    author_picture: string
+    author_picture?: string
 }
 
 export interface ISub {

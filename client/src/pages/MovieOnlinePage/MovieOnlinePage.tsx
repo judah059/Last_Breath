@@ -75,8 +75,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
             }
 
-            setComments(resMovie.comments)
-            setReviews(resMovie.comments.filter(c=> c.comment_type === 'R'))
+            setComments(resMovie.comments.filter(c => c.comment_type === 'C'))
+            setReviews(resMovie.comments.filter(c => c.comment_type === 'R'))
 
 
         } catch (e) {

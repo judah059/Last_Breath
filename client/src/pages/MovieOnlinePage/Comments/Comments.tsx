@@ -36,7 +36,6 @@ const Comments: React.FC<CommentsProps> = ({
                 comment_text: commentContent,
                 film: +`${movieId}`,
                 author_name: username,
-                author_picture: ''
             }
             if (selectedBlock === 'C') {
                 if (comments) {
@@ -71,19 +70,28 @@ const Comments: React.FC<CommentsProps> = ({
             <div className={s.divider}></div>
             <div className={s.comments}>
                 {
-                    selectedBlock === 'C' && comments?.map(c => <CommentItem key={c.comment_text}
+                    selectedBlock === 'C' && comments?.map(c => <CommentItem key={c.id}
+                                                                             author={c.author_name}
+                                                                             id={c.id}
+                                                                             type={c.comment_type}
                                                                              comment={c.comment_text}
-                                                                             username={c.author_name}
+                                                                             username={username}
                                                                              avatarUrl={c.author_picture}
+                                                                             comments={comments}
+                                                                             setComments={setComments}
 
                     />)
                 }
                 {
-                    selectedBlock === 'R' && reviews?.map(c => <CommentItem key={c.comment_text}
+                    selectedBlock === 'R' && reviews?.map(c => <CommentItem key={c.id}
+                                                                            author={c.author_name}
+                                                                            type={c.comment_type}
+                                                                            id={c.id}
                                                                             comment={c.comment_text}
-                                                                            username={c.author_name}
+                                                                            username={username}
                                                                             avatarUrl={c.author_picture}
-
+                                                                            setReviews={setReviews}
+                                                                            reviews={reviews}
                     />)
                 }
 
