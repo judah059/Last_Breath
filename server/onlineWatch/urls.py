@@ -24,6 +24,12 @@ routerFilmComments.register(r'commentfilm', CommentFilmViewSet, basename='commen
 routerSerialComments = routers.SimpleRouter()
 routerSerialComments.register(r'commentserial', CommentSerialViewSet, basename='commentserial')
 
+routerSubscription = routers.SimpleRouter()
+routerSubscription.register(r'subscription', SubscriptionViewSet, basename='subscription')
+
+routerClientSub = routers.SimpleRouter()
+routerClientSub.register(r'client-subscription', ClientSubscriptionViewSet, basename='client-subscription')
+
 urlpatterns = [
     path('online/', include(routerGenre.urls)),
     path('online/', include(routerFilm.urls)),
@@ -35,4 +41,7 @@ urlpatterns = [
     path('online/watch/', MainPageView.as_view()),
     path('online/', include(routerFilmComments.urls)),
     path('online/', include(routerSerialComments.urls)),
+    path('online/', include(routerSubscription.urls)),
+    path('online/', include(routerClientSub.urls)),
+
 ]
