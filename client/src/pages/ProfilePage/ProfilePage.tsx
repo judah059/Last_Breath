@@ -14,6 +14,9 @@ import UsernameEdit from "../../components/Forms/EditingProfile/UsernameEditForm
 import PasswordEditForm from "../../components/Forms/EditingProfile/PasswordEditForm";
 import PaymentChangeForm from "../../components/Forms/EditingProfile/PaymentChangeForm/PaymentChangeForm";
 import PaymentForm from "../../components/Forms/EditingProfile/PaymentForm/PaymentForm";
+import {API} from "../../utils/api";
+import {IUserSub} from "../../utils/api/types";
+import {convertSubPlanName} from "../../utils/ConvertSubNameToFull";
 
 const ProfilePage: React.FC = (props) => {
     const [isUsernameEditFormOpened, setUsernameEditFormOpened] = useState(false)
@@ -24,6 +27,7 @@ const ProfilePage: React.FC = (props) => {
     const [isDeleteFormOpened, setDeleteFormOpened] = useState(false)
 
     const [selectedSettingName, setSelectedSettingName] = useState('')
+    const [userSubs, setUserSubs] = useState<IUserSub[]>([])
 
     const {email, username, birth_date} = useAppSelector((state: RootState) => state.user);
 
@@ -40,6 +44,22 @@ const ProfilePage: React.FC = (props) => {
             return navigate("/main");
         }
     }, [!isAuth]);
+
+
+    useEffect(() => {
+        fetchUserSub()
+    }, [])
+
+    const fetchUserSub = async () => {
+        try {
+
+            const resUserSubs = await API.getUserSub()
+            setUserSubs(resUserSubs)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <div>
@@ -66,8 +86,11 @@ const ProfilePage: React.FC = (props) => {
                         <SettingObject settingName='Payment method' settingContent='**** 4444'
                                        setFormOpened={() => setPaymentEditFormOpened(true)}
                         />
-                        <SettingObject settingName='Subscription' settingContent='Premium'
-                                        setFormOpened={onClickToSub} isSub
+                        <SettingObject settingName='Subscription'
+                                       settingContent={convertSubPlanName(userSubs[userSubs?.length - 1]?.subscription?.sub_type)}
+                                       setFormOpened={onClickToSub} isSub
+                                       userSubs={userSubs}
+                                       setUserSubs={setUserSubs}
                         />
                         <SettingObject settingName='Password' settingContent='*********'
                                        setFormOpened={() => setPasswordEditFormOpened(true)}
@@ -92,7 +115,7 @@ const ProfilePage: React.FC = (props) => {
             <PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
                          onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}
                          isProfilePage
-                         />
+            />
         </div>
     )
 };

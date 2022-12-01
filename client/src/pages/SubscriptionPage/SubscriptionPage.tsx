@@ -5,24 +5,20 @@ import logo from "../../assets/logo.svg";
 import {useNavigate} from "react-router-dom";
 import Button from "../../components/common/Buttons/Button";
 import {useAuth} from "../../utils/hooks/useAuth";
+import {API} from "../../utils/api";
+import {ISub} from "../../utils/api/types";
+import {convertSubPlanName} from "../../utils/ConvertSubNameToFull";
 
 interface SubscriptionPageProps {
 
 }
 
-interface ISubscription {
-    name: string
-    price: string
-    quality: string
-    downloadSpeed: string
-}
-
 
 const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
 
-    const [currentSubscription, setCurrentSubscription] = useState<ISubscription>()
-    const [active, setActive] = useState(false)
-    const [active1, setActive1] = useState(false)
+    const [selectedPlan, setSelectedPlan] = useState('ST')
+    const [selectedSubId, setSelectedSubId] = useState(1)
+    const [subscriptions, setSubscriptions] = useState<ISub[]>([])
 
     const navigate = useNavigate()
 
@@ -30,32 +26,25 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
         navigate('/online')
     }
 
-    const onClickAction = (name: string) => {
-        if (name === 'Standard') {
-            setActive(true)
-            setActive1(false)
-            setCurrentSubscription({
-                name: name,
-                price: '5',
-                quality: '720',
-                downloadSpeed: '5'
-            })
-            console.log(currentSubscription)
-        } else if (name === 'Premium') {
-            setActive1(true)
-            setActive(false)
-            setCurrentSubscription({
-                name: name,
-                price: '10',
-                quality: '1080',
-                downloadSpeed: '10'
-            })
-            console.log(currentSubscription)
-        }
+    const onClickAction = (name: string, id: number) => {
+        setSelectedPlan(name)
+        setSelectedSubId(id)
     }
 
-    const onClickProceed = () => {
-        !active && !active1 ? alert('Please choose Subscription plane') : console.log()
+
+
+    const onClickProceed = async () => {
+        try {
+            const userAnswer = window.confirm(`Are you sure you want to buy ${convertSubPlanName(selectedPlan)} subscription?`)
+            if (userAnswer) {
+                await API.postClientSub(selectedSubId)
+                alert(`Congratulations on purchasing a ${convertSubPlanName(selectedPlan)} subscription`)
+                navigate('/profile')
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const isAuth = useAuth()
@@ -65,6 +54,20 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
             return navigate("/online");
         }
     }, [!isAuth]);
+
+
+    useEffect(() => {
+        fetchSubs()
+    }, [])
+
+    const fetchSubs = async () => {
+        try {
+            let subs = await API.getSubs()
+            setSubscriptions(subs)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <div className={s.wrapper}>
@@ -92,8 +95,18 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
                         Download Speed
                     </div>
                 </div>
-                <SubscriptionItem active={active} onClickAction={onClickAction} subName={'Standard'} price={'5'} quality={'720'} downloadSpeed={'5'}/>
-                <SubscriptionItem active={active1} onClickAction={onClickAction} subName={'Premium'} price={'10'} quality={'1080'} downloadSpeed={'10'}/>
+
+                {
+                    subscriptions.map(s => <SubscriptionItem key={s.id}
+                                                             id={s.id}
+                                                             subName={s.sub_type}
+                                                             price={s.price}
+                                                             quality={s.quality}
+                                                             downloadSpeed={s.download_speed}
+                                                             active={selectedPlan === s.sub_type}
+                                                             onClickAction={onClickAction}/>)
+                }
+
             </div>
             <div className={s.lowerSide}>
                 <Button buttonContent={'PROCEED'} onClickAction={onClickProceed}/>

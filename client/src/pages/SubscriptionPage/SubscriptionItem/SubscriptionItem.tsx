@@ -1,27 +1,29 @@
 import React from 'react';
 import s from './SubscriptionItem.module.scss'
+import {convertSubPlanName} from "../../../utils/ConvertSubNameToFull";
 
 interface SubscriptionItemProps {
+    id: number
     subName: string
-    price: string
+    price: number
     quality: string
     downloadSpeed: string
-    onClickAction: (subName: string) => void
-    active: boolean
+    onClickAction: (subName: string, id: number) => void
+    active?: boolean
 }
 
 
 const SubscriptionItem: React.FC<SubscriptionItemProps> = (props) => {
 
     const clickAction = () => {
-        props.onClickAction(props.subName)
+        props.onClickAction(props.subName, props.id)
     }
 
     return (
         <div className={s.wrapperBox}>
             {props.active ? <>
                     <div className={s.subName} onClick={clickAction} style={{background: 'red'}}>
-                        {props.subName}
+                        {convertSubPlanName(props.subName)}
                     </div>
                     <div style={{color: 'red'}}>
                         {props.price}$
@@ -36,7 +38,7 @@ const SubscriptionItem: React.FC<SubscriptionItemProps> = (props) => {
                 :
                 <>
                     <div className={s.subName} onClick={clickAction}>
-                        {props.subName}
+                        {convertSubPlanName(props.subName)}
                     </div>
                     <div>
                         {props.price}$

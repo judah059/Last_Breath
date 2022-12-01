@@ -40,12 +40,14 @@ export interface ISession {
     "movie_name": number,
     "movie_poster": number,
     "seats": Array<object>,
-    "start_time":string
+    "start_time": string
 }
+
 export interface niceBackEnd {
-    "cinema" : string,
-    "time" : string,
+    "cinema": string,
+    "time": string,
 }
+
 export interface ICinema {
     "id": number,
     "name": string,
@@ -76,6 +78,7 @@ export interface IReqSessionByDate {
     date?: string
     cinema?: number
 }
+
 export interface IResUser {
     refresh: string
     access: string
@@ -85,27 +88,26 @@ export interface ISessionItem {
     label: string,
     dates: Array<string>
 }
+
 export interface ISessionByDate {
     "id": number,
     "halls": [
-    {
-        "id": number,
-        "number": number,
-        "sessions": [
-            {
-                "id": number,
-                "date": string,
-                "start_time": string,
-                "end_time": string,
-                "base_price": number,
-                "movie": number,
-                "cinemahall": number,
-                "seats": []
-            }
-        ]
-    }]
-
-
+        {
+            "id": number,
+            "number": number,
+            "sessions": [
+                {
+                    "id": number,
+                    "date": string,
+                    "start_time": string,
+                    "end_time": string,
+                    "base_price": number,
+                    "movie": number,
+                    "cinemahall": number,
+                    "seats": []
+                }
+            ]
+        }]
 
 
     // "id": number,
@@ -133,7 +135,25 @@ export interface ISessionByDate {
     //     }
     // ]
 }
+
 export interface ISessionEmptyArray {
+    "id": number,
+    "date": string,
+    "start_time": string,
+    "end_time": string,
+    "base_price": number,
+    "movie": number,
+    "cinemahall": number,
+    "seats": []
+
+
+}
+
+export interface IHall {
+    "id": number,
+    "number": number,
+    "sessions": [
+        {
             "id": number,
             "date": string,
             "start_time": string,
@@ -142,25 +162,10 @@ export interface ISessionEmptyArray {
             "movie": number,
             "cinemahall": number,
             "seats": []
-
-
+        }
+    ]
 }
-export interface IHall {
-            "id": number,
-            "number": number,
-            "sessions": [
-                {
-                    "id": number,
-                    "date": string,
-                    "start_time": string,
-                    "end_time": string,
-                    "base_price": number,
-                    "movie": number,
-                    "cinemahall": number,
-                    "seats": []
-                }
-            ]
-}
+
 export interface IUser {
     id?: number
     username?: string
@@ -292,6 +297,7 @@ export type IOnlineCinemaItems = {
     films: IOnlineCinemaItem[]
     serials: IOnlineCinemaItem[]
 }
+
 export interface ISeries {
     id: number
     number: number
@@ -299,14 +305,14 @@ export interface ISeries {
     season: number
 }
 
-export interface ISerial{
+export interface ISerial {
     seasons: Array<{
         number: number
         series: Array<ISeries>
     }>
 }
 
-export interface IOnlineMovie extends ISerial{
+export interface IOnlineMovie extends ISerial {
     id: number
     name: string
     video: string
@@ -322,4 +328,37 @@ export interface IOnlineMovie extends ISerial{
     country: string
     main_genre: string
     genre_list: Array<string>
+}
+
+export interface ISub {
+    id: number
+    sub_type: string
+    price: number
+    quality: string
+    download_speed: string
+    days: number
+}
+
+export interface IUserSub {
+    id: number
+    client: {
+        id: number
+        username: string
+        first_name: string
+        last_name: string
+        birth_date: any
+        role: string
+        email: string
+    }
+    subscription: {
+        id: number
+        sub_type: string
+        price: number
+        quality: string
+        download_speed: string
+        days: number
+    }
+    created_at: string
+    days_to_update: number
+    is_active: boolean
 }

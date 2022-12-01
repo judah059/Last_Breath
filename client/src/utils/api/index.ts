@@ -8,8 +8,8 @@ import {
     IResPayment,
     IResSnack,
     IResTicket,
-    IResUser,
-    IUser
+    IResUser, ISub,
+    IUser, IUserSub
 } from "./types";
 import {getWithExpiry} from "../localStorage";
 import {ISession, ISnack} from "../../store/session/session.types";
@@ -128,6 +128,30 @@ export let API = {
     },
     deletePayment(id: number) {
         return baseApi2.delete(`/payment/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    getSubs() {
+        return baseApi2.get<ISub[]>(`online/subscription/`,).then(res => res.data);
+    },
+    postClientSub(id: number) {
+        return baseApi2.post(`online/client-subscription/`, {subscription: id}, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    getUserSub() {
+        return baseApi2.get<IUserSub[]>(`online/client-subscription/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    deleteUserSub(id: number) {
+        return baseApi2.delete(`online/client-subscription/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }

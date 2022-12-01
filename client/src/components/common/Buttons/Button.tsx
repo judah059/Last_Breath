@@ -5,7 +5,7 @@ import {DateOfBirth} from "../../../utils/api/types";
 
 interface ButtonProps {
     buttonContent: string
-    onClickAction?: () => void | SubmitHandler<DateOfBirth>
+    onClickAction?: () => void | SubmitHandler<DateOfBirth> | Promise<void>
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
