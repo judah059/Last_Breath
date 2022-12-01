@@ -40,6 +40,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
     const [comments, setComments] = useState<IComment[]>([])
     const [reviews, setReviews] = useState<IComment[]>([])
+    const [lastCommentId, setLastCommentId] = useState(0)
 
 
     const scrollRef = useHorizontalScroll();
@@ -75,10 +76,10 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
             }
 
-            setComments(resMovie.comments.filter(c => c.comment_type === 'C'))
-            setReviews(resMovie.comments.filter(c => c.comment_type === 'R'))
+            setComments(resMovie.comments.filter(c => c.comment_type === 'C').sort((a, b) => a.id - b.id))
+            setReviews(resMovie.comments.filter(c => c.comment_type === 'R').sort((a, b) => a.id - b.id))
 
-
+            setLastCommentId(resMovie.comments.sort((a, b) => a.id - b.id)[resMovie.comments.length-1].id)
         } catch (e) {
             console.log(e)
         }
@@ -186,6 +187,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                   setComments={setComments}
                                   reviews={reviews}
                                   setReviews={setReviews}
+                                  lastCommentId={lastCommentId}
+                                  setLastCommentId={setLastCommentId}
                         />
                     </div>
 

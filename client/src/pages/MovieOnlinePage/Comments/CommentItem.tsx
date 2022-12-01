@@ -6,11 +6,11 @@ import delBtn from '../../../assets/delBtn.svg'
 import editBtn from '../../../assets/editBtn.svg'
 import {useOutsideAlerter} from "../../../utils/hooks/useOutside";
 import {API} from "../../../utils/api";
-import {IComment} from "../../../utils/api/types";
+import {IComment, IReqComment} from "../../../utils/api/types";
 import Button from "../../../components/common/Buttons/Button";
 
 interface CommentItemProps {
-    id?: number
+    id: number
     comment: string
     username: string
     avatarUrl?: string
@@ -19,7 +19,7 @@ interface CommentItemProps {
     reviews?: IComment[] | undefined
     setReviews?: (comments: IComment[]) => void
     type: string
-    author: string
+    author?: string
     movieId?: number
     selectedBlock?: string
 }
@@ -75,15 +75,39 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const onClickSaveChangedComment = async () => {
         try {
-            let obj: IComment = {
+            let obj: IReqComment = {
                 comment_type: `${selectedBlock}`,
                 comment_text: changeCommentContent,
                 film: +`${movieId}`,
-                author_name: username,
             }
 
+            setChangeCommentMode(false)
 
-        }catch (e) {
+            if (type === 'C') {
+                if (comments && setComments) {
+                    setComments(comments?.map(c => {
+                        if (c.id === id) {
+                            return {...obj, id, author_name: username}
+                        }
+                        return c
+                    }))
+                }
+            } else {
+                if (reviews && setReviews) {
+                    setReviews(reviews?.map(c => {
+                        if (c.id === id) {
+                            return {...obj, id, author_name: username}
+                        }
+                        return c
+                    }))
+                }
+            }
+
+            console.log(id)
+            await API.updateComment(obj, `${id}`)
+
+
+        } catch (e) {
             console.log(e)
         }
 
@@ -115,7 +139,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             </div>
             {
                 author === username ? <div className={s.left} ref={ref}>
-                    <img src={commentBtn} alt="commentBtn" onClick={() => setIsShow(!isShow)}/>
+                    <img src={commentBtn} alt="commentBtn" onClick={() => setIsShow(!isShow)} className={s.dotsBtn}/>
                     {
                         isShow ? (<div className={s.popup}>
                             <button onClick={onClickEditComment}>

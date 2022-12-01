@@ -3,7 +3,7 @@ import s from './Comments.module.scss'
 import CommentItem from "./CommentItem";
 import Button from "../../../components/common/Buttons/Button";
 import {API} from "../../../utils/api";
-import {IComment} from "../../../utils/api/types";
+import {IComment, IReqComment} from "../../../utils/api/types";
 import {useAppSelector} from "../../../utils/hooks/redux";
 import {RootState} from "../../../store";
 
@@ -13,6 +13,8 @@ interface CommentsProps {
     setComments: (comments: IComment[]) => void
     reviews: IComment[] | undefined
     setReviews: (comments: IComment[]) => void
+    lastCommentId?: number
+    setLastCommentId?: (id: number)=> void
 }
 
 
@@ -21,7 +23,9 @@ const Comments: React.FC<CommentsProps> = ({
                                                comments,
                                                setComments,
                                                reviews,
-                                               setReviews
+                                               setReviews,
+                                               lastCommentId,
+                                               setLastCommentId
                                            }) => {
     const {role, username} = useAppSelector((state: RootState) => state.user);
 
@@ -30,25 +34,38 @@ const Comments: React.FC<CommentsProps> = ({
 
 
     const onClickSendComment = async () => {
+        console.log(lastCommentId)
         try {
-
-            let obj: IComment = {
+            let obj: IReqComment = {
                 comment_type: selectedBlock,
                 comment_text: commentContent,
                 film: +`${movieId}`,
-                author_name: username,
             }
             if (selectedBlock === 'C') {
-                if (comments) {
-                    setComments([...comments, obj])
+                if (comments && lastCommentId) {
+                    setComments([...comments, {
+                        ...obj,
+                        id: +`${lastCommentId + 1}`,
+                        author_name: username
+                    }])
                 }
             } else {
-                if (reviews) {
-                    setReviews([...reviews, obj])
+                if (reviews && lastCommentId) {
+                    setReviews([...reviews,
+                        {
+                            ...obj,
+                            id: +`${lastCommentId + 1}`,
+                            author_name: username
+                        }])
                 }
             }
 
-            await API.postFilmComment(obj)
+            setCommentContent('')
+            const res = await API.postFilmComment(obj)
+
+            if (setLastCommentId) {
+                setLastCommentId(res.id)
+            }
 
         } catch (e) {
             console.log(e)
@@ -95,6 +112,9 @@ const Comments: React.FC<CommentsProps> = ({
                                                                             avatarUrl={c.author_picture}
                                                                             setReviews={setReviews}
                                                                             reviews={reviews}
+                                                                            setComments={setReviews}
+                                                                            movieId={movieId}
+                                                                            selectedBlock={selectedBlock}
                     />)
                 }
 

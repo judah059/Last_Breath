@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     IChangePassword,
     ICinema, IComment,
-    IOnlineMovie,
+    IOnlineMovie, IReqComment,
     IReqSessionByDate,
     IReqUser,
     IResPayment,
@@ -157,8 +157,8 @@ export let API = {
             }
         }).then(res => res.data);
     },
-    postFilmComment({comment_type, comment_text, film}: IComment) {
-        return baseApi2.post(`/online/commentfilm/`, {comment_type, comment_text, film}, {
+    postFilmComment({comment_type, comment_text, film}: IReqComment) {
+        return baseApi2.post<IComment>(`/online/commentfilm/`, {comment_type, comment_text, film}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
@@ -166,6 +166,13 @@ export let API = {
     },
     deleteComment(id?: string) {
         return baseApi2.delete(`/online/commentfilm/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    updateComment({comment_type, comment_text, film}: IReqComment, id?: string){
+        return baseApi2.put(`/online/commentfilm/${id}/`, {comment_type, comment_text, film}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
