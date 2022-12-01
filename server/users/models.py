@@ -8,7 +8,8 @@ class MyUser(AbstractUser):
     USER_ROLES = [
         ('MA', 'Main admin'),
         ('RG', 'Regular'),
-        ('CA', 'Cinema admin')
+        ('CA', 'Cinema admin'),
+        ('RC', 'Recensor')
     ]
     birth_date = models.DateField(
         null=True,
@@ -17,7 +18,7 @@ class MyUser(AbstractUser):
     role = models.CharField(
         max_length=2,
         choices=USER_ROLES,
-        default='RE',
+        default='RG',
     )
     date_joined = models.DateTimeField(
         auto_now=True,
@@ -28,6 +29,9 @@ class MyUser(AbstractUser):
     )
     stripe_id = models.CharField(
         max_length=30
+    )
+    profile_picture = models.CharField(
+        max_length=100 # url
     )
 
     USERNAME_FIELD = 'email'

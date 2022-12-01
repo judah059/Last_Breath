@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import *
 
+from users.models import MyUser
 
 class Genre(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -63,4 +64,70 @@ class Series(models.Model):
 
     def __str__(self):
         return f"{self.season.serial.name} Season #{self.season.number} Series #{self.number}"
+
+class CommentsFilm(models.Model):
+    comment_types = [
+        ("C", "Comment"),
+        ("R", "Review")]
+    comment_type = models.CharField(max_length=1, choices=comment_types)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, null=False, related_name="film_comment")
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
+    comment_text = models.TextField()  # comment body
+
+
+class CommentsSerial(models.Model):
+    comment_types = [
+        ("C", "Comment"),
+        ("R", "Review")]
+    comment_type = models.CharField(max_length=1, choices=comment_types)
+    serial = models.ForeignKey(Serial, on_delete=models.CASCADE, null=False, related_name="serial_comment")
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=False)
+    comment_text = models.TextField()  # comment body
+
+
+class Subscription(models.Model):
+    SUBSCRIPTION_TYPES = [
+        ('ST', 'Standard'),
+        ('PR', 'Premium'),
+    ]
+    sub_type = models.CharField(
+        choices=SUBSCRIPTION_TYPES,
+        max_length=2,
+        default='ST',
+    )
+    price = models.IntegerField()
+    quality = models.CharField(
+        max_length=120,
+    )
+    download_speed = models.CharField(
+        max_length=120,
+    )
+    days = models.IntegerField(
+        default=30,
+    )
+
+    def __str__(self):
+        return self.sub_type
+
+
+class ClientSubscription(models.Model):
+    client = models.ForeignKey(
+        MyUser,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+    subscription = models.ForeignKey(
+        'Subscription',
+        on_delete=models.CASCADE,
+        related_name='clients',
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    days_to_update = models.IntegerField(
+        default=30,
+    )
+    is_active = models.BooleanField(
+        default=True,
+    )
 

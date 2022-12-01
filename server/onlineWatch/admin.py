@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from onlineWatch.models import Subscription, ClientSubscription
+
+
+@admin.register(Subscription)
+class AdminSubscription(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ClientSubscription)
+class AdminClientSubscription(admin.ModelAdmin):
+    pass
