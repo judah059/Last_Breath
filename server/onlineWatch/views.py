@@ -51,3 +51,11 @@ class GetSerialPage(generics.RetrieveAPIView):
 class MainPageView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GetAllRelatedToGenre
+
+class CommentFilmViewSet(viewsets.ModelViewSet):
+    queryset = CommentsFilm.objects.all()
+    serializer_class = CommentFilmSerilaizer
+
+class CommentSerialViewSet(viewsets.ModelViewSet):
+    queryset = CommentsSerial.objects.all()
+    serializer_class = CommentSerialSerilaizer

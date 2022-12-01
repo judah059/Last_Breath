@@ -36,9 +36,30 @@ class SeriesSerializer(ModelSerializer):
         fields = "__all__"
 
 
+class CommentFilmSerilaizer(ModelSerializer):
+    author_name = serializers.CharField(read_only=True, source='user.first_name')
+    author_picture = serializers.CharField(read_only=True, source='user.profile_picture')
+
+    class Meta:
+        model = CommentsFilm
+        fields = ["comment_type", "comment_text", "film", "author_name", "author_picture"]
+
+    def create(self, validated_data):
+        instance = CommentsFilm()
+        if validated_data["comment_type"] == "R" and self.context["request"].user.role != "RC":
+            raise serializers.ValidationError({"validation_error": "Something going wrong."})
+        instance.comment_text = validated_data["comment_text"]
+        instance.comment_type = validated_data["comment_type"]
+        instance.film = validated_data["film"]
+        instance.user = self.context["request"].user
+        instance.save()
+        return instance
+
+
 class GetFilmPageSerializer(ModelSerializer):
     main_genre = serializers.CharField(read_only=True, source='main_genre.name')
     genre_list = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+    comments = CommentFilmSerilaizer(many=True, read_only=True, source="film_comment")
 
     class Meta:
         model = Film
@@ -46,7 +67,8 @@ class GetFilmPageSerializer(ModelSerializer):
                   "poster", "trailer", "premier",
                   "release_date", "length", "cast",
                   "ageLimit", "producer", "language",
-                  "country", "main_genre", "genre_list"]
+                  "country", "main_genre", "genre_list",
+                  "comments"]
 
 
 class GetSerialPageSeriesSerializer(ModelSerializer):
@@ -63,10 +85,31 @@ class GetSerialPageSeasonSerializer(ModelSerializer):
         fields = ["number", "series"]
 
 
+class CommentSerialSerilaizer(ModelSerializer):
+    author_name = serializers.CharField(read_only=True, source='user.first_name')
+    author_picture = serializers.CharField(read_only=True, source='user.profile_picture')
+
+    class Meta:
+        model = CommentsSerial
+        fields = ["comment_type", "comment_text", "serial", "author_name", "author_picture"]
+
+    def create(self, validated_data):
+        instance = CommentsSerial()
+        if validated_data["comment_type"] == "R" and self.context["request"].user.role != "RC":
+            raise serializers.ValidationError({"validation_error": "Something going wrong."})
+        instance.comment_text = validated_data["comment_text"]
+        instance.comment_type = validated_data["comment_type"]
+        instance.serial = validated_data["serial"]
+        instance.user = self.context["request"].user
+        instance.save()
+        return instance
+
+
 class GetSerialPageSerializer(ModelSerializer):
     main_genre = serializers.CharField(read_only=True, source='main_genre.name')
     genre_list = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     seasons = GetSerialPageSeasonSerializer(many=True, read_only=True, source="season_set")
+    comments = CommentSerialSerilaizer(many=True, read_only=True, source="serial_comment")
 
     class Meta:
         model = Serial
@@ -74,7 +117,7 @@ class GetSerialPageSerializer(ModelSerializer):
                   "trailer", "premier", "release_date",
                   "length", "cast", "ageLimit", "producer",
                   "language", "country", "main_genre",
-                  "genre_list", "seasons"]
+                  "genre_list", "seasons", "comments"]
 
 
 class FilmRelatedToGenreSerializer(ModelSerializer):

@@ -18,6 +18,12 @@ routerSeason.register(r'season', DevSeasonViewSet, basename='season')
 routerSeries = routers.SimpleRouter()
 routerSeries.register(r'series', DevSeriesViewSet, basename='series')
 
+routerFilmComments = routers.SimpleRouter()
+routerFilmComments.register(r'commentfilm', CommentFilmViewSet, basename='commentfilm')
+
+routerSerialComments = routers.SimpleRouter()
+routerSerialComments.register(r'commentserial', CommentSerialViewSet, basename='commentserial')
+
 urlpatterns = [
     path('online/', include(routerGenre.urls)),
     path('online/', include(routerFilm.urls)),
@@ -27,4 +33,6 @@ urlpatterns = [
     path('online/watch/film/<int:pk>/', GetFilmPage.as_view()),
     path('online/watch/serial/<int:pk>/', GetSerialPage.as_view()),
     path('online/watch/', MainPageView.as_view()),
+    path('online/', include(routerFilmComments.urls)),
+    path('online/', include(routerSerialComments.urls)),
 ]
