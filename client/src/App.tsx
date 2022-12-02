@@ -28,9 +28,10 @@ const App: React.FC = () => {
         dispatch(setPayment(res))
 
     }
-    const token = getWithExpiry('access_token')
+
 
     useEffect(() => {
+        const token = getWithExpiry('access_token')
         fetchPayment()
         dispatch(getMe(token))
     }, [])

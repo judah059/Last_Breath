@@ -24,6 +24,8 @@ interface CommentItemProps {
     author?: string
     movieId?: number
     selectedBlock?: string
+    lastCommentId?: number
+    setLastCommentId?: (id: number) => void
 }
 
 
@@ -39,7 +41,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                                      type,
                                                      author,
                                                      movieId,
-                                                     selectedBlock
+                                                     selectedBlock,
+                                                     lastCommentId,
+                                                     setLastCommentId
                                                  }) => {
 
     const itemType = useAppSelector((state: RootState) => state.onlineItem.itemType)
@@ -111,10 +115,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
             }
 
             if (itemType === 'film') {
-                await API.updateFilmComment(obj, `${id}`)
+                await API.updateFilmComment(obj, `${lastCommentId}`)
             } else {
                 const {film, ...serialObj} = obj
-                await API.updateSerialComment({...serialObj, serial: +`${movieId}`}, `${id}`)
+                await API.updateSerialComment({...serialObj, serial: +`${movieId}`}, `${lastCommentId}`)
             }
 
 

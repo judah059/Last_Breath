@@ -28,7 +28,8 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const isAuth = useAuth()
     let navigate = useNavigate();
     useEffect(() => {
-        if (!isLoading && isAuth === "") {
+        console.log(isAuth)
+        if (isAuth === "") {
             alert('Please login to your account')
             return navigate("/online");
         }
@@ -82,12 +83,11 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
             setLastCommentId(resMovie.comments.sort((a, b) => a.id - b.id)[resMovie.comments.length-1].id)
         } catch (err: any) {
-            let error: AxiosError<ResOnlineError> = err
-            console.log()
-            if(error.response?.status === 401){
-                alert('Please login to your account')
-                navigate("/online");
-            }
+            // let error: AxiosError<ResOnlineError> = err
+            // if(error.response?.status === 401){
+            //     alert('Please login to your account')
+            //     navigate("/online");
+            // }
         }
     }
 

@@ -114,6 +114,7 @@ export let API = {
         }).then(res => res.data);
     },
     getSerial(id: string, itemType: string) {
+        const tk = getWithExpiry('access_token')
         let type;
         if (!itemType) {
             type = localStorage.getItem('onlineType')
@@ -122,7 +123,7 @@ export let API = {
         }
         return baseApi2.get<IOnlineMovie>(`online/watch/${type}/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },

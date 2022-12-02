@@ -110,6 +110,8 @@ const Comments: React.FC<CommentsProps> = ({
                                                                              setComments={setComments}
                                                                              movieId={movieId}
                                                                              selectedBlock={selectedBlock}
+                                                                             setLastCommentId={setLastCommentId}
+                                                                             lastCommentId={lastCommentId}
 
                     />)
                 }
