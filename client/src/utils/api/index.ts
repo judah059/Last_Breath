@@ -128,9 +128,11 @@ export let API = {
         }).then(res => res.data);
     },
     deletePayment(id: number) {
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.delete(`/payment/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
@@ -138,65 +140,80 @@ export let API = {
         return baseApi2.get<ISub[]>(`online/subscription/`,).then(res => res.data);
     },
     postClientSub(id: number) {
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.post(`online/client-subscription/`, {subscription: id}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     getUserSub() {
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.get<IUserSub[]>(`online/client-subscription/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     deleteUserSub(id: number) {
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.delete(`online/client-subscription/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     postFilmComment({comment_type, comment_text, film}: IReqComment) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.post<IComment>(`/online/commentfilm/`, {comment_type, comment_text, film}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     deleteFilmComment(id?: string) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.delete(`/online/commentfilm/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     updateFilmComment({comment_type, comment_text, film}: IReqComment, id?: string){
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.put(`/online/commentfilm/${id}/`, {comment_type, comment_text, film}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     postSerialComment({comment_type, comment_text, serial}: IReqSerialComment) {
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.post<IComment>(`/online/commentserial/`, {comment_type, comment_text, serial}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     updateSerialComment({comment_type, comment_text, serial}: IReqSerialComment, id?: string){
+        const tk = getWithExpiry('access_token')
+
         return baseApi2.put(`/online/commentserial/${id}/`, {comment_type, comment_text, serial}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     deleteSerialComment(id?: string) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.delete(`/online/commentserial/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
