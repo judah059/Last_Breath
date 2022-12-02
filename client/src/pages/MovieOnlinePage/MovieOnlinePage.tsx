@@ -27,7 +27,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const isAuth = useAuth()
     let navigate = useNavigate();
     useEffect(() => {
-        if (!isLoading && !isAuth) {
+        if (!isLoading && isAuth === "") {
             alert('Please login to your account')
             return navigate("/online");
         }

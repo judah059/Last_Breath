@@ -48,7 +48,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
     const onClickDeleteComment = async () => {
         try {
-            console.log(type)
             if (type === 'C') {
                 if (comments && setComments) {
                     setComments(comments?.filter(c => c.id !== id))
