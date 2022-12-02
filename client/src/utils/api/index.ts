@@ -85,16 +85,18 @@ export let API = {
         }).then(res => res.data);
     },
     getPayment() {
+        const tk = getWithExpiry('access_token')
         return baseApi2.get<IResPayment[]>(`payment/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     postPayment(token?: string) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.post(`payment/`, {token}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
@@ -139,7 +141,7 @@ export let API = {
     getSubs() {
         return baseApi2.get<ISub[]>(`online/subscription/`,).then(res => res.data);
     },
-    postClientSub(id: number) {
+    postClientSub(id?: number) {
         const tk = getWithExpiry('access_token')
 
         return baseApi2.post(`online/client-subscription/`, {subscription: id}, {

@@ -8,6 +8,9 @@ import {useAuth} from "../../utils/hooks/useAuth";
 import {API} from "../../utils/api";
 import {ISub} from "../../utils/api/types";
 import {convertSubPlanName} from "../../utils/ConvertSubNameToFull";
+import {useAppSelector} from "../../utils/hooks/redux";
+import {RootState} from "../../store";
+import PaymentForm from "../../components/Forms/EditingProfile/PaymentForm/PaymentForm";
 
 interface SubscriptionPageProps {
 
@@ -19,6 +22,9 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
     const [selectedPlan, setSelectedPlan] = useState('ST')
     const [selectedSubId, setSelectedSubId] = useState(1)
     const [subscriptions, setSubscriptions] = useState<ISub[]>([])
+
+    const [isPaymentEditFormOpened, setPaymentEditFormOpened] = useState(false)
+    const {payment} = useAppSelector((state: RootState) => state.user);
 
     const navigate = useNavigate()
 
@@ -32,15 +38,9 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
     }
 
 
-
     const onClickProceed = async () => {
         try {
-            const userAnswer = window.confirm(`Are you sure you want to buy ${convertSubPlanName(selectedPlan)} subscription?`)
-            if (userAnswer) {
-                await API.postClientSub(selectedSubId)
-                alert(`Congratulations on purchasing a ${convertSubPlanName(selectedPlan)} subscription`)
-                navigate('/profile')
-            }
+            setPaymentEditFormOpened(true)
 
         } catch (e) {
             console.log(e)
@@ -111,6 +111,13 @@ const SubscriptionPage: React.FC<SubscriptionPageProps> = () => {
             <div className={s.lowerSide}>
                 <Button buttonContent={'PROCEED'} onClickAction={onClickProceed}/>
             </div>
+
+            <PaymentForm isPaymentChangeFormOpened={isPaymentEditFormOpened}
+                         onClickPaymentChangeFormClose={() => setPaymentEditFormOpened(false)}
+                         totalPrice={subscriptions.find(s => s.sub_type === selectedPlan)?.price}
+                         isSubPage
+                         selectedSubId={selectedSubId}
+            />
         </div>
     );
 };

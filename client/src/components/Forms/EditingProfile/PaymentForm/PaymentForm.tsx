@@ -18,6 +18,8 @@ interface PaymentChangeFormProps {
     onClickPaymentChangeFormClose?: () => void
     totalPrice?: number | undefined
     isProfilePage?: boolean
+    isSubPage?: boolean
+    selectedSubId?: number
 }
 
 const PaymentForm: React.FC<PaymentChangeFormProps> = (props) => {
@@ -59,6 +61,8 @@ const PaymentForm: React.FC<PaymentChangeFormProps> = (props) => {
                         totalPrice={props.totalPrice}
                         onClickPaymentChangeFormClose={props.onClickPaymentChangeFormClose}
                         isProfilePage={props.isProfilePage}
+                        isSubPage={props.isSubPage}
+                        selectedSubId={props.selectedSubId}
                     />}
                     {isAddCard && <AddCardForm onClickAdd={() => setIsAddCard(false)}/>}
 

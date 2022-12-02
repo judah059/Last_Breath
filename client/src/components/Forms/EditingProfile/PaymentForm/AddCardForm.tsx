@@ -3,6 +3,8 @@ import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {StripeCardElement} from "@stripe/stripe-js";
 import {API} from "../../../../utils/api";
 import s from "../EditForm.module.scss";
+import {useAppSelector} from "../../../../utils/hooks/redux";
+import {RootState} from "../../../../store";
 
 interface AddCardFormProps {
     onClickAdd: ()=>void
@@ -15,6 +17,7 @@ const AddCardForm: React.FC<AddCardFormProps> = ({onClickAdd}) => {
     const stripe = useStripe();
     const elements = useElements();
 
+    const {payment} = useAppSelector((state: RootState) => state.user);
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()

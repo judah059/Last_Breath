@@ -12,13 +12,17 @@ interface ChooseCardFormProps {
     totalPrice: number | undefined
     onClickPaymentChangeFormClose: (() => void) | undefined
     isProfilePage?: boolean
+    isSubPage?: boolean
+    selectedSubId?: number
 }
 
 
 const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
                                                            totalPrice,
                                                            onClickPaymentChangeFormClose,
-                                                           isProfilePage = false
+                                                           isProfilePage = false,
+                                                           isSubPage = false,
+                                                           selectedSubId
                                                        }) => {
 
     const payment = useAppSelector((state: RootState) => state.user.payment);
@@ -41,6 +45,15 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
                 onClickPaymentChangeFormClose()
             }
 
+            if (isSubPage) {
+                const userAnswer = window.confirm(`Are you sure you want to buy a subscription?`)
+                if (userAnswer) {
+                    await API.postClientSub(selectedSubId)
+                    alert(`Congratulations on purchasing a subscription`)
+                    navigate('/profile')
+                    return
+                }
+            }
 
             navigate('/payment-history')
             const res = await API.postTransaction(selectedCardId)
@@ -75,7 +88,7 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
     console.log('RENDER')
     return (
         <div className={s.container}>
-            {selectedCardId === -1 && <p className={s.title}>Please choose a card</p>}
+            {selectedCardId === -1 && (payment.length !== 0 && <p className={s.title}>Please choose a card</p>)}
             {
                 payment.map(c => <div className={`${s.wrapperCard} ${selectedCardId === c.id && s.selected}`}
                                       onClick={() => onClickCard(c.id)}>
@@ -95,10 +108,15 @@ const ChooseCardForm: React.FC<ChooseCardFormProps> = ({
             }
             <div className={s.btnBlock}>
                 {
-                    isProfilePage ? <button className={s.buttonSave} onClick={onClickDelete}>Delete</button> :
+                    isProfilePage ? <>
+                            {
+                                payment.length === 0 ? <div>Please add a card</div> :
+                                    <button className={s.buttonSave} onClick={onClickDelete}>Delete</button>
+                            }
+                        </> :
                         <>
                             {selectedCardId !== -1 && <button className={s.buttonSave} onClick={onClickPay}>
-                                Pay ₴{totalPrice}
+                                Pay ${totalPrice}
                             </button>}
                         </>
 
