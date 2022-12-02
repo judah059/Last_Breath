@@ -14,7 +14,8 @@ interface CommentsProps {
     reviews: IComment[] | undefined
     setReviews: (comments: IComment[]) => void
     lastCommentId?: number
-    setLastCommentId?: (id: number)=> void
+    setLastCommentId?: (id: number) => void
+    itemType: string
 }
 
 
@@ -25,7 +26,8 @@ const Comments: React.FC<CommentsProps> = ({
                                                reviews,
                                                setReviews,
                                                lastCommentId,
-                                               setLastCommentId
+                                               setLastCommentId,
+                                               itemType
                                            }) => {
     const {role, username} = useAppSelector((state: RootState) => state.user);
 
@@ -61,7 +63,16 @@ const Comments: React.FC<CommentsProps> = ({
             }
 
             setCommentContent('')
-            const res = await API.postFilmComment(obj)
+
+            let res: IComment;
+            if (itemType === 'film') {
+                res = await API.postFilmComment(obj)
+            } else {
+
+                const {film, ...serialObj} = obj
+                res = await API.postSerialComment({...serialObj, serial: +`${movieId}`})
+            }
+
 
             if (setLastCommentId) {
                 setLastCommentId(res.id)

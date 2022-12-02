@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import s from "./MovieOnlinePage.module.scss";
 import play from "../../assets/play-button.png";
-import {IComment, IOnlineMovie, ISeries} from "../../utils/api/types";
+import {IComment, IOnlineMovie, ISeries, ResOnlineError} from "../../utils/api/types";
 import {useNavigate, useParams} from "react-router-dom";
 import {API} from "../../utils/api";
 import OnlineCHeaderCommon from "../../components/OnlineHeaderCommon/OnlineHeaderCommon";
@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import {useAuth} from "../../utils/hooks/useAuth";
 import {setIsLoading, setItemType} from "../../store/onlineItem/onlineItem.slice";
+import {AxiosError} from "axios";
 
 
 interface MovieOnlinePageProps {
@@ -80,11 +81,15 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
             setReviews(resMovie.comments.filter(c => c.comment_type === 'R').sort((a, b) => a.id - b.id))
 
             setLastCommentId(resMovie.comments.sort((a, b) => a.id - b.id)[resMovie.comments.length-1].id)
-        } catch (e) {
-            console.log(e)
+        } catch (err: any) {
+            let error: AxiosError<ResOnlineError> = err
+            console.log()
+            if(error.response?.status === 401){
+                alert('Please login to your account')
+                navigate("/online");
+            }
         }
     }
-
 
     const onClickSeason = (season: number) => {
         setSelectedSeason(season)
@@ -189,6 +194,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
                                   setReviews={setReviews}
                                   lastCommentId={lastCommentId}
                                   setLastCommentId={setLastCommentId}
+                                  itemType={itemType}
                         />
                     </div>
 

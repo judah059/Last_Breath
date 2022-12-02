@@ -31,7 +31,7 @@ export const userSlice = createSlice({
         setError(state, action) {
             state.error = action.payload
         },
-        setPayment(state, action){
+        setPayment(state, action) {
             state.payment = action.payload
         }
 
@@ -48,6 +48,9 @@ export const userSlice = createSlice({
             state.birth_date = action.payload.birth_date || '';
             state.role = action.payload.role || '';
             state.email = action.payload.email || '';
+            state.isLoading = false;
+        })
+        builder.addCase(getMe.rejected, (state) => {
             state.isLoading = false;
         })
         builder.addCase(updateMe.pending, (state) => {

@@ -8,6 +8,8 @@ import {useOutsideAlerter} from "../../../utils/hooks/useOutside";
 import {API} from "../../../utils/api";
 import {IComment, IReqComment} from "../../../utils/api/types";
 import Button from "../../../components/common/Buttons/Button";
+import {useAppSelector} from "../../../utils/hooks/redux";
+import {RootState} from "../../../store";
 
 interface CommentItemProps {
     id: number
@@ -40,7 +42,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                                                      selectedBlock
                                                  }) => {
 
-
+    const itemType = useAppSelector((state: RootState) => state.onlineItem.itemType)
     const {ref, isShow, setIsShow} = useOutsideAlerter(false);
     const [changeCommentMode, setChangeCommentMode] = useState(false)
     const [changeCommentContent, setChangeCommentContent] = useState(comment)
@@ -57,7 +59,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     setReviews(reviews?.filter(c => c.id !== id))
                 }
             }
-            await API.deleteComment(`${id}`)
+
+            if (itemType === 'film') {
+                await API.deleteFilmComment(`${id}`)
+            } else {
+                await API.deleteSerialComment(`${id}`)
+            }
+
         } catch (e) {
             console.log(e)
         }
@@ -102,8 +110,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 }
             }
 
-            console.log(id)
-            await API.updateComment(obj, `${id}`)
+            if (itemType === 'film') {
+                await API.updateFilmComment(obj, `${id}`)
+            } else {
+                const {film, ...serialObj} = obj
+                await API.updateSerialComment({...serialObj, serial: +`${movieId}`}, `${id}`)
+            }
 
 
         } catch (e) {

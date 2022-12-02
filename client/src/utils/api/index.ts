@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     IChangePassword,
     ICinema, IComment,
-    IOnlineMovie, IReqComment,
+    IOnlineMovie, IReqComment, IReqSerialComment,
     IReqSessionByDate,
     IReqUser,
     IResPayment,
@@ -164,20 +164,41 @@ export let API = {
             }
         }).then(res => res.data);
     },
-    deleteComment(id?: string) {
+    deleteFilmComment(id?: string) {
         return baseApi2.delete(`/online/commentfilm/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
     },
-    updateComment({comment_type, comment_text, film}: IReqComment, id?: string){
+    updateFilmComment({comment_type, comment_text, film}: IReqComment, id?: string){
         return baseApi2.put(`/online/commentfilm/${id}/`, {comment_type, comment_text, film}, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
         }).then(res => res.data);
-    }
+    },
+    postSerialComment({comment_type, comment_text, serial}: IReqSerialComment) {
+        return baseApi2.post<IComment>(`/online/commentserial/`, {comment_type, comment_text, serial}, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    updateSerialComment({comment_type, comment_text, serial}: IReqSerialComment, id?: string){
+        return baseApi2.put(`/online/commentserial/${id}/`, {comment_type, comment_text, serial}, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
+    deleteSerialComment(id?: string) {
+        return baseApi2.delete(`/online/commentserial/${id}/`, {
+            headers: {
+                Authorization: "Bearer " + cookieToken
+            }
+        }).then(res => res.data);
+    },
 }
 
 export let userAPI = {

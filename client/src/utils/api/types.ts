@@ -339,10 +339,17 @@ export interface IComment {
     author_name?: string
     author_picture?: string
 }
+
 export interface IReqComment {
     comment_type: string
     comment_text: string
     film: number
+}
+
+export interface IReqSerialComment {
+    comment_type: string
+    comment_text: string
+    serial: number
 }
 
 export interface ISub {
@@ -376,4 +383,10 @@ export interface IUserSub {
     created_at: string
     days_to_update: number
     is_active: boolean
+}
+
+export type ResOnlineError = {
+    code: string
+    detail: string
+    messages: string[]
 }
