@@ -31,13 +31,17 @@ const Comments: React.FC<CommentsProps> = ({
                                            }) => {
     const {role, username} = useAppSelector((state: RootState) => state.user);
 
-    const [commentContent, setCommentContent] = useState('')
+    const [commentContent, setCommentContent] = useState(' ')
     const [selectedBlock, setSelectedBlock] = useState<'C' | 'R'>('C')
 
 
     const onClickSendComment = async () => {
         console.log(lastCommentId)
         try {
+
+            if (commentContent === ' ')
+                return
+
             let obj: IReqComment = {
                 comment_type: selectedBlock,
                 comment_text: commentContent,
@@ -62,7 +66,7 @@ const Comments: React.FC<CommentsProps> = ({
                 }
             }
 
-            setCommentContent('')
+            setCommentContent(' ')
 
             let res: IComment;
             if (itemType === 'film') {
