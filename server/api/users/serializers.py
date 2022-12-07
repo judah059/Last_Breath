@@ -211,7 +211,7 @@ class DevSessionSerializer(serializers.ModelSerializer):
             if response["date"] == self.context['request'].query_params.get('date'):
                 return response
             else:
-                return '卐 1488'
+                return None
         return response
 
 
