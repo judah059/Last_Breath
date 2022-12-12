@@ -25,7 +25,6 @@ import {setCity, setEmptySnack, setEmptyTicket, setSessionById} from "../../stor
 const MoviePage: React.FC = () => {
     const dispatch = useAppDispatch();
     const [movie, setMovie] = useState<ITestMovieItem | undefined>(undefined);
-    const [session, setSession] = useState<ISession[] | undefined>()
     const {id} = useParams()
     const {cinema} = useAppSelector((state: RootState) => state.cinema);
     const nowDate = new Date()
@@ -36,63 +35,6 @@ const MoviePage: React.FC = () => {
     const [popup, setPopup] = useState<Boolean>(true)
     const [noHalls, setNoHallse] = useState<Boolean>(false)
     const [dataIsLoaded, setDataIsLoaded] = useState<boolean>(false)
-    // const fetchData = async () => {
-    //     try {
-    //         const movie: ITestMovieItem = await API.getCinemaMovie(id);
-    //         setMovie(movie)
-    //
-    //         let dates = []
-    //         let multiplier = 0
-    //         for (let i = 0; i < 4; i++, multiplier++) {
-    //             dates.push(new Date(Date.now() + ((3600 * 1000 * 24) * multiplier)))
-    //         }
-    //         await setInputValues(dates);
-    //
-    //         let sessionsByDate: ISessionByDate[] = []
-    //
-    //         if (inputValue === nowDate) sessionsByDate = await API.getSessionByDate({
-    //             date: dates[0].toISOString().substring(0, 10),
-    //             cinema: cinema?.id
-    //         });
-    //         else await API.getSessionByDate({date: inputValue.toISOString().substring(0, 10), cinema: cinema?.id});
-    //
-    //         let sessionByDate: ISessionByDate = sessionsByDate[0];
-    //         let hallsLength = sessionByDate.halls.length
-    //         let counter = 0;
-    //
-    //         for (let i = 0; i < sessionByDate.halls.length; i++) {
-    //             if (sessionByDate.halls[i].sessions.every(element => element === null)) {
-    //                 sessionByDate.halls[i].sessions.splice(i, 1)
-    //                 if (sessionByDate.halls.every(element => element.sessions.length as number === 0)) {
-    //                     setNoHallse(true)
-    //                     break;
-    //                 } else continue;
-    //             }
-    //             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-    //                 if (movie && sessionByDate.halls[i].sessions[j]?.movie != +movie?.id) {
-    //                     sessionByDate.halls[i].sessions.splice(j, 1)
-    //                     j--;
-    //                 }
-    //             }
-    //         }
-    //         if (hallsLength !== counter) setNoHallse(false);
-    //
-    //         for (let i = 0; i < sessionByDate.halls.length; i++) {
-    //             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-    //                 if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
-    //                     let temp = sessionByDate.halls[i].sessions[j];
-    //                     sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
-    //                     sessionByDate.halls[i].sessions[j + 1] = temp;
-    //                 }
-    //             }
-    //         }
-    //
-    //         await setSessionByDateAndCinema(sessionByDate)
-    //         console.log(sessionByDate)
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
 
     const getMovie = async () => {
         const movie: ITestMovieItem = await API.getCinemaMovie(id);
@@ -107,7 +49,12 @@ const MoviePage: React.FC = () => {
         await setInputValues(dates);
         fetchSessionBy(dates[0].toISOString().substring(0, 10))
     }
+    const fetchCinema = async () => {
+        const cinemas = await API.getCinemas();
+        dispatch(setCinema(cinemas[0]));
+        dispatch(setCity(cinema?.location_details.city))
 
+    }
     const fetchSessionBy = async (date: string) => {
         const sessionsByDate: ISessionByDate[] = await API.getSessionByDate({date: date, cinema: cinema?.id});
         let sessionByDate: ISessionByDate = sessionsByDate[0];
@@ -160,6 +107,8 @@ const MoviePage: React.FC = () => {
         dispatch(setEmptyTicket())
         dispatch(setEmptySnack())
         getMovie()
+        fetchCinema();
+
         // fillDates()
         // fetchSession()
 
@@ -167,8 +116,7 @@ const MoviePage: React.FC = () => {
 
         return () => {
             dispatch(setIsCinemaPage(true))
-            dispatch(setCinema(null))
-            dispatch(setCity(cinema?.location_details.city))
+            // dispatch(setCinema(null))
 
         }
     }, [])
