@@ -125,7 +125,9 @@ const MoviePage: React.FC = () => {
          fillDates()
     }, [movie]);
 
-
+    useEffect(() => {
+        fetchSessionBy(inputValue.toISOString().substring(0, 10))
+    }, [cinema]);
     const navigate = useNavigate()
     const onClickTicketOpen = async (id: number) => {
         const data = await API.getSessionById(id)
