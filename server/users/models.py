@@ -114,12 +114,18 @@ class SubscriptionType(models.Model):
     downloadSpeed = models.IntegerField()
 
 
+class Row(models.Model):
+    row_number = models.IntegerField(null=False)
+
+    hall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False, related_name='hall_row')
+
+    def __str__(self):
+        return f'Row #{self.row_number} in {self.hall}'
+
 class Seat(models.Model):
     number = models.IntegerField(null=False)
-    row = models.IntegerField(null=False)
+    row = models.ForeignKey('Row', on_delete=models.CASCADE, null=False, related_name='row_seat')
     additional_price = models.IntegerField(null=False)
-
-    hall = models.ForeignKey('CinemaHall', on_delete=models.CASCADE, null=False)
 
 
 class Session(models.Model):
@@ -134,13 +140,19 @@ class Session(models.Model):
         return f'{self.movie.__str__()} in {self.cinemahall.__str__()}'
 
 
+class SessionRow(models.Model):
+    session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
+    row = models.ForeignKey('Row', on_delete=models.CASCADE, null=False)
+
+
 class SessionSeat(models.Model):
     seat = models.ForeignKey('Seat', on_delete=models.CASCADE, null=False)
     session = models.ForeignKey('Session', on_delete=models.CASCADE, null=False)
+    row = models.ForeignKey('SessionRow', on_delete=models.CASCADE, null=False, related_name="sessionseat_row")
     is_free = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'Row: {self.seat.row} Number: {self.seat.number}'
+        return f'Row: {self.row.row.row_number} Number: {self.seat.number}'
 
 
 class Ticket(models.Model):

@@ -43,5 +43,4 @@ urlpatterns = [
     path('online/', include(routerSerialComments.urls)),
     path('online/', include(routerSubscription.urls)),
     path('online/', include(routerClientSub.urls)),
-
 ]

@@ -57,6 +57,9 @@ routerBoughtSnack.register(r'bought_snack', BoughtSnackView, basename='bought_sn
 routerTransaction = routers.SimpleRouter()
 routerTransaction.register(r'transaction', TransactionViewSet, basename='transaction')
 
+routerRow = routers.SimpleRouter()
+routerRow.register(r'row', RowViewSet, basename='row')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
@@ -82,4 +85,5 @@ urlpatterns = [
     path('api/', include(routerBoughtSnack.urls)),
     path('api/', include(routerTransaction.urls)),
     path('api/', include('onlineWatch.urls')),
+    path('api/', include(routerRow.urls)),
 ]
