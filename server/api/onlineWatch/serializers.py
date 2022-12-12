@@ -1,10 +1,9 @@
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from api.users.serializers import MyUserProfileSerializer
-from users.models import *
-from onlineWatch.models import *
+from onlineWatch.models import Genre, Film, Serial, Season, Series, CommentsFilm, CommentsSerial, Subscription, \
+    ClientSubscription
 
 
 class GenreSerializer(ModelSerializer):

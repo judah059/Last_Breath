@@ -1,8 +1,8 @@
-from django.db import transaction
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from users.models import Ticket, BoughtSnack, Transaction, MyUser, Basket
+from offlineWatch.models import Ticket, BoughtSnack, Transaction, Basket
+from users.models import MyUser
 
 
 @receiver(post_save, sender=Ticket)

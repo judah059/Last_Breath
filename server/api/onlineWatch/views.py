@@ -1,8 +1,10 @@
-from django.shortcuts import render
 from rest_framework import viewsets, generics
 
-from onlineWatch.models import *
-from onlineWatch.serializers import *
+from api.onlineWatch.serializers import GenreSerializer, FilmSerializer, SerialSerializer, SeasonSerializer, \
+    SeriesSerializer, GetFilmPageSerializer, GetSerialPageSerializer, GetAllRelatedToGenre, CommentFilmSerilaizer, \
+    CommentSerialSerilaizer, SubscriptionSerializer, ClientSubscriptionPOSTSerializer, ClientSubscriptionGETSerializer
+from onlineWatch.models import Genre, Film, Serial, Season, Series, CommentsFilm, CommentsSerial, Subscription, \
+    ClientSubscription
 
 
 class DevGenreViewSet(viewsets.ModelViewSet):
@@ -52,9 +54,11 @@ class MainPageView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GetAllRelatedToGenre
 
+
 class CommentFilmViewSet(viewsets.ModelViewSet):
     queryset = CommentsFilm.objects.all()
     serializer_class = CommentFilmSerilaizer
+
 
 class CommentSerialViewSet(viewsets.ModelViewSet):
     queryset = CommentsSerial.objects.all()

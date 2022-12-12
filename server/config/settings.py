@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'onlineWatch',
+    'offlineWatch',
     'rest_framework_simplejwt',
 ]
 

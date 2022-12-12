@@ -1,7 +1,9 @@
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from onlineWatch.views import *
+
+from api.onlineWatch.views import DevGenreViewSet, DevFilmViewSet, DevSerialViewSet, DevSeasonViewSet, DevSeriesViewSet, \
+    CommentFilmViewSet, CommentSerialViewSet, SubscriptionViewSet, ClientSubscriptionViewSet, GetFilmPage, \
+    GetSerialPage, MainPageView
 
 routerGenre = routers.SimpleRouter()
 routerGenre.register(r'genre', DevGenreViewSet, basename='genre')
