@@ -110,7 +110,7 @@ const Cinema: React.FC<CinemaProps> = () => {
 
         for (let i = 0; i < sessionByDate.halls.length; i++) {
             for (let j = 0; j < sessionByDate.halls[i].sessions.length; j++) {
-                if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j].start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1].start_time.substring(0, 2)))) {
+                if ((sessionByDate.halls[i].sessions[j] && sessionByDate.halls[i].sessions[j + 1]) && (Number(sessionByDate.halls[i].sessions[j]?.start_time.substring(0, 2)) > Number(sessionByDate.halls[i].sessions[j + 1]?.start_time.substring(0, 2)))) {
                     let temp = sessionByDate.halls[i].sessions[j];
                     sessionByDate.halls[i].sessions[j] = sessionByDate.halls[i].sessions[j + 1];
                     sessionByDate.halls[i].sessions[j + 1] = temp;
