@@ -35,8 +35,7 @@ const MoviePage: React.FC = () => {
     const [inputValuesForSpecDate, setInputValuesForSpecDate] = useState<ISessionItem | {}>();
     const [popup, setPopup] = useState<Boolean>(true)
     const [noHalls, setNoHallse] = useState<Boolean>(false)
-    const [labels, setLabels] = useState<String[]>(["KinoLand", "Planet cinema", "Dafa Multiplex", "Cinema Kyiv"])
-    const [datesForItems, setDatesForItems] = useState<String[]>(["11:00", "12:00", "13:00", "14:00"])
+    const [dataIsLoaded, setDataIsLoaded] = useState<boolean>(false)
     // const fetchData = async () => {
     //     try {
     //         const movie: ITestMovieItem = await API.getCinemaMovie(id);
@@ -95,10 +94,11 @@ const MoviePage: React.FC = () => {
     //     }
     // }
 
-    const fillDates = async () => {
+    const getMovie = async () => {
         const movie: ITestMovieItem = await API.getCinemaMovie(id);
-        setMovie(movie)
-
+        await setMovie(movie)
+    }
+    const fillDates = async () => {
         let dates = []
         let multiplier = 0
         for (let i = 0; i < 4; i++, multiplier++) {
@@ -148,22 +148,9 @@ const MoviePage: React.FC = () => {
         }
 
         await setSessionByDateAndCinema(sessionByDate)
-        console.log(sessionByDate)
+        setDataIsLoaded(true);
     }
 
-    const fetchSession = async () => {
-        try {
-            const sessions: ISession[] = await API.getSession(cinema?.id.toString(), inputValues[0]);
-            let sessionsMovie: ISession[] = sessions.filter(x => x.movie.toString() === id?.toString())
-
-            setSession(sessionsMovie)
-
-            // console.log(session)
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
     const popupToggle = () => {
         if (popup) setPopup(false)
         else setPopup(true)
@@ -172,8 +159,8 @@ const MoviePage: React.FC = () => {
     useEffect(() => {
         dispatch(setEmptyTicket())
         dispatch(setEmptySnack())
-
-        fillDates()
+        getMovie()
+        // fillDates()
         // fetchSession()
 
         dispatch(setIsCinemaPage(false))
@@ -185,6 +172,10 @@ const MoviePage: React.FC = () => {
 
         }
     }, [])
+    useEffect(() => {
+        fillDates()
+    }, [movie]);
+
 
     const navigate = useNavigate()
     const onClickTicketOpen = async (id: number) => {
@@ -290,14 +281,21 @@ const MoviePage: React.FC = () => {
                                 </div>
                                 <div className={s.session__bottom}>
                                     {(() => {
-
+                                        if(!dataIsLoaded) {
+                                            return (
+                                                <div className={s.session__bottom__items} style={{textAlign: "center"}}>
+                                                    No sessions
+                                                </div>
+                                            )
+                                        }
                                         if (noHalls) {
                                             return (
                                                 <div className={s.session__bottom__items} style={{textAlign: "center"}}>
                                                     No sessions
                                                 </div>
                                             )
-                                        } else {
+                                        }
+                                        if(noHalls === false && dataIsLoaded === true)  {
                                             return (
                                                 sessionByDateAndCinema?.halls.map(x =>
                                                     <div className={s.session__bottom__items}>
