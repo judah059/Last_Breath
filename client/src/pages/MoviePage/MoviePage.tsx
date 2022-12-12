@@ -104,6 +104,7 @@ const MoviePage: React.FC = () => {
     }
 
     useEffect(() => {
+        console.log(inputValues)
         dispatch(setEmptyTicket())
         dispatch(setEmptySnack())
         getMovie()
@@ -121,8 +122,8 @@ const MoviePage: React.FC = () => {
         }
     }, [])
     useEffect(() => {
-        fillDates()
-    }, [movie]);
+        if(inputValues.length != 0) fillDates()
+    }, [cinema]);
 
 
     const navigate = useNavigate()
