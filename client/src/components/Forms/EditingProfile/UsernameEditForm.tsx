@@ -52,6 +52,7 @@ const UsernameEditForm: React.FC<UsernameEditProps> = (props) => {
                 <label>{props.settingName}:</label>
                 <div className={s.fieldBlock}>
                     <input type="text" placeholder={`Enter your ${props.settingName}`} className={s.field}
+                           maxLength={14}
                            {...register("username", {required: true})}
                     />
                 </div>

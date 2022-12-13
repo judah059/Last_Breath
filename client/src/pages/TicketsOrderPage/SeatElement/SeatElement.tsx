@@ -11,9 +11,8 @@ interface SeatElementProps {
 const SeatElement: React.FC<SeatElementProps> = (props) => {
 
     return (
-        <div className={`${s.seat} ${!props.isFree && s.free} ${ props.isSeatFree(props.id) && s.active}`} onClick={props.onClickAddTicketOrder}>
-
-        </div>
+        <div className={`${s.seat} ${!props.isFree && s.free} ${props.isSeatFree(props.id) && s.active}`}
+             onClick={props.onClickAddTicketOrder}></div>
     )
 };
 

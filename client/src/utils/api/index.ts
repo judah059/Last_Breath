@@ -47,40 +47,50 @@ export let API = {
         return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
     },
     postTicket(data: { session_seat?: number, session?: number }) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.post(`ticket/`, data, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     getTicket() {
+        const tk = getWithExpiry('access_token')
         return baseApi2.get<IResTicket[]>(`ticket/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     postSnack(data: { amount: number, snack: number, user: number }) {
-        return baseApi2.post(`bought_snack/`, data,).then(res => res.data);
+        const tk = getWithExpiry('access_token')
+        return baseApi2.post(`bought_snack/`, data, {
+            headers: {
+                Authorization: "Bearer " + tk
+            }
+        }).then(res => res.data);
     },
     getBoughtSnacks() {
+        const tk = getWithExpiry('access_token')
         return baseApi2.get<IResSnack[]>(`bought_snack/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     removeBoughtSnack(id: number) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.delete(`bought_snack/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     removeTicket(id: number) {
+        const tk = getWithExpiry('access_token')
         return baseApi2.delete(`ticket/${id}/`, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },

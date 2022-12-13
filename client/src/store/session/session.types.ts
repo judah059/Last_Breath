@@ -1,10 +1,9 @@
 export interface ISeat {
     id: number
+    is_free: boolean
+    seat_additional_price: number,
     seat_id: number
     seat_number: number,
-    seat_row: number,
-    seat_additional_price: number,
-    is_free: boolean
 }
 
 export interface ISession {
@@ -23,6 +22,12 @@ export interface ISession {
         cinema: number,
         cinema_name: string
     },
+    rows: IRow[]
+}
+
+export interface IRow {
+    id: number
+    number: number
     seats: ISeat[]
 }
 

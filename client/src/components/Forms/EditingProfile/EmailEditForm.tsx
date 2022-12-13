@@ -66,6 +66,7 @@ const EmailEdit: React.FC<EmailEditProps> = (props) => {
                 <label>{props.settingName}:</label>
                 <div className={s.fieldBlock}>
                     <input type="text" placeholder={`Enter your ${props.settingName}`} className={s.field}
+                           maxLength={14}
                            {...register("email", {
                                required: true, pattern: {
                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,

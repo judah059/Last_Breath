@@ -92,6 +92,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                         type="text"
                         placeholder={"Enter your username name"}
                         className={s.field}
+                        maxLength={14}
                         {...register("userName", {required: "This field is required"})}
                     />
                     <ErrorMessage errors={errors} name="userName" as="p" className={s.errorMsg}/>
@@ -121,6 +122,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({onOpenSignIn, onClickSigningClos
                 <div className={s.fieldBlock}>
                     <label>Email</label>
                     <input type="text" placeholder={"Enter your email"} className={s.field}
+                           maxLength={14}
                            {...register("email", {
                                required: "This field is required", pattern: {
                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,

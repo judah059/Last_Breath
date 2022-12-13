@@ -96,6 +96,7 @@ const TicketsOrderPage: React.FC = (props) => {
         if (session === null) {
             return navigate(-1);
         }
+        console.log(session)
     }, [session]);
 
     const onClickRemoveSnack = () => {
@@ -126,19 +127,20 @@ const TicketsOrderPage: React.FC = (props) => {
                             </div>
                         </div>
                     </div>
-
                     <div className={s.seats}>
-                        {session?.seats.slice().sort((a, b) => a.id - b.id).map((x, i) => <SeatElement
-                            isFree={x.is_free}
-                            isSeatFree={isSeatFree}
-                            id={x.id}
-                            onClickAddTicketOrder={() => onClickAddTicketOrder({
-                                seat_number: x.seat_number,
-                                seat_row: x.seat_row,
-                                price: x.seat_additional_price + session!.base_price,
-                                seat_id: x.seat_id,
-                                id: x.id
-                            })}/>)}
+                        {session?.rows.filter((n, index) => n.number === index + 1).map(n => <div className={s.rows}>
+                            {n.seats.map(a =>
+                                <SeatElement isSeatFree={isSeatFree} id={a.seat_id}
+                                             isFree={a.is_free}
+                                             onClickAddTicketOrder={() => onClickAddTicketOrder({
+                                                 seat_number: a.seat_number,
+                                                 seat_row: n.number,
+                                                 price: a.seat_additional_price + session!.base_price,
+                                                 seat_id: a.seat_id,
+                                                 id: a.id
+                                             })}/>
+                            )}
+                        </div>)}
                     </div>
                 </div>
             </div>
