@@ -66,7 +66,10 @@ const SnackOrderPage: React.FC = (props) => {
 
     const onClickRemoveSnack = (id?: number) => {
         console.log(id)
-        dispatch(setRemoveSnackOrder(id))
+        if(snackOrder.length !== 0){
+            dispatch(setRemoveSnackOrder(id))
+        }
+
     }
     const navigate = useNavigate()
     const onClickProceed = async () => {

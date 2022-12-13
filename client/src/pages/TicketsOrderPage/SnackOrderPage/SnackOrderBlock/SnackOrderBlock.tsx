@@ -26,7 +26,13 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
     const itemMinus = (index: number) => {
         const snackType = snackOrder.filter(p => p.id === props.index + 1)
         const lastTypeId = snackType[snackType.length-1]?.index
-        dispatch(setRemoveSnackOrder(lastTypeId))
+        const snackLength = snackOrder.filter(s=>s.id === props.snack.id).length
+
+        if(snackLength !== 0){
+            dispatch(setRemoveSnackOrder(lastTypeId))
+        }
+
+
     }
 
     const snackCount = snackOrder.filter(p => p.id === props.index + 1).length
