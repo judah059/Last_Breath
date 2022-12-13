@@ -40,7 +40,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
     const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
     const [comments, setComments] = useState<IComment[]>([])
     const [reviews, setReviews] = useState<IComment[]>([])
-    const [lastCommentId, setLastCommentId] = useState(0)
+    const [lastCommentId, setLastCommentId] = useState<number | undefined>(0)
 
 
     const scrollRef = useHorizontalScroll();
