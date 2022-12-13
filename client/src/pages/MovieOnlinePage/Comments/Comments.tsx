@@ -36,7 +36,6 @@ const Comments: React.FC<CommentsProps> = ({
 
 
     const onClickSendComment = async () => {
-        console.log(lastCommentId)
         try {
 
             if (commentContent === ' ')
@@ -49,11 +48,6 @@ const Comments: React.FC<CommentsProps> = ({
             }
             if (selectedBlock === 'C') {
                 if (comments !== undefined && lastCommentId !== undefined) {
-                    console.log([...comments, {
-                        ...obj,
-                        id: +`${lastCommentId + 1}`,
-                        author_name: username
-                    }])
 
                     setComments([...comments, {
                         ...obj,
