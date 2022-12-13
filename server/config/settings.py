@@ -86,17 +86,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'itsbase',
-        'USER': 'postgres',
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'itsbase',
+#         'USER': 'postgres',
+#         'PASSWORD': os.environ.get('DB_PASS'),
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+#updated
+DATABASES = {'default': dj_database_url.config(default='postgresql://postgres:82ldtvgvhpoa8KBYuwOj@containers-us-west-160.railway.app:5521/railway')}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
