@@ -128,7 +128,7 @@ const TicketsOrderPage: React.FC = (props) => {
                         </div>
                     </div>
                     <div className={s.seats}>
-                        {session?.rows.filter((n, index) => n.number === index + 1).map(n => <div className={s.rows}>
+                        {session?.rows.filter((n, index) => n.number === index + 1 && n.seats[0]).map(n => <div className={s.rows}>
                             {n.seats.map(a =>
                                 <SeatElement isSeatFree={isSeatFree} id={a.seat_id}
                                              isFree={a.is_free}

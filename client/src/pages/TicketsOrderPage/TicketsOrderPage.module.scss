@@ -12,7 +12,7 @@ body {
       display: flex;
       flex-flow: column;
       gap: 10px;
-      padding: 80px;
+      padding-top: 20px;
       justify-content: center;
 
       .rows {
@@ -26,6 +26,8 @@ body {
     .leftSide {
       background-color: white;
       height: 100vh;
+      overflow: auto;
+      padding-bottom: 20px;
 
       .topBlock {
         display: flex;

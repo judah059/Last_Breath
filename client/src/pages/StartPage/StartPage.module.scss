@@ -1,4 +1,9 @@
 .wrapper{
+  display: flex;
+  flex-flow: column;
+  flex-wrap: wrap;
+  gap: 60px;
+
   .logo_name{
     padding-top: 57px;
     text-align: center;
@@ -18,11 +23,12 @@
 
   .buttons{
     display: flex;
+    flex-wrap: wrap;
     font-family: "Montserrat", serif;
     font-size: 36px;
     margin-top: 104px;
     justify-content: space-around;
-    gap: 450px;
+    gap: 20px;
 
     .buy_ticket button{
       background-color: #86e7e1;
