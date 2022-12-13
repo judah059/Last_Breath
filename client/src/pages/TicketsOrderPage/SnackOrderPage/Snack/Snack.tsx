@@ -7,7 +7,8 @@ interface SnackProps {
     logo: string,
     name: string,
     price: number
-    onClickRemove: (id: number) => void
+    index?: number
+    onClickRemove: (id: number | undefined) => void
 }
 
 const Snack: React.FC<SnackProps> = (props) => {
@@ -19,7 +20,7 @@ const Snack: React.FC<SnackProps> = (props) => {
                         {props.price} UAH
                     </div>
                     <div className={s.close}>
-                        <img src={close} alt={'close'} onClick={()=>props.onClickRemove(props.id)}/>
+                        <img src={close} alt={'close'} onClick={()=>props.onClickRemove(props.index)}/>
                     </div>
                 </div>
             </div>

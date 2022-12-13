@@ -18,19 +18,18 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
     const snackOrder = useAppSelector((state: RootState) => state.session.snackOrder);
     const dispatch = useAppDispatch()
 
-    const [itemCount, setItemCount] = useState(0)
 
     const itemPlus = (snack: ISnack) => {
-        setItemCount(itemCount + 1)
         dispatch(setSnackOrder(snack))
-        console.log(snackOrder)
     }
 
     const itemMinus = (index: number) => {
-        setItemCount(p => p<=0 ? 0 : p-1)
-        dispatch(setRemoveSnackOrder(snackIndex))
-        console.log(snackIndex)
+        const snackType = snackOrder.filter(p => p.id === props.index + 1)
+        const lastTypeId = snackType[snackType.length-1]?.index
+        dispatch(setRemoveSnackOrder(lastTypeId))
     }
+
+    const snackCount = snackOrder.filter(p => p.id === props.index + 1).length
 
     return (
         <div className={s.block}>
@@ -52,7 +51,7 @@ const SnackOrderBlock: React.FC<SnackOrderBlockProps> = (props) => {
                             -
                         </button>
                     </div>
-                    <div className={s.itemCount}>{itemCount}</div>
+                    <div className={s.itemCount}>{snackCount}</div>
                     <div>
                         <button className={s.plusButton} onClick={() => itemPlus(props.snack)}>
                             +

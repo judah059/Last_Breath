@@ -36,6 +36,9 @@ const SnackOrderPage: React.FC = (props) => {
     const user = useAppSelector((state: RootState) => state.user);
     const [error, setError] = useState(false)
 
+
+
+
     const date = session?.date.split("-").reverse().join("/")
 
     let thirdDate = session?.date
@@ -46,7 +49,6 @@ const SnackOrderPage: React.FC = (props) => {
 
     if (thirdDate) {
         firstDateDate = new Date(thirdDate);
-        console.log(firstDateDate)
         day = firstDateDate.toLocaleString('en-us', {weekday: 'long'});
     }
 
@@ -62,8 +64,9 @@ const SnackOrderPage: React.FC = (props) => {
         dispatch(setRemoveTicket(id))
     }
 
-    const onClickRemoveSnack = () => {
-        dispatch(setRemoveSnackOrder(snackIndex))
+    const onClickRemoveSnack = (id?: number) => {
+        console.log(id)
+        dispatch(setRemoveSnackOrder(id))
     }
     const navigate = useNavigate()
     const onClickProceed = async () => {
@@ -161,7 +164,7 @@ const SnackOrderPage: React.FC = (props) => {
                             </div>
                             <div className={s.snackList}>
                                 {
-                                    snackOrder.map(s => <Snack id={s.id} logo={s.logo} name={s.name} price={s.price}
+                                    snackOrder.map(s => <Snack id={s.id} logo={s.logo} name={s.name} price={s.price} index={s.index}
                                                                onClickRemove={onClickRemoveSnack}/>)
                                 }
                             </div>
