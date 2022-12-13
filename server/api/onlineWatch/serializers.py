@@ -155,6 +155,16 @@ class ClientSubscriptionPOSTSerializer(ModelSerializer):
             'subscription',
         )
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    def validate(self, attrs):
+        user = self.request.user
+        sub = ClientSubscription.objects.get(subscription__id=attrs['subscription'], client=user)
+        if sub:
+            raise serializers.ValidationError('You already have this subscription')
+
 
 class ClientSubscriptionGETSerializer(ModelSerializer):
     client = MyUserProfileSerializer()

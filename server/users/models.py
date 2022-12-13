@@ -78,6 +78,7 @@ class Payments(models.Model):
     last_4 = models.CharField(
         max_length=10,
         default='0000',
+        unique=True,
     )
     expire_date = models.DateField(
         null=True,
