@@ -15,12 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView
-
-from api.auth.serializers import CustomJWTSerializer
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(serializer_class=CustomJWTSerializer), name='token_obtain_pair'),
-    path('', include('api.users.urls')),
+    path('api/', include('api.users.urls')),
+    path('api/', include('api.offlineWatch.urls')),
+    path('api/', include('api.onlineWatch.urls')),
 ]
