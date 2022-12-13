@@ -123,14 +123,15 @@ const Cinema: React.FC<CinemaProps> = () => {
     }
 
     useEffect(() => {
-        fetchCinema()
         fetchDate()
+        fetchCinema()
         fetchSessionBy(new Date().toISOString().substring(0, 10))
         fetchMovies()
         return () => {
             dispatch(setCinema(null))
         }
     }, [id])
+
 
 
     // @ts-ignore

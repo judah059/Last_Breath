@@ -99,6 +99,10 @@ const Movie: React.FC<MovieProps> = (props) => {
         }
     }
 
+    useEffect(() => {
+       fetchSessionBy()
+    }, [cinema]);
+
     return (
         <div className={s.item}>
             <div className={s.title} onClick={() => navigate(`../main/movies/${props.movie_id}`)}>
