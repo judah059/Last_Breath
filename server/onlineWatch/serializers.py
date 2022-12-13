@@ -92,7 +92,7 @@ class CommentSerialSerilaizer(ModelSerializer):
 
     class Meta:
         model = CommentsSerial
-        fields = ["id","comment_type", "comment_text", "serial", "author_name", "author_picture"]
+        fields = ["id", "comment_type", "comment_text", "serial", "author_name", "author_picture"]
 
     def create(self, validated_data):
         instance = CommentsSerial()

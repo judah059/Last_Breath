@@ -114,24 +114,38 @@ class CinemaSerializer(serializers.ModelSerializer):
 class SessionSeatSerializer(serializers.ModelSerializer):
     seat_id = serializers.IntegerField(read_only=True, source='seat.id')
     seat_number = serializers.IntegerField(read_only=True, source='seat.number')
-    seat_row = serializers.IntegerField(read_only=True, source='seat.row')
     seat_additional_price = serializers.IntegerField(read_only=True, source='seat.additional_price')
 
     class Meta:
         model = SessionSeat
-        fields = ["id", "seat_id", "seat_number", "seat_row", "seat_additional_price", "is_free"]
+        fields = ["id", "seat_id", "seat_number", "seat_additional_price", "is_free"]
+
+
+class RowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Row
+        fields = "__all__"
+
+
+class SessionRowSerializer(serializers.ModelSerializer):
+    seats = SessionSeatSerializer(many=True, read_only=True, source="sessionseat_row")
+    number = serializers.IntegerField(source='row.row_number')
+
+    class Meta:
+        model = SessionRow
+        fields = ['id', 'number', 'seats']
 
 
 class SessionSerializer(serializers.ModelSerializer):
     cinemahall_detail = CinemaHallSerializer(read_only=True, source="cinemahall")
     movie_name = serializers.CharField(read_only=True, source="movie.name")
     movie_poster = serializers.CharField(read_only=True, source="movie.poster")
-    seats = SessionSeatSerializer(many=True, read_only=True, source="sessionseat_set")
+    rows = SessionRowSerializer(many=True, read_only=True, source="sessionrow_set")
 
     class Meta:
         model = Session
         fields = ["id", "date", "start_time", "end_time", "base_price", "movie", "movie_name", "movie_poster",
-                  "cinemahall", "cinemahall_detail", "seats"]
+                  "cinemahall", "cinemahall_detail", "rows"]
 
     def create(self, validated_data):
         session_instance = Session(
@@ -144,15 +158,57 @@ class SessionSerializer(serializers.ModelSerializer):
         )
         session_instance.save()
 
-        seats = Seat.objects.filter(hall=validated_data['cinemahall'])
-        for seat in seats:
-            session_seat_instance = SessionSeat(
-                seat=seat,
+        seats = Seat.objects.filter(row__hall=validated_data['cinemahall'])
+        rows = Row.objects.filter(hall=validated_data['cinemahall'])
+        for row in rows:
+            session_row_instance = SessionRow(
+                row=row,
                 session=session_instance
             )
-            session_seat_instance.save()
+            session_row_instance.save()
 
+            for seat in seats:
+                if seat.row == row:
+                    session_seat_instance = SessionSeat(
+                        seat=seat,
+                        row=session_row_instance,
+                        session=session_instance
+                    )
+                    session_seat_instance.save()
         return session_instance
+
+    def update(self, instance, validated_data):
+        instance.date = validated_data['date']
+        instance.start_time = validated_data['start_time']
+        instance.end_time = validated_data['end_time']
+        instance.base_price = validated_data['base_price']
+        instance.movie = validated_data['movie']
+        instance.cinemahall = validated_data['cinemahall']
+        SessionSeat.objects.filter(session=instance).delete()
+        SessionRow.objects.filter(session=instance).delete()
+
+        instance.save()
+
+        seats = Seat.objects.filter(row__hall=validated_data['cinemahall'])
+        rows = Row.objects.filter(hall=validated_data['cinemahall'])
+
+        for row in rows:
+            session_row_instance = SessionRow(
+                row=row,
+                session=instance
+            )
+            session_row_instance.save()
+
+            for seat in seats:
+                if seat.row == row:
+                    session_seat_instance = SessionSeat(
+                        seat=seat,
+                        row=session_row_instance,
+                        session=instance
+                    )
+                    session_seat_instance.save()
+
+        return instance
 
 
 class SessionWithoutSeatsSerializer(serializers.ModelSerializer):

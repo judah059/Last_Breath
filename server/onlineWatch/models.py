@@ -65,6 +65,7 @@ class Series(models.Model):
     def __str__(self):
         return f"{self.season.serial.name} Season #{self.season.number} Series #{self.number}"
 
+
 class CommentsFilm(models.Model):
     comment_types = [
         ("C", "Comment"),

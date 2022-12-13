@@ -211,3 +211,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         qs = super(TransactionViewSet, self).get_queryset()
         return qs.filter(basket__user=self.request.user.id)
+
+
+class RowViewSet(viewsets.ModelViewSet):
+    queryset = Row.objects.all()
+    serializer_class = RowSerializer
