@@ -11,7 +11,7 @@ import Comments from "./Comments/Comments";
 import {useAppDispatch, useAppSelector} from "../../utils/hooks/redux";
 import {RootState} from "../../store";
 import {useAuth} from "../../utils/hooks/useAuth";
-import {setIsLoading, setItemType} from "../../store/onlineItem/onlineItem.slice";
+import {setItemType} from "../../store/onlineItem/onlineItem.slice";
 import {AxiosError} from "axios";
 
 
@@ -22,21 +22,19 @@ interface MovieOnlinePageProps {
 
 const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
-    const isLoading = useAppSelector((state: RootState) => state.user.isLoading)
-
+    const [isFetching, setIsFetching] = useState(true)
 
     const isAuth = useAuth()
     let navigate = useNavigate();
     useEffect(() => {
-        console.log(isAuth)
-        if (isAuth === "") {
+        if (isAuth === "" && !isFetching) {
             alert('Please login to your account')
             return navigate("/online");
         }
     }, [!isAuth]);
 
+
     const {id} = useParams()
-    const [isFetching, setIsFetching] = useState(true)
     const [movie, setMovie] = useState<IOnlineMovie | null>(null)
     const [selectedSeason, setSelectedSeason] = useState(1)
     const [selectedEpisode, setSelectedEpisode] = useState<ISeries | undefined>(undefined)
@@ -83,11 +81,11 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
 
             setLastCommentId(resMovie.comments.sort((a, b) => a.id - b.id)[resMovie.comments.length-1].id)
         } catch (err: any) {
-            // let error: AxiosError<ResOnlineError> = err
-            // if(error.response?.status === 401){
-            //     alert('Please login to your account')
-            //     navigate("/online");
-            // }
+            let error: AxiosError<ResOnlineError> = err
+            if(error.response?.status === 401){
+                alert('Please login to your account')
+                navigate("/online");
+            }
         }
     }
 
