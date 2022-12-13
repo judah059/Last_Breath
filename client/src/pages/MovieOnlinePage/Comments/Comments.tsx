@@ -14,7 +14,7 @@ interface CommentsProps {
     reviews: IComment[] | undefined
     setReviews: (comments: IComment[]) => void
     lastCommentId?: number
-    setLastCommentId?: (id: number) => void
+    setLastCommentId?: (id: number | undefined) => void
     itemType: string
 }
 
@@ -36,7 +36,6 @@ const Comments: React.FC<CommentsProps> = ({
 
 
     const onClickSendComment = async () => {
-        console.log(lastCommentId)
         try {
 
             if (commentContent === ' ')
@@ -47,33 +46,57 @@ const Comments: React.FC<CommentsProps> = ({
                 comment_text: commentContent,
                 film: +`${movieId}`,
             }
-            if (selectedBlock === 'C') {
-                if (comments && lastCommentId) {
-                    setComments([...comments, {
-                        ...obj,
-                        id: +`${lastCommentId + 1}`,
-                        author_name: username
-                    }])
-                }
-            } else {
-                if (reviews && lastCommentId) {
-                    setReviews([...reviews,
-                        {
-                            ...obj,
-                            id: +`${lastCommentId + 1}`,
-                            author_name: username
-                        }])
-                }
+
+            //set id when comments length equals 0
+            if (lastCommentId !== undefined && lastCommentId === 0) {
+                const id = await sendComment(obj)
+                setRenderedComments(obj, id)
+                setCommentContent(' ')
+                return
             }
 
+            //send when comments length grater than 0
+            setRenderedComments(obj)
             setCommentContent(' ')
+            await sendComment(obj)
 
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const setRenderedComments = (comment: IReqComment, id?: number) => {
+
+
+        if (selectedBlock === 'C') {
+            if (comments !== undefined && lastCommentId !== undefined) {
+                setComments([...comments, {
+                    ...comment,
+                    id: lastCommentId === 0 ? +`${id}` : +`${lastCommentId + 1}`,
+                    author_name: username
+                }])
+            }
+        } else {
+            if (reviews !== undefined && lastCommentId !== undefined) {
+                setReviews([...reviews,
+                    {
+                        ...comment,
+                        id: lastCommentId === 0 ? +`${id}` : +`${lastCommentId + 1}`,
+                        author_name: username
+                    }])
+            }
+        }
+    }
+
+    const sendComment = async (comment: IReqComment) => {
+        try {
             let res: IComment;
             if (itemType === 'film') {
-                res = await API.postFilmComment(obj)
+                res = await API.postFilmComment(comment)
             } else {
 
-                const {film, ...serialObj} = obj
+                const {film, ...serialObj} = comment
                 res = await API.postSerialComment({...serialObj, serial: +`${movieId}`})
             }
 
@@ -82,10 +105,12 @@ const Comments: React.FC<CommentsProps> = ({
                 setLastCommentId(res.id)
             }
 
+            return res.id
         } catch (e) {
             console.log(e)
         }
     }
+
 
     const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCommentContent(e.target.value)
