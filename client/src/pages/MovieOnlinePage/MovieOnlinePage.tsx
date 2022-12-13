@@ -89,6 +89,7 @@ const MovieOnlinePage: React.FC<MovieOnlinePageProps> = () => {
         }
     }
 
+
     const onClickSeason = (season: number) => {
         setSelectedSeason(season)
         setSelectedEpisode(movie?.seasons[season - 1]?.series[0])
