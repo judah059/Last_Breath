@@ -48,7 +48,13 @@ const Comments: React.FC<CommentsProps> = ({
                 film: +`${movieId}`,
             }
             if (selectedBlock === 'C') {
-                if (comments && lastCommentId) {
+                if (comments !== undefined && lastCommentId !== undefined) {
+                    console.log([...comments, {
+                        ...obj,
+                        id: +`${lastCommentId + 1}`,
+                        author_name: username
+                    }])
+
                     setComments([...comments, {
                         ...obj,
                         id: +`${lastCommentId + 1}`,
@@ -56,7 +62,7 @@ const Comments: React.FC<CommentsProps> = ({
                     }])
                 }
             } else {
-                if (reviews && lastCommentId) {
+                if (reviews !== undefined && lastCommentId !== undefined) {
                     setReviews([...reviews,
                         {
                             ...obj,
