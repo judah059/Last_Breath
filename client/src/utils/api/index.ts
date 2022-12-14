@@ -18,37 +18,37 @@ import {ISession, ISnack} from "../../store/session/session.types";
 const cookieToken = getWithExpiry('access_token')
 
 let baseApi2 = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    baseURL: 'https://lbdeploy-production.up.railway.app/api',
 })
 
 export let API = {
     getCinemaMovies() {
-        return baseApi2.get('filmlist/').then(res => res.data)
+        return baseApi2.get('/offline/filmlist/').then(res => res.data)
     },
     getCinemaMovie(id: string | undefined) {
-        return baseApi2.get(`film/${id}`).then(res => res.data)
+        return baseApi2.get(`/offline/film/${id}`).then(res => res.data)
     },
     getSession(cinemaId?: string, date?: Date) {
-        return baseApi2.get(`session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
+        return baseApi2.get(`/offline/session/filter/session/?cinema=${cinemaId}&date=${date}`).then(res => res.data)
     },
     getSessionById(id: number) {
-        return baseApi2.get<ISession>(`session/${id}`).then(res => res.data)
+        return baseApi2.get<ISession>(`/offline/session/${id}`).then(res => res.data)
     },
     getSnackByCinemaID(id: number | undefined) {
-        return baseApi2.get<ISnack>(`filter/snack/${id}`).then(res => res.data)
+        return baseApi2.get<ISnack>(`/offline/filter/snack/${id}`).then(res => res.data)
     },
     getCinemas() {
-        return baseApi2.get<ICinema[]>(`cinema/`).then(res => res.data)
+        return baseApi2.get<ICinema[]>(`/offline/cinema/`).then(res => res.data)
     },
     getSessionByDate(data: IReqSessionByDate) {
-        return baseApi2.get(`filter/session/`, {params: data}).then(res => res.data)
+        return baseApi2.get(`/offline/filter/session/`, {params: data}).then(res => res.data)
     },
     getCinema(id: string) {
-        return baseApi2.get<ICinema>(`cinema/${id}/`).then(res => res.data)
+        return baseApi2.get<ICinema>(`/offline/cinema/${id}/`).then(res => res.data)
     },
     postTicket(data: { session_seat?: number, session?: number }) {
         const tk = getWithExpiry('access_token')
-        return baseApi2.post(`ticket/`, data, {
+        return baseApi2.post(`/offline/ticket/`, data, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -56,7 +56,7 @@ export let API = {
     },
     getTicket() {
         const tk = getWithExpiry('access_token')
-        return baseApi2.get<IResTicket[]>(`ticket/`, {
+        return baseApi2.get<IResTicket[]>(`/offline/ticket/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -64,7 +64,7 @@ export let API = {
     },
     postSnack(data: { amount: number, snack: number, user: number }) {
         const tk = getWithExpiry('access_token')
-        return baseApi2.post(`bought_snack/`, data, {
+        return baseApi2.post(`/offline/bought_snack/`, data, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -72,7 +72,7 @@ export let API = {
     },
     getBoughtSnacks() {
         const tk = getWithExpiry('access_token')
-        return baseApi2.get<IResSnack[]>(`bought_snack/`, {
+        return baseApi2.get<IResSnack[]>(`/offline/bought_snack/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -80,7 +80,7 @@ export let API = {
     },
     removeBoughtSnack(id: number) {
         const tk = getWithExpiry('access_token')
-        return baseApi2.delete(`bought_snack/${id}/`, {
+        return baseApi2.delete(`/offline/bought_snack/${id}/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -88,7 +88,7 @@ export let API = {
     },
     removeTicket(id: number) {
         const tk = getWithExpiry('access_token')
-        return baseApi2.delete(`ticket/${id}/`, {
+        return baseApi2.delete(`/offline/ticket/${id}/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -96,7 +96,7 @@ export let API = {
     },
     getPayment() {
         const tk = getWithExpiry('access_token')
-        return baseApi2.get<IResPayment[]>(`payment/`, {
+        return baseApi2.get<IResPayment[]>(`/user/payment/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -104,22 +104,23 @@ export let API = {
     },
     postPayment(token?: string) {
         const tk = getWithExpiry('access_token')
-        return baseApi2.post(`payment/`, {token}, {
+        return baseApi2.post(`/user/payment/`, {token}, {
             headers: {
                 Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     postTransaction(payment: number) {
-        return baseApi2.post(`transaction/`, {payment}, {
+        const tk = getWithExpiry('access_token')
+        return baseApi2.post(`/offline/transaction/`, {payment}, {
             headers: {
-                Authorization: "Bearer " + cookieToken
+                Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
 
     getOnlineMovie(id?: string) {
-        return baseApi2.get<IOnlineMovie>(`online/watch/film/${id}/`, {
+        return baseApi2.get<IOnlineMovie>(`/online/watch/film/${id}/`, {
             headers: {
                 Authorization: "Bearer " + cookieToken
             }
@@ -133,7 +134,7 @@ export let API = {
         } else {
             type = itemType
         }
-        return baseApi2.get<IOnlineMovie>(`online/watch/${type}/${id}/`, {
+        return baseApi2.get<IOnlineMovie>(`/online/watch/${type}/${id}/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -142,19 +143,19 @@ export let API = {
     deletePayment(id: number) {
         const tk = getWithExpiry('access_token')
 
-        return baseApi2.delete(`/payment/${id}/`, {
+        return baseApi2.delete(`/offline/payment/${id}/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
         }).then(res => res.data);
     },
     getSubs() {
-        return baseApi2.get<ISub[]>(`online/subscription/`,).then(res => res.data);
+        return baseApi2.get<ISub[]>(`/online/subscription/`,).then(res => res.data);
     },
     postClientSub(id?: number) {
         const tk = getWithExpiry('access_token')
 
-        return baseApi2.post(`online/client-subscription/`, {subscription: id}, {
+        return baseApi2.post(`/online/client-subscription/`, {subscription: id}, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -163,7 +164,7 @@ export let API = {
     getUserSub() {
         const tk = getWithExpiry('access_token')
 
-        return baseApi2.get<IUserSub[]>(`online/client-subscription/`, {
+        return baseApi2.get<IUserSub[]>(`/online/client-subscription/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -172,7 +173,7 @@ export let API = {
     deleteUserSub(id: number) {
         const tk = getWithExpiry('access_token')
 
-        return baseApi2.delete(`online/client-subscription/${id}/`, {
+        return baseApi2.delete(`/online/client-subscription/${id}/`, {
             headers: {
                 Authorization: "Bearer " + tk
             }
@@ -233,15 +234,15 @@ export let API = {
 
 export let userAPI = {
     login(data: IReqUser) {
-        return baseApi2.post<IResUser>(`token/`, data).then(res => res.data);
+        return baseApi2.post<IResUser>(`/user/token/`, data).then(res => res.data);
     },
 
     register(data: IUser) {
-        return axios.post<IUser>(`http://127.0.0.1:8000/api/registration/`, data).then(res => res.data);
+        return axios.post<IUser>(`https://lbdeploy-production.up.railway.app/api/user/registration/`, data).then(res => res.data);
     },
 
     getMe(token?: string) {
-        return baseApi2.get<IUser[]>(`profile/`, {
+        return baseApi2.get<IUser[]>(`/user/profile/`, {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
             }
@@ -249,7 +250,7 @@ export let userAPI = {
     },
 
     updateMe(data: IUser, token?: string) {
-        return baseApi2.put<IUser>('profile/', data, {
+        return baseApi2.put<IUser>('/user/profile/', data, {
                 headers: {
                     Authorization: "Bearer " + token || cookieToken
                 }
@@ -258,7 +259,7 @@ export let userAPI = {
     },
 
     deleteMe(token?: string) {
-        return baseApi2.delete('profile/', {
+        return baseApi2.delete('/user/profile/', {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
             }
@@ -266,7 +267,7 @@ export let userAPI = {
     },
 
     updatePassword(data: IChangePassword, token?: string) {
-        return baseApi2.put<string>('change_password/', data, {
+        return baseApi2.put<string>('/user/change_password/', data, {
             headers: {
                 Authorization: "Bearer " + token || cookieToken
             }

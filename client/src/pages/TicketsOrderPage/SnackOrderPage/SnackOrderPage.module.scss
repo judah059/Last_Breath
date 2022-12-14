@@ -26,6 +26,8 @@ body {
 
     .leftSide {
       background-color: white;
+      height: 100vh;
+      overflow: auto;
 
       .topBlock {
         display: flex;
